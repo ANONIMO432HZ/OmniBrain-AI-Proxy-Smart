@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "Bun SQLite": {
+      "source": "secondsky/claude-skills",
+      "sourceType": "github",
+      "computedHash": "e0e8603341dc88c6af2d8ab6f69150c86aee70cf408671820c52a931ce079b29"
+    }
+  }
+}

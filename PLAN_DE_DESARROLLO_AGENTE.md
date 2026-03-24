@@ -17,6 +17,17 @@ Crear una API unificada y compatible con el estándar de **OpenAI** que centrali
 
 ---
 
+## 🧠 Skills y Capacidades Especiales del Sistema
+Capacidades lógicas que el proxy ejecutará de forma autónoma para mejorar la experiencia del Agente.
+
+| Skill | Descripción | Implementación |
+| :--- | :--- | :--- |
+| **Circuit Breaker** | Apaga temporalmente un proveedor (Groq/Cerebras) si lanza `429` o responde `500`. | **Fase 1.4** (Fallback) |
+| **Smart Routing** | Elige el proveedor según la complejidad de la tarea (Groq para ráfagas, OpenRouter para lógica pesada). | **Fase 3** (Calibrado) |
+| **Context Trimming** | Recorta o resume el historial de mensajes de forma autónoma si el contexto satura los límites de tokens. | **Fase 2** (Persistencia) |
+
+---
+
 ## 🚀 FASE 1: Fundación y Soporte para Herramientas (Tool Calls)
 **Duración estimada:** 3 días
 **Objetivo:** Crear el proxy que reciba comandos de texto y solicitudes de herramientas, enrutando a proveedores rápidos.
