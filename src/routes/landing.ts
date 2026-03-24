@@ -378,11 +378,10 @@ export const landingPageHtml = `<!doctype html>
                 if (!reasoningBox) {
                   reasoningBox = document.createElement("details");
                   reasoningBox.id = "reasoning-box";
-                  reasoningBox.open = true;
                   reasoningBox.style = "background: #1e2430; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #38bdf8; font-size: 0.9rem; color: #94a3b8;";
                   const summary = document.createElement("summary");
                   summary.style = "cursor: pointer; color: #38bdf8; font-weight: 600; outline:none; display:flex; align-items:center; gap:8px;";
-                  summary.innerHTML = '<div class="spinner-thinking" style="width: 14px; height: 14px; border: 2px solid rgba(56,189,248,0.2); border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite;"></div><span>🤔 Pensando del modelo...</span>';
+                  summary.innerHTML = '<div class="spinner-thinking" style="width: 14px; height: 14px; border: 2px solid rgba(56,189,248,0.2); border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite;"></div><span>🤔 Pensando...</span>';
                   reasoningBox.appendChild(summary);
                   const contentDiv = document.createElement("div");
                   contentDiv.id = "reasoning-content";
@@ -396,11 +395,10 @@ export const landingPageHtml = `<!doctype html>
               if (eventName === "delta" && data.content) {
                 const reasoningBox = document.getElementById("reasoning-box");
                 if (reasoningBox) {
-                   if (reasoningBox.open) reasoningBox.open = false; // Colapsar al empezar a responder
                    const spinner = reasoningBox.querySelector(".spinner-thinking");
                    if (spinner) spinner.style.display = "none"; // Ocultar spinner
                    const textSpan = reasoningBox.querySelector("summary span");
-                   if (textSpan) textSpan.textContent = "🤔 Pensamiento del modelo (Completado)";
+                   if (textSpan) textSpan.textContent = "🧠 Razonamiento completado (clic aquí para ver)";
                 }
 
                 let textNode = document.getElementById("text-content");
