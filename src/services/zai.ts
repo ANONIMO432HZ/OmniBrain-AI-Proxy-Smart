@@ -82,7 +82,8 @@ export const zaiProvider: AIProvider = {
 
           if (delta?.content) {
             chunk.content = delta.content;
-          } else if (delta?.reasoning_content) {
+          }
+          if (delta?.reasoning_content) {
             // Guardar en campo separado para que la UI lo oculte
             chunk.reasoning = delta.reasoning_content;
           }

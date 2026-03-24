@@ -50,17 +50,7 @@ He revisado los archivos de documentación en `docs/providers/`. A continuación
 
 ---
 
-## 🪐 4. BytePlus (`byteplus.md`)
 
-**Hallazgos Clave:**
-
-- **Compatibilidad 100% con OpenAI**: BytePlus utiliza el protocolo estándar de OpenAI (REST API). La integración a nivel de driver es directa (`StreamChunk`, `delta`, `tools`).
-- **Endpoint Internacional**: El `BASE_URL` para la región es `https://ark.ap-southeast.bytepluses.com/api/v3`.
-- **Modo "Free Tokens Only"**: Ofrece 500k tokens gratuitos por cuenta para pruebas iniciales. Al agotarse, el servicio se pausa automáticamente arrojando error HTTP 429 (`SetLimitExceeded`) para evitar cargos imprevistos.
-- **Modelos**: Soporta de forma nativa la familia **Doubao** (desarrollada por ByteDance) y modelos avanzados como `seed-2-0-lite`, de gran rendimiento y optimización de costes.
-- **Estado**: **✅ 100% IMPLEMENTADO** (`src/services/byteplus.ts`)
-
----
 
 ## 💡 Recomendaciones de Actualización (Dashboard)
 

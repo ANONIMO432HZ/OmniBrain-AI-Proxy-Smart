@@ -2,7 +2,6 @@ import { openRouter } from "./openrouter";
 import { groqProvider } from "./groq";
 import { cerebrasProvider } from "./cerebras";
 import { zaiProvider } from "./zai";
-import { byteplusProvider } from "./byteplus";
 import { mockProvider } from "./mock";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
@@ -17,7 +16,6 @@ const providers: ProviderState[] = [
   { provider: groqProvider, inactiveUntil: 0 },
   { provider: cerebrasProvider, inactiveUntil: 0 },
   { provider: zaiProvider, inactiveUntil: 0 },
-  { provider: byteplusProvider, inactiveUntil: 0 },
 ];
 
 export const providerRouter = {
@@ -35,11 +33,10 @@ export const providerRouter = {
       if (forceProvider === "openrouter") params.model = "openrouter/free";
       if (forceProvider === "cerebras") params.model = "llama3.1-8b";
       if (forceProvider === "zai") params.model = "glm-4.7-flash";
-      if (forceProvider === "byteplus") params.model = "seed-2-0-lite-260228";
     }
 
-    // Si no se especifica modelo, asignamos el general de OpenRouter (Comportamiento Original)
-    if (!params.model) {
+    const isAutoGlobal = !params.model;
+    if (isAutoGlobal) {
       console.log(`[router] Sin modelo especificado. Asignando 'openrouter/free' por defecto.`);
       params.model = "openrouter/free"; 
     }
@@ -91,23 +88,24 @@ export const providerRouter = {
       if (m.startsWith("glm-") && nameA === "z.ai") return -1;
       if (m.startsWith("glm-") && nameB === "z.ai") return 1;
 
-      // Priorizar BytePlus para Seed, Skylark y modelos de razonamiento avanzado
-      const isBytePlusModel = m.startsWith("seed-") || m.startsWith("skylark-") || m.startsWith("kimi-k2") || m.startsWith("deepseek-v3");
-      if (isBytePlusModel && nameA === "byteplus") return -1;
-      if (isBytePlusModel && nameB === "byteplus") return 1;
-
       return 0; // Mantener orden por defecto
     });
 
     let lastError: Error | null = null;
     let firstError: Error | null = null; // Guardar el error del proveedor priorizado
+    const failedProvidersDetails: string[] = [];
 
     for (const state of sortedAvailable) {
       let chunkCount = 0;
       try {
         console.log(`[router] Intentando proveedor Real: ${state.provider.name} para modelo ${params.model}`);
         
-        const stream = state.provider.chat(params);
+        const currentParams = { ...params };
+        if (isAutoGlobal && state.provider.id !== "openrouter") {
+          delete currentParams.model; // Permitir que el proveedor use su modelo por defecto nativo
+        }
+
+        const stream = state.provider.chat(currentParams);
         for await (const chunk of stream) {
           chunkCount++;
           yield chunk;
@@ -127,6 +125,8 @@ export const providerRouter = {
         lastError = err;
         if (!firstError) firstError = err; // Guardamos el primer error para feedback
         
+        failedProvidersDetails.push(`🔴 [${state.provider.name}] -> ${errMsg}`);
+
         // Evitamos meter en cooldown si es un error de modelo no soportado (404 / 400)
         const isModelError = errMsg.includes("404") || errMsg.includes("model") || errMsg.includes("400") || errMsg.includes("not found") || errMsg.includes("sin arrojar contenido");
         
@@ -146,7 +146,6 @@ export const providerRouter = {
       }
     }
 
-    const finalError = firstError || lastError;
-    throw new Error(`Todos los proveedores fallaron. Error del proveedor optimo: ${finalError?.message || finalError}`);
+    throw new Error(`Todos los proveedores fallaron.\n\nDetalles:\n${failedProvidersDetails.join("\n")}`);
   }
 };

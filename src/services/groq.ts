@@ -2,7 +2,7 @@ import { env } from "../config/env";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
 const GROQ_BASE_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_DEFAULT_MODEL = "llama-3.1-8b"; // Ajustado según plan de desarrollo
+const GROQ_DEFAULT_MODEL = "llama-3.1-8b-instant"; // Ajustado según plan de desarrollo
 
 function maskApiKey(apiKey: string): string {
   return apiKey.length > 10 ? `${apiKey.slice(0, 6)}...${apiKey.slice(-4)}` : "***";
@@ -89,7 +89,8 @@ export const groqProvider: AIProvider = {
 
           if (delta?.content) {
             chunk.content = delta.content;
-          } else if (delta?.reasoning_content) {
+          }
+          if (delta?.reasoning_content) {
             chunk.reasoning = delta.reasoning_content;
           }
 

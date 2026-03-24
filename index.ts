@@ -16,6 +16,7 @@ const CORS_HEADERS = {
 
 const server = Bun.serve({
   port: 3000,
+  idleTimeout: 60, // 60 segundos de inactividad para evitar cortes en streams lentos (ej. Thinking)
   async fetch(req) {
     const url = new URL(req.url);
     const requestId = crypto.randomUUID();
