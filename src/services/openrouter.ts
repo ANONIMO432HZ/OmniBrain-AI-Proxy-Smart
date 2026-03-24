@@ -75,6 +75,11 @@ export const openRouter: AIProvider = {
           const event = decodeSseLine(line);
           if (!event) continue;
 
+          // DETECTAR ERRORES EMBEBIDOS EN EL FLUJO SSE
+          if (event.error) {
+            throw new Error(`OpenRouter Stream Error: ${event.error.message || JSON.stringify(event.error)}`);
+          }
+
           const delta = event.choices?.[0]?.delta;
           const usage = event.usage;
 

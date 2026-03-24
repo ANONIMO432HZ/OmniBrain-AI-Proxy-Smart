@@ -151,15 +151,49 @@ export const landingPageHtml = `<!doctype html>
 
         <form id="chat-form">
           <label for="model">Modelo (opcional)</label>
-          <select id="model" name="model">
-            <option value="">Auto por proveedor (Round Robin / Default)</option>
-            <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Groq)</option>
-            <option value="google/gemini-2.0-flash:free">google/gemini-2.0-flash:free (OpenRouter Free)</option>
-            <option value="mistralai/mistral-small-3.1-24b-instruct:free">mistralai/mistral-small (OpenRouter Free)</option>
-            <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
-            <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
-            <option value="mock">Prueba: Mock Agent (Simulado)</option>
-            <option value="fail-first">Prueba: Circuit Breaker (Forzado)</option>
+          <select id="model" name="model" style="background:#0e1218;">
+            <optgroup label="🌐 ENRUTADO AUTOMÁTICO">
+              <option value="">Auto Global (Garantizado - 3 Proveedores)</option>
+              <option value="auto:openrouter">Auto OpenRouter (Usa solo OpenRouter)</option>
+              <option value="auto:groq">Auto Groq (Usa solo Groq)</option>
+              <option value="auto:cerebras">Auto Cerebras (Usa solo Cerebras)</option>
+            </optgroup>
+            
+            <optgroup label="🚀 MODELOS GROQ 2026">
+              <option value="llama-4-scout-17b-16e-instruct">llama-4-scout-17b-16e-instruct (Llama 4 Nuevo)</option>
+              <option value="openai/gpt-oss-120b">openai/gpt-oss-120b (GPT OSS)</option>
+              <option value="openai/gpt-oss-20b">openai/gpt-oss-20b (GPT OSS Light)</option>
+              <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Llama 3.3)</option>
+              <option value="qwen/qwen3-32b">qwen/qwen3-32b (Qwen 3)</option>
+              <option value="moonshotai/kimi-k2-instruct">moonshotai/kimi-k2-instruct (Kimi K2)</option>
+            </optgroup>
+
+            <optgroup label="📂 OPENROUTER FREE (Todos los Modelos)">
+              <option value="google/gemma-3-12b-it:free">google/gemma-3-12b-it:free</option>
+              <option value="google/gemma-3-4b-it:free">google/gemma-3-4b-it:free</option>
+              <option value="google/gemma-3n-e2b-it:free">google/gemma-3n-e2b-it:free</option>
+              <option value="google/gemma-3n-e4b-it:free">google/gemma-3n-e4b-it:free</option>
+              <option value="google/gemini-2.0-flash:free">google/gemini-2.0-flash:free</option>
+              <option value="google/gemini-2.0-pro-exp:free">google/gemini-2.0-pro-exp:free (Pro experimental)</option>
+              <option value="deepseek/deepseek-chat:free">deepseek/deepseek-chat:free (V3)</option>
+              <option value="deepseek/deepseek-r1:free">deepseek/deepseek-r1:free (R1)</option>
+              <option value="meta-llama/llama-3.3-70b-instruct:free">meta-llama/llama-3.3-70b-instruct:free</option>
+              <option value="mistralai/mistral-small-3.1-24b-instruct:free">mistralai/mistral-small-3.1-24b-instruct:free</option>
+              <option value="liquid/lfm-2.5-1.2b-instruct:free">liquid/lfm-2.5-1.2b-instruct:free</option>
+              <option value="nousresearch/hermes-3-llama-3.1-405b:free">nousresearch/hermes-3-llama-3.1-405b:free</option>
+              <option value="nvidia/llama-nemotron-embed-vl-1b-v2:free">nvidia/llama-nemotron-embed-vl-1b-v2:free</option>
+              <option value="openrouter/free">openrouter/free (Auto Free)</option>
+            </optgroup>
+
+            <optgroup label="📂 CEREBRAS DIRECTO">
+              <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
+              <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
+            </optgroup>
+
+            <optgroup label="🧪 PRUEBAS Y DIAGNÓSTICO">
+              <option value="mock">Prueba: Mock Agent (Simulado)</option>
+              <option value="fail-first">Prueba: Circuit Breaker (Forzado)</option>
+            </optgroup>
           </select>
 
           <label for="message">Mensaje</label>
