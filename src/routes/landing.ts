@@ -3,7 +3,7 @@ export const landingPageHtml = `<!doctype html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CubePath API Tester</title>
+    <title>OmniBrain API Tester</title>
     <style>
       :root {
         color-scheme: light dark;
@@ -146,17 +146,18 @@ export const landingPageHtml = `<!doctype html>
   <body>
     <main>
       <section class="panel">
-        <h1>CubePath API</h1>
+        <h1>OmniBrain API</h1>
         <p>Prueba el endpoint <code>POST /chat</code> desde esta página.</p>
 
         <form id="chat-form">
           <label for="model">Modelo (opcional)</label>
           <select id="model" name="model" style="background:#0e1218;">
             <optgroup label="🌐 ENRUTADO AUTOMÁTICO">
-              <option value="">Auto Global (Garantizado - 3 Proveedores)</option>
+              <option value="">Auto Global (Garantizado - 4 Proveedores)</option>
               <option value="auto:openrouter">Auto OpenRouter (Usa solo OpenRouter)</option>
               <option value="auto:groq">Auto Groq (Usa solo Groq)</option>
               <option value="auto:cerebras">Auto Cerebras (Usa solo Cerebras)</option>
+              <option value="auto:zai">Auto Z.AI (Usa solo Z.AI)</option>
             </optgroup>
             
             <optgroup label="🚀 MODELOS GROQ 2026">
@@ -191,7 +192,11 @@ export const landingPageHtml = `<!doctype html>
             <optgroup label="📂 CEREBRAS DIRECTO">
               <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
               <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
-              <option value="zai-glm-4.7">zai-glm-4.7 (Cerebras GLM)</option>
+              <option value="zai-glm-4.7">zai-glm-4.7 (Cerebras GLM - Deprecated)</option>
+            </optgroup>
+
+            <optgroup label="📂 Z.AI NATIVO">
+              <option value="glm-4.7-flash">glm-4.7-flash (Gratis)</option>
             </optgroup>
 
             <optgroup label="🧪 PRUEBAS Y DIAGNÓSTICO">

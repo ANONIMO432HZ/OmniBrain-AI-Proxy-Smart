@@ -82,6 +82,8 @@ export const cerebrasProvider: AIProvider = {
 
           if (delta?.content) {
             chunk.content = delta.content;
+          } else if (delta?.reasoning_content) {
+            chunk.content = delta.reasoning_content;
           }
 
           if (delta?.tool_calls) {

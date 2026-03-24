@@ -1,6 +1,7 @@
 import { openRouter } from "./openrouter";
 import { groqProvider } from "./groq";
 import { cerebrasProvider } from "./cerebras";
+import { zaiProvider } from "./zai";
 import { mockProvider } from "./mock";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
@@ -14,6 +15,7 @@ const providers: ProviderState[] = [
   { provider: openRouter, inactiveUntil: 0 },
   { provider: groqProvider, inactiveUntil: 0 },
   { provider: cerebrasProvider, inactiveUntil: 0 },
+  { provider: zaiProvider, inactiveUntil: 0 },
 ];
 
 export const providerRouter = {
@@ -30,6 +32,7 @@ export const providerRouter = {
       if (forceProvider === "groq") params.model = "llama-3.3-70b-versatile";
       if (forceProvider === "openrouter") params.model = "openrouter/free";
       if (forceProvider === "cerebras") params.model = "llama3.1-8b";
+      if (forceProvider === "zai") params.model = "glm-4.7-flash";
     }
 
     // Si no se especifica modelo, asignamos el general de OpenRouter (Comportamiento Original)
@@ -81,10 +84,15 @@ export const providerRouter = {
       if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && nameA === "cerebras") return -1;
       if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && nameB === "cerebras") return 1;
 
+      // Priorizar Z.AI para modelos GLM
+      if (m.startsWith("glm-") && nameA === "z.ai") return -1;
+      if (m.startsWith("glm-") && nameB === "z.ai") return 1;
+
       return 0; // Mantener orden por defecto
     });
 
     let lastError: Error | null = null;
+    let firstError: Error | null = null; // Guardar el error del proveedor priorizado
 
     for (const state of sortedAvailable) {
       let chunkCount = 0;
@@ -109,6 +117,7 @@ export const providerRouter = {
         const errMsg = err.message ? err.message : String(err);
         console.error(`[router] Error en ${state.provider.name}: ${errMsg}`);
         lastError = err;
+        if (!firstError) firstError = err; // Guardamos el primer error para feedback
         
         // Evitamos meter en cooldown si es un error de modelo no soportado (404 / 400)
         const isModelError = errMsg.includes("404") || errMsg.includes("model") || errMsg.includes("400") || errMsg.includes("not found") || errMsg.includes("sin arrojar contenido");
@@ -129,6 +138,7 @@ export const providerRouter = {
       }
     }
 
-    throw new Error(`Todos los proveedores fallaron. Último error: ${lastError?.message || lastError}`);
+    const finalError = firstError || lastError;
+    throw new Error(`Todos los proveedores fallaron. Error del proveedor optimo: ${finalError?.message || finalError}`);
   }
 };

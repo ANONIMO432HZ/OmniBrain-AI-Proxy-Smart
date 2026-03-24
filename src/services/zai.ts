@@ -1,12 +1,8 @@
 import { env } from "../config/env";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
-const GROQ_BASE_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_DEFAULT_MODEL = "llama-3.1-8b"; // Ajustado según plan de desarrollo
-
-function maskApiKey(apiKey: string): string {
-  return apiKey.length > 10 ? `${apiKey.slice(0, 6)}...${apiKey.slice(-4)}` : "***";
-}
+const ZAI_BASE_URL = "https://api.z.ai/api/paas/v4/chat/completions";
+const ZAI_DEFAULT_MODEL = "glm-4.7-flash";
 
 function decodeSseLine(rawLine: string): any | null {
   const line = rawLine.trim();
@@ -22,31 +18,26 @@ function decodeSseLine(rawLine: string): any | null {
   }
 }
 
-export const groqProvider: AIProvider = {
-  name: "Groq",
-  id: "groq",
+export const zaiProvider: AIProvider = {
+  name: "Z.AI",
+  id: "zai",
   isAvailable() {
-    return env.GROQ_API_KEY.trim().length > 0;
+    return env.ZAI_API_KEY.trim().length > 0;
   },
   async *chat(params: ChatParams): AsyncGenerator<StreamChunk> {
     if (!this.isAvailable()) {
-      throw new Error("GROQ_API_KEY no configurada");
+      throw new Error("ZAI_API_KEY no configurada");
     }
 
-    let modelToSend = params.model || GROQ_DEFAULT_MODEL;
+    const modelToSend = params.model || ZAI_DEFAULT_MODEL;
+    console.log(`[zai] Iniciando streaming para modelo: ${modelToSend}`);
 
-    // Corregir ID para Llama 4 si le falta el prefijo mandatorio de Groq
-    if (modelToSend === "llama-4-scout-17b-16e-instruct") {
-      modelToSend = "meta-llama/llama-4-scout-17b-16e-instruct";
-    }
-
-    console.log(`[groq] Iniciando streaming para modelo: ${modelToSend}`);
-
-    const response = await fetch(GROQ_BASE_URL, {
+    const response = await fetch(ZAI_BASE_URL, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${env.GROQ_API_KEY}`,
+        Authorization: `Bearer ${env.ZAI_API_KEY}`,
         "Content-Type": "application/json",
+        "Accept-Language": "en-US,en"
       },
       body: JSON.stringify({
         model: modelToSend,
@@ -58,9 +49,11 @@ export const groqProvider: AIProvider = {
       }),
     });
 
+    console.log(`[zai] Respuesta HTTP de Z.AI: ${response.status} ${response.statusText}`);
+
     if (!response.ok || !response.body) {
       const errorText = await response.text();
-      throw new Error(`Groq ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
+      throw new Error(`Z.AI ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
     }
 
     const reader = response.body.getReader();
@@ -90,8 +83,8 @@ export const groqProvider: AIProvider = {
           if (delta?.content) {
             chunk.content = delta.content;
           } else if (delta?.reasoning_content) {
-            // Mapear el razonamiento para evitar que la conexión se cierre por inactividad
-            chunk.content = delta.reasoning_content;
+            // Guardar en campo separado para que la UI lo oculte
+            chunk.reasoning = delta.reasoning_content;
           }
 
           if (delta?.tool_calls) {
@@ -111,7 +104,7 @@ export const groqProvider: AIProvider = {
             chunk.finishReason = finishReason;
           }
 
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoningTokens !== undefined) {
+          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
             yield chunk;
           }
         }
@@ -121,10 +114,3 @@ export const groqProvider: AIProvider = {
     }
   }
 };
-
-console.log("[groq] Proveedor inicializado");
-console.log(
-  `[groq] API key ${
-    groqProvider.isAvailable() ? `detectada (${maskApiKey(env.GROQ_API_KEY)})` : "no configurada"
-  }`,
-);
