@@ -90,7 +90,7 @@ export const openRouter: AIProvider = {
           if (delta?.content) {
             chunk.content = delta.content;
           } else if (delta?.reasoning_content) {
-            chunk.content = delta.reasoning_content;
+            chunk.reasoning = delta.reasoning_content;
           }
 
           if (delta?.tool_calls) {
@@ -110,7 +110,7 @@ export const openRouter: AIProvider = {
             chunk.finishReason = finishReason;
           }
 
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoningTokens !== undefined) {
+          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
             yield chunk;
           }
         }

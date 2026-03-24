@@ -42,6 +42,7 @@ export interface ChatParams {
 
 export interface StreamChunk {
   content?: string;
+  reasoning?: string; // Textos de razonamiento (pensamientos)
   tool_calls?: ToolCall[]; // Para streaming de ejecuciones
   finishReason?: string;
   reasoningTokens?: number;

@@ -97,6 +97,12 @@ export async function handleChatRoute(
               );
             }
 
+            if (chunk.reasoning) {
+              controller.enqueue(
+                encoder.encode(sseEvent("delta", { reasoning: chunk.reasoning })),
+              );
+            }
+
             if (chunk.tool_calls) {
               controller.enqueue(
                 encoder.encode(sseEvent("delta", { tool_calls: chunk.tool_calls })),

@@ -114,11 +114,15 @@ export const landingPageHtml = `<!doctype html>
         align-items: center;
       }
 
-      code {
+            code {
         background: #10151d;
         border: 1px solid var(--border);
         border-radius: 6px;
         padding: 1px 6px;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
       }
 
       .quick-buttons {
@@ -369,8 +373,44 @@ export const landingPageHtml = `<!doctype html>
                 );
               }
 
+              if (eventName === "delta" && data.reasoning) {
+                let reasoningBox = document.getElementById("reasoning-box");
+                if (!reasoningBox) {
+                  reasoningBox = document.createElement("details");
+                  reasoningBox.id = "reasoning-box";
+                  reasoningBox.open = true;
+                  reasoningBox.style = "background: #1e2430; padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid #38bdf8; font-size: 0.9rem; color: #94a3b8;";
+                  const summary = document.createElement("summary");
+                  summary.style = "cursor: pointer; color: #38bdf8; font-weight: 600; outline:none; display:flex; align-items:center; gap:8px;";
+                  summary.innerHTML = '<div class="spinner-thinking" style="width: 14px; height: 14px; border: 2px solid rgba(56,189,248,0.2); border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite;"></div><span>🤔 Pensando del modelo...</span>';
+                  reasoningBox.appendChild(summary);
+                  const contentDiv = document.createElement("div");
+                  contentDiv.id = "reasoning-content";
+                  contentDiv.style = "margin-top: 10px; font-style: italic; white-space: pre-wrap;";
+                  reasoningBox.appendChild(contentDiv);
+                  result.appendChild(reasoningBox);
+                }
+                document.getElementById("reasoning-content").textContent += data.reasoning;
+              }
+
               if (eventName === "delta" && data.content) {
-                result.textContent += data.content;
+                const reasoningBox = document.getElementById("reasoning-box");
+                if (reasoningBox) {
+                   if (reasoningBox.open) reasoningBox.open = false; // Colapsar al empezar a responder
+                   const spinner = reasoningBox.querySelector(".spinner-thinking");
+                   if (spinner) spinner.style.display = "none"; // Ocultar spinner
+                   const textSpan = reasoningBox.querySelector("summary span");
+                   if (textSpan) textSpan.textContent = "🤔 Pensamiento del modelo (Completado)";
+                }
+
+                let textNode = document.getElementById("text-content");
+                if (!textNode) {
+                  textNode = document.createElement("div");
+                  textNode.id = "text-content";
+                  textNode.style = "white-space: pre-wrap;";
+                  result.appendChild(textNode);
+                }
+                textNode.textContent += data.content;
               }
 
               if (eventName === "usage" && data.reasoningTokens !== undefined) {

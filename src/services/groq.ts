@@ -90,8 +90,7 @@ export const groqProvider: AIProvider = {
           if (delta?.content) {
             chunk.content = delta.content;
           } else if (delta?.reasoning_content) {
-            // Mapear el razonamiento para evitar que la conexión se cierre por inactividad
-            chunk.content = delta.reasoning_content;
+            chunk.reasoning = delta.reasoning_content;
           }
 
           if (delta?.tool_calls) {
@@ -111,7 +110,7 @@ export const groqProvider: AIProvider = {
             chunk.finishReason = finishReason;
           }
 
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoningTokens !== undefined) {
+          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
             yield chunk;
           }
         }
