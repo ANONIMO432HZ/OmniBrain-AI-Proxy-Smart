@@ -3,4 +3,5 @@ export const env = {
   GROQ_API_KEY: Bun.env.GROQ_API_KEY ?? "",
   CEREBRAS_API_KEY: Bun.env.CEREBRAS_API_KEY ?? "",
   ZAI_API_KEY: Bun.env.ZAI_API_KEY ?? "",
+  ARK_API_KEY: Bun.env.ARK_API_KEY ?? "",
 } as const;

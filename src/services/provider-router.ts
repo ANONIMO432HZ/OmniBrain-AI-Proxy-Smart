@@ -2,6 +2,7 @@ import { openRouter } from "./openrouter";
 import { groqProvider } from "./groq";
 import { cerebrasProvider } from "./cerebras";
 import { zaiProvider } from "./zai";
+import { byteplusProvider } from "./byteplus";
 import { mockProvider } from "./mock";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
@@ -16,6 +17,7 @@ const providers: ProviderState[] = [
   { provider: groqProvider, inactiveUntil: 0 },
   { provider: cerebrasProvider, inactiveUntil: 0 },
   { provider: zaiProvider, inactiveUntil: 0 },
+  { provider: byteplusProvider, inactiveUntil: 0 },
 ];
 
 export const providerRouter = {
@@ -33,6 +35,7 @@ export const providerRouter = {
       if (forceProvider === "openrouter") params.model = "openrouter/free";
       if (forceProvider === "cerebras") params.model = "llama3.1-8b";
       if (forceProvider === "zai") params.model = "glm-4.7-flash";
+      if (forceProvider === "byteplus") params.model = "seed-2-0-lite-260228";
     }
 
     // Si no se especifica modelo, asignamos el general de OpenRouter (Comportamiento Original)
@@ -87,6 +90,11 @@ export const providerRouter = {
       // Priorizar Z.AI para modelos GLM
       if (m.startsWith("glm-") && nameA === "z.ai") return -1;
       if (m.startsWith("glm-") && nameB === "z.ai") return 1;
+
+      // Priorizar BytePlus para Seed, Skylark y modelos de razonamiento avanzado
+      const isBytePlusModel = m.startsWith("seed-") || m.startsWith("skylark-") || m.startsWith("kimi-k2") || m.startsWith("deepseek-v3");
+      if (isBytePlusModel && nameA === "byteplus") return -1;
+      if (isBytePlusModel && nameB === "byteplus") return 1;
 
       return 0; // Mantener orden por defecto
     });

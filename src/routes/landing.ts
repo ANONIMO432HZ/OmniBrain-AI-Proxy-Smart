@@ -157,11 +157,12 @@ export const landingPageHtml = `<!doctype html>
           <label for="model">Modelo (opcional)</label>
           <select id="model" name="model" style="background:#0e1218;">
             <optgroup label="🌐 ENRUTADO AUTOMÁTICO">
-              <option value="">Auto Global (Garantizado - 4 Proveedores)</option>
+              <option value="">Auto Global (Garantizado - 5 Proveedores)</option>
               <option value="auto:openrouter">Auto OpenRouter (Usa solo OpenRouter)</option>
               <option value="auto:groq">Auto Groq (Usa solo Groq)</option>
               <option value="auto:cerebras">Auto Cerebras (Usa solo Cerebras)</option>
               <option value="auto:zai">Auto Z.AI (Usa solo Z.AI)</option>
+              <option value="auto:byteplus">Auto BytePlus (Usa solo BytePlus)</option>
             </optgroup>
             
             <optgroup label="🚀 MODELOS GROQ 2026">
@@ -196,11 +197,17 @@ export const landingPageHtml = `<!doctype html>
             <optgroup label="📂 CEREBRAS DIRECTO">
               <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
               <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
-              <option value="zai-glm-4.7">zai-glm-4.7 (Cerebras GLM - Deprecated)</option>
             </optgroup>
 
             <optgroup label="📂 Z.AI NATIVO">
               <option value="glm-4.7-flash">glm-4.7-flash (Gratis)</option>
+            </optgroup>
+
+            <optgroup label="📂 BYTEPLUS ARK NATIVO">
+              <option value="seed-2-0-lite-260228">seed-2-0-lite (Flagship)</option>
+              <option value="seed-2-0-mini-260215">seed-2-0-mini (Rápido)</option>
+              <option value="deepseek-v3-2-251201">deepseek-v3-2 (DeepSeek V3)</option>
+              <option value="kimi-k2-thinking-251104">kimi-k2-thinking (Kimi CoT)</option>
             </optgroup>
 
             <optgroup label="🧪 PRUEBAS Y DIAGNÓSTICO">
