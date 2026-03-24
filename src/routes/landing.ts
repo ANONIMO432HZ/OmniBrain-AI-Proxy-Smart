@@ -60,6 +60,7 @@ export const landingPageHtml = `<!doctype html>
       }
 
       input,
+      select,
       textarea,
       button {
         width: 100%;
@@ -150,7 +151,16 @@ export const landingPageHtml = `<!doctype html>
 
         <form id="chat-form">
           <label for="model">Modelo (opcional)</label>
-          <input id="model" name="model" placeholder="Auto por proveedor (round robin)" />
+          <select id="model" name="model">
+            <option value="">Auto por proveedor (Round Robin / Default)</option>
+            <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Groq)</option>
+            <option value="google/gemini-2.0-flash:free">google/gemini-2.0-flash:free (OpenRouter Free)</option>
+            <option value="mistralai/mistral-small-3.1-24b-instruct:free">mistralai/mistral-small (OpenRouter Free)</option>
+            <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
+            <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
+            <option value="mock">Prueba: Mock Agent (Simulado)</option>
+            <option value="fail-first">Prueba: Circuit Breaker (Forzado)</option>
+          </select>
 
           <label for="message">Mensaje</label>
           <textarea id="message" name="message" placeholder="Escribe una pregunta..."></textarea>

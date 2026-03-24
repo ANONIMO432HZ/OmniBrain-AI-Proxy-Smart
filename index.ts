@@ -7,7 +7,6 @@ import "./src/routes/api/users";
 import "./src/routes/api/conversations";
 import "./src/routes/api/messages";
 
-await ensureDatabaseReady();
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
