@@ -23,7 +23,7 @@ export const providerRouter = {
     // SOPORTE PARA AUTO-DIRECCIONADO POR PROVEEDOR (auto:groq, auto:openrouter)
     let forceProvider: string | null = null;
     if (params.model && params.model.startsWith("auto:")) {
-      forceProvider = params.model.split(":")[1]; // "groq", "openrouter", "cerebras"
+      forceProvider = params.model.split(":")[1] || null; // "groq", "openrouter", "cerebras"
       console.log(`[router] Forzando uso exclusivo del proveedor: ${forceProvider}`);
       
       // Asignar modelo por defecto para ese proveedor
@@ -68,8 +68,10 @@ export const providerRouter = {
       const m = params.model!.toLowerCase();
 
       // Priorizar OpenRouter para modelos free o google/
-      if ((m.includes(":free") || m.includes("google/")) && nameA === "openrouter") return -1;
-      if ((m.includes(":free") || m.includes("google/")) && nameB === "openrouter") return 1;
+      const isOpenRouterModel = m.includes(":free") || m.includes("/free") || m.includes("google/");
+      
+      if (isOpenRouterModel && nameA === "openrouter") return -1;
+      if (isOpenRouterModel && nameB === "openrouter") return 1;
 
       // Priorizar Groq para Llama 4 y Llama 3.3 versatile
       if ((m.includes("versatile") || m.includes("llama-4-scout")) && nameA === "groq") return -1;

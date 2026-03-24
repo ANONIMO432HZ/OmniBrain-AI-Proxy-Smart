@@ -33,7 +33,14 @@ export const groqProvider: AIProvider = {
       throw new Error("GROQ_API_KEY no configurada");
     }
 
-    console.log(`[groq] Iniciando streaming para modelo: ${params.model || GROQ_DEFAULT_MODEL}`);
+    let modelToSend = params.model || GROQ_DEFAULT_MODEL;
+
+    // Corregir ID para Llama 4 si le falta el prefijo mandatorio de Groq
+    if (modelToSend === "llama-4-scout-17b-16e-instruct") {
+      modelToSend = "meta-llama/llama-4-scout-17b-16e-instruct";
+    }
+
+    console.log(`[groq] Iniciando streaming para modelo: ${modelToSend}`);
 
     const response = await fetch(GROQ_BASE_URL, {
       method: "POST",
@@ -42,7 +49,7 @@ export const groqProvider: AIProvider = {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: params.model || GROQ_DEFAULT_MODEL,
+        model: modelToSend,
         messages: params.messages,
         temperature: params.temperature,
         stream: true,
