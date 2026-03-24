@@ -166,6 +166,9 @@ export const landingPageHtml = `<!doctype html>
               <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Llama 3.3)</option>
               <option value="qwen/qwen3-32b">qwen/qwen3-32b (Qwen 3)</option>
               <option value="moonshotai/kimi-k2-instruct">moonshotai/kimi-k2-instruct (Kimi K2)</option>
+              <option value="groq/compound-mini">groq/compound-mini (Compound Agentic)</option>
+              <option value="groq/compound">groq/compound (Compound Large)</option>
+              <option value="llama-3.1-8b-instant">llama-3.1-8b-instant (Llama 8B Instant)</option>
             </optgroup>
 
             <optgroup label="📂 OPENROUTER FREE (Todos los Modelos)">
@@ -188,6 +191,7 @@ export const landingPageHtml = `<!doctype html>
             <optgroup label="📂 CEREBRAS DIRECTO">
               <option value="llama3.1-8b">llama3.1-8b (Cerebras Llama)</option>
               <option value="qwen-3-235b-a22b-instruct-2507">qwen-3-235b-a22b-instruct-2507 (Cerebras Qwen)</option>
+              <option value="zai-glm-4.7">zai-glm-4.7 (Cerebras GLM)</option>
             </optgroup>
 
             <optgroup label="🧪 PRUEBAS Y DIAGNÓSTICO">
