@@ -1,4 +1,4 @@
-# cubepath-bun-api
+# OmniBrain-API
 
 To install dependencies:
 

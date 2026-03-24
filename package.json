@@ -1,5 +1,5 @@
 {
-  "name": "cubepath-bun-api",
+  "name": "omnibrain-api",
   "module": "index.ts",
   "type": "module",
   "private": true,
