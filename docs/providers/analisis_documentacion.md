@@ -8,18 +8,18 @@ He revisado los archivos de documentación en `docs/providers/`. A continuación
 
 **Hallazgos Clave:**
 
-- **Sistema de Cuotas Continuo**: Groq usa un algoritmo de *Token Bucketing* (reposición continua). No hay un reinicio fijo a las 00:00.
+- **Sistema de Cuotas Continuo**: Groq usa un algoritmo de _Token Bucketing_ (reposición continua). No hay un reinicio fijo a las 00:00.
 - **Modelos 2026 Confirmados (LPU speed)**: Se valida la presencia de familias como **Llama 4 Scout** y **GPT OSS** (OpenAI open weight).
-- **Parámetro Recomendado**: Recomiendan configurar `max_completion_tokens` de forma óptima para evitar sobre-estimar el consumo y activar el block de *Rate Limits* erróneamente.
+- **Parámetro Recomendado**: Recomiendan configurar `max_completion_tokens` de forma óptima para evitar sobre-estimar el consumo y activar el block de _Rate Limits_ erróneamente.
 
 ### 📝 Modelos Groq vs Dashboard
 
-| Modelo | Estado en Dashboard | Sugerencia |
-| :--- | :--- | :--- |
-| `meta-llama/llama-4-scout-17b-16e-instruct` | ✅ Agregado | - |
-| `openai/gpt-oss-120b` y `20b` | ✅ Agregado | Modelos de razonamiento ultra-rápido |
-| `groq/compound` y `groq/compound-mini` | ⚠️ Ausente | **Agregar**. Modelos dedicados a workflows compuestos de Groq. |
-| `moonshotai/kimi-k2-instruct` | ✅ Agregado | - |
+| Modelo                                      | Estado en Dashboard | Sugerencia                                                     |
+| :------------------------------------------ | :------------------ | :------------------------------------------------------------- |
+| `meta-llama/llama-4-scout-17b-16e-instruct` | ✅ Agregado         | -                                                              |
+| `openai/gpt-oss-120b` y `20b`               | ✅ Agregado         | Modelos de razonamiento ultra-rápido                           |
+| `groq/compound` y `groq/compound-mini`      | ⚠️ Ausente          | **Agregar**. Modelos dedicados a workflows compuestos de Groq. |
+| `moonshotai/kimi-k2-instruct`               | ✅ Agregado         | -                                                              |
 
 ---
 
@@ -32,12 +32,12 @@ He revisado los archivos de documentación en `docs/providers/`. A continuación
 
 ### 📝 Modelos Cerebras vs Dashboard
 
-| Modelo | Estado en Dashboard | Sugerencia |
-| :--- | :--- | :--- |
-| `llama3.1-8b` | ✅ Agregado | - |
-| `qwen-3-235b-a22b-instruct-2507` | ✅ Agregado | - |
-| `zai-glm-4.7` | ❌ Ausente | **Agregar**. Modelo de alta capacidad. |
-| `gpt-oss-120b` | ⚠️ Duplicado | Cerebras también ofrece GPT OSS 120B. |
+| Modelo                           | Estado en Dashboard | Sugerencia                             |
+| :------------------------------- | :------------------ | :------------------------------------- |
+| `llama3.1-8b`                    | ✅ Agregado         | -                                      |
+| `qwen-3-235b-a22b-instruct-2507` | ✅ Agregado         | -                                      |
+| `zai-glm-4.7`                    | ❌ Ausente          | **Agregar**. Modelo de alta capacidad. |
+| `gpt-oss-120b`                   | ⚠️ Duplicado        | Cerebras también ofrece GPT OSS 120B.  |
 
 ---
 
@@ -49,8 +49,6 @@ He revisado los archivos de documentación en `docs/providers/`. A continuación
 - **Sufijo `:free`**: Es el estándar mandatorio de OpenRouter para variantes gratuitas (ej. `meta-llama/llama-3.2-3b-instruct:free`).
 
 ---
-
-
 
 ## 💡 Recomendaciones de Actualización (Dashboard)
 

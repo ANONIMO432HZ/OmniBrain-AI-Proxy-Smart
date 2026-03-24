@@ -14,6 +14,7 @@ Otro proceso en segundo plano (o una ejecución fallida anterior de Bun que no s
 
 **✅ Solución:**
 Matar el proceso que ocupa el puerto antes de reiniciar:
+
 - **Windows (PowerShell):** `Stop-Process -Id (Get-NetTCPConnection -LocalPort 3000).OwningProcess -Force`
 - **Linux / Mac:** `kill -9 $(lsof -t -i:3000)`
 
@@ -30,6 +31,7 @@ El `provider-router` inyectaba `"openrouter/free"` como modelo por defecto para 
 
 **✅ Solución:**
 Se ajustó el `provider-router.ts` con una bandera de memoria:
+
 ```typescript
 const isAutoGlobal = !params.model; // Detectar si viene vacío de front
 ...
@@ -48,10 +50,11 @@ Al llamar a modelos pesados con Razonamiento o CoT Inteligente, la UI devolvía 
 `[Bun.serve]: request timed out after 10 seconds. Pass idleTimeout to configure.`
 
 **🔍 Causa:**
-Bun tiene por defecto un tiempo de inactividad (*idle timeout*) de **10 segundos**. Como los cálculos de razonamiento pueden tardar más de eso en pulsar el primer token del stream, Bun abortaba la conexión por "inactividad".
+Bun tiene por defecto un tiempo de inactividad (_idle timeout_) de **10 segundos**. Como los cálculos de razonamiento pueden tardar más de eso en pulsar el primer token del stream, Bun abortaba la conexión por "inactividad".
 
 **✅ Solución:**
 Se elevó el umbral de desconexión en [index.ts](file:///index.ts):
+
 ```typescript
 const server = Bun.serve({
   port: 3000,
@@ -68,14 +71,17 @@ El razonamiento del modelo de IA caía de forma aleatoria como texto plano en ve
 
 **🔍 Causa:**
 En los drivers (`groq.ts`, `zai.ts`), el parseador de eventos SSE estaba programado con un filtro excluyente:
+
 ```typescript
 if (delta?.content) { ... }
 else if (delta?.reasoning_content) { ... }
 ```
+
 Si el API del proveedor devolvía la respuesta de texto (`content`) y su pensamiento (`reasoning_content`) **juntos en el mismo paquete de datos**, la condición `else if` ignoraba y descartaba el pensamiento.
 
 **✅ Solución:**
 Modificar los bloques condicionales para correr en paralelo sin exclusión:
+
 ```typescript
 if (delta?.content) { ... }
 if (delta?.reasoning_content) { ... }
@@ -91,10 +97,11 @@ El driver de Groq (`src/services/groq.ts`) tenía configurado el modelo `"llama-
 
 **✅ Solución:**
 Actualizar la constante en `src/services/groq.ts`:
+
 ```typescript
 const GROQ_DEFAULT_MODEL = "llama-3.1-8b-instant";
 ```
 
 ---
 
-*Actualizado: 2026-03-24*
+_Actualizado: 2026-03-24_

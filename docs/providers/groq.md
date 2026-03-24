@@ -12,12 +12,12 @@ Rate limits act as control measures to regulate how frequently users and applica
 
 Rate limits are measured in:
 
-* **RPM:** Requests per minute
-* **RPD:** Requests per day
-* **TPM:** Tokens per minute
-* **TPD:** Tokens per day
-* **ASH:** Audio seconds per hour
-* **ASD:** Audio seconds per day
+- **RPM:** Requests per minute
+- **RPD:** Requests per day
+- **TPM:** Tokens per minute
+- **TPD:** Tokens per day
+- **ASH:** Audio seconds per hour
+- **ASD:** Audio seconds per day
 
 [Cached tokens](https://console.groq.com/docs/prompt-caching) do not count towards your rate limits.
 
@@ -34,25 +34,25 @@ The following is a high level summary and there may be exceptions to these limit
 | MODEL ID | RPM | RPD | TPM | TPD | ASH | ASD |
 | -------- | --- | --- | --- | --- | --- | --- |
 
-| allam-2-7b                                | 30 | 7K    | 6K   | 500K | \-   | \-    |
-| ----------------------------------------- | -- | ----- | ---- | ---- | ---- | ----- |
-| canopylabs/orpheus-arabic-saudi           | 10 | 100   | 1.2K | 3.6K | \-   | \-    |
-| canopylabs/orpheus-v1-english             | 10 | 100   | 1.2K | 3.6K | \-   | \-    |
-| groq/compound                             | 30 | 250   | 70K  | \-   | \-   | \-    |
-| groq/compound-mini                        | 30 | 250   | 70K  | \-   | \-   | \-    |
-| llama-3.1-8b-instant                      | 30 | 14.4K | 6K   | 500K | \-   | \-    |
-| llama-3.3-70b-versatile                   | 30 | 1K    | 12K  | 100K | \-   | \-    |
-| meta-llama/llama-4-scout-17b-16e-instruct | 30 | 1K    | 30K  | 500K | \-   | \-    |
-| meta-llama/llama-prompt-guard-2-22m       | 30 | 14.4K | 15K  | 500K | \-   | \-    |
-| meta-llama/llama-prompt-guard-2-86m       | 30 | 14.4K | 15K  | 500K | \-   | \-    |
-| moonshotai/kimi-k2-instruct               | 60 | 1K    | 10K  | 300K | \-   | \-    |
-| moonshotai/kimi-k2-instruct-0905          | 60 | 1K    | 10K  | 300K | \-   | \-    |
-| openai/gpt-oss-120b                       | 30 | 1K    | 8K   | 200K | \-   | \-    |
-| openai/gpt-oss-20b                        | 30 | 1K    | 8K   | 200K | \-   | \-    |
-| openai/gpt-oss-safeguard-20b              | 30 | 1K    | 8K   | 200K | \-   | \-    |
-| qwen/qwen3-32b                            | 60 | 1K    | 6K   | 500K | \-   | \-    |
-| whisper-large-v3                          | 20 | 2K    | \-   | \-   | 7.2K | 28.8K |
-| whisper-large-v3-turbo                    | 20 | 2K    | \-   | \-   | 7.2K | 28.8K |
+| allam-2-7b                                | 30  | 7K    | 6K   | 500K | \-   | \-    |
+| ----------------------------------------- | --- | ----- | ---- | ---- | ---- | ----- |
+| canopylabs/orpheus-arabic-saudi           | 10  | 100   | 1.2K | 3.6K | \-   | \-    |
+| canopylabs/orpheus-v1-english             | 10  | 100   | 1.2K | 3.6K | \-   | \-    |
+| groq/compound                             | 30  | 250   | 70K  | \-   | \-   | \-    |
+| groq/compound-mini                        | 30  | 250   | 70K  | \-   | \-   | \-    |
+| llama-3.1-8b-instant                      | 30  | 14.4K | 6K   | 500K | \-   | \-    |
+| llama-3.3-70b-versatile                   | 30  | 1K    | 12K  | 100K | \-   | \-    |
+| meta-llama/llama-4-scout-17b-16e-instruct | 30  | 1K    | 30K  | 500K | \-   | \-    |
+| meta-llama/llama-prompt-guard-2-22m       | 30  | 14.4K | 15K  | 500K | \-   | \-    |
+| meta-llama/llama-prompt-guard-2-86m       | 30  | 14.4K | 15K  | 500K | \-   | \-    |
+| moonshotai/kimi-k2-instruct               | 60  | 1K    | 10K  | 300K | \-   | \-    |
+| moonshotai/kimi-k2-instruct-0905          | 60  | 1K    | 10K  | 300K | \-   | \-    |
+| openai/gpt-oss-120b                       | 30  | 1K    | 8K   | 200K | \-   | \-    |
+| openai/gpt-oss-20b                        | 30  | 1K    | 8K   | 200K | \-   | \-    |
+| openai/gpt-oss-safeguard-20b              | 30  | 1K    | 8K   | 200K | \-   | \-    |
+| qwen/qwen3-32b                            | 60  | 1K    | 6K   | 500K | \-   | \-    |
+| whisper-large-v3                          | 20  | 2K    | \-   | \-   | 7.2K | 28.8K |
+| whisper-large-v3-turbo                    | 20  | 2K    | \-   | \-   | 7.2K | 28.8K |
 
 ## [Rate Limit Headers](#rate-limit-headers)
 
@@ -77,8 +77,10 @@ When you exceed rate limits, our API returns a `429 Too Many Requests` HTTP stat
 **Note**: `retry-after` is only set if you hit the rate limit and status code 429 is returned. The other headers are always included.
 
 ---
+
 description: Comprehensive reference documentation for the Groq API, including endpoints, parameters, and examples.
 title: API Reference - GroqDocs
+
 ---
 
 # Groq API Reference [Groq](https://console.groq.com/docs/api-reference)
@@ -91,144 +93,175 @@ POSThttps://api.groq.com/openai/v1/chat/completions
 
 Creates a model response for the given chat conversation.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#chat-create-request-body)
 
-* messagesarrayRequired  
-A list of messages comprising the conversation so far.  
-### Show possible types
-* modelstringRequired  
-ID of the model to use. For details on which models are compatible with the Chat API, see available [models](https://console.groq.com/docs/models)
-* citation\_optionsstring or nullOptionalDefaults to enabled  
-Allowed values: `enabled, disabled`  
-Whether to enable citations in the response. When enabled, the model will include citations for information retrieved from provided documents or web searches.
-* compound\_customobject or nullOptional  
-Custom configuration of models and tools for Compound.  
-### Show properties
-* disable\_tool\_validationbooleanOptionalDefaults to false  
-If set to true, groq will return called tools without validating that the tool is present in request.tools. tool\_choice=required/none will still be enforced, but the request cannot require a specific tool be used.
-* documentsarray or nullOptional  
-A list of documents to provide context for the conversation. Each document contains text that can be referenced by the model.  
-### Show properties
-* exclude\_domainsDeprecatedarray or nullOptional  
-Deprecated: Use search\_settings.exclude\_domains instead. A list of domains to exclude from the search results when the model uses a web search tool.
-* frequency\_penaltynumber or nullOptionalDefaults to 0  
-Range: \-2 - 2  
-This is not yet supported by any of our models. Number between -2.0 and 2.0\. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
-* function\_callDeprecatedstring / object or nullOptional  
-Deprecated in favor of `tool_choice`.  
-Controls which (if any) function is called by the model.`none` means the model will not call a function and instead generates a message.`auto` means the model can pick between generating a message or calling a function. Specifying a particular function via `{"name": "my_function"}` forces the model to call that function.  
-`none` is the default when no functions are present. `auto` is the default if functions are present.  
-### Show possible types
-* functionsDeprecatedarray or nullOptional  
-Deprecated in favor of `tools`.  
-A list of functions the model may generate JSON inputs for.  
-### Show properties
-* include\_domainsDeprecatedarray or nullOptional  
-Deprecated: Use search\_settings.include\_domains instead. A list of domains to include in the search results when the model uses a web search tool.
-* include\_reasoningboolean or nullOptional  
-Whether to include reasoning in the response. If true, the response will include a `reasoning` field. If false, the model's reasoning will not be included in the response. This field is mutually exclusive with `reasoning_format`.
-* logit\_biasobject or nullOptional  
-This is not yet supported by any of our models. Modify the likelihood of specified tokens appearing in the completion.
-* logprobsboolean or nullOptionalDefaults to false  
-This is not yet supported by any of our models. Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
-* max\_completion\_tokensinteger or nullOptional  
-The maximum number of tokens that can be generated in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length.
-* max\_tokensDeprecatedinteger or nullOptional  
-Deprecated in favor of `max_completion_tokens`. The maximum number of tokens that can be generated in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length.
-* metadataobject or nullOptional  
-This parameter is not currently supported.
-* ninteger or nullOptionalDefaults to 1  
-Range: 1 - 1  
-How many chat completion choices to generate for each input message. Note that the current moment, only n=1 is supported. Other values will result in a 400 response.
-* parallel\_tool\_callsboolean or nullOptionalDefaults to true  
-Whether to enable parallel function calling during tool use.
-* presence\_penaltynumber or nullOptionalDefaults to 0  
-Range: \-2 - 2  
-This is not yet supported by any of our models. Number between -2.0 and 2.0\. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
-* reasoning\_effortstring or nullOptional  
-Allowed values: `none, default, low, medium, high`  
-qwen3 models support the following values Set to 'none' to disable reasoning. Set to 'default' or null to let Qwen reason.  
-openai/gpt-oss-20b and openai/gpt-oss-120b support 'low', 'medium', or 'high'. 'medium' is the default value.
-* reasoning\_formatstring or nullOptional  
-Allowed values: `hidden, raw, parsed`  
-Specifies how to output reasoning tokens This field is mutually exclusive with `include_reasoning`.
-* response\_formatobject / object / object or nullOptional  
-An object specifying the format that the model must output. Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema. `json_schema` response format is only available on [supported models](https://console.groq.com/docs/structured-outputs#supported-models). Setting to `{ "type": "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON. Using `json_schema` is preferred for models that support it.  
-### Show possible types
-* search\_settingsobject or nullOptional  
-Settings for web search functionality when the model uses a web search tool.  
-### Show properties
-* seedinteger or nullOptional  
-If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result. Determinism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.
-* service\_tierstring or nullOptional  
-Allowed values: `auto, on_demand, flex, performance, null`  
-The service tier to use for the request. Defaults to `on_demand`.  
-   * `auto` will automatically select the highest tier available within the rate limits of your organization.  
-   * `flex` uses the flex tier, which will succeed or fail quickly.
-* stopstring / array or nullOptional  
-Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.  
-### Show possible types
-* storeboolean or nullOptional  
-This parameter is not currently supported.
-* streamboolean or nullOptionalDefaults to false  
-If set, partial message deltas will be sent. Tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent%5Fevents/Using%5Fserver-sent%5Fevents#Event%5Fstream%5Fformat) as they become available, with the stream terminated by a `data: [DONE]` message. [Example code](https://console.groq.com/docs/text-chat#streaming-a-chat-completion).
-* stream\_optionsobject or nullOptional  
-Options for streaming response. Only set this when you set `stream: true`.  
-### Show properties
-* temperaturenumber or nullOptionalDefaults to 1  
-Range: 0 - 2  
-What sampling temperature to use, between 0 and 2\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top\_p but not both.
-* tool\_choicestring / object or nullOptional  
-Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
-`none` is the default when no tools are present. `auto` is the default if tools are present.  
-### Show possible types
-* toolsarray or nullOptional  
-A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for. A max of 128 functions are supported.  
-### Show properties
-* top\_logprobsinteger or nullOptional  
-Range: 0 - 20  
-This is not yet supported by any of our models. An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability. `logprobs` must be set to `true` if this parameter is used.
-* top\_pnumber or nullOptionalDefaults to 1  
-Range: 0 - 1  
-An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top\_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.
-* userstring or nullOptional  
-A unique identifier representing your end-user, which can help us monitor and detect abuse.
+- messagesarrayRequired  
+  A list of messages comprising the conversation so far.
 
-### 
+### Show possible types
+
+- modelstringRequired  
+  ID of the model to use. For details on which models are compatible with the Chat API, see available [models](https://console.groq.com/docs/models)
+- citation_optionsstring or nullOptionalDefaults to enabled  
+  Allowed values: `enabled, disabled`  
+  Whether to enable citations in the response. When enabled, the model will include citations for information retrieved from provided documents or web searches.
+- compound_customobject or nullOptional  
+  Custom configuration of models and tools for Compound.
+
+### Show properties
+
+- disable_tool_validationbooleanOptionalDefaults to false  
+  If set to true, groq will return called tools without validating that the tool is present in request.tools. tool_choice=required/none will still be enforced, but the request cannot require a specific tool be used.
+- documentsarray or nullOptional  
+  A list of documents to provide context for the conversation. Each document contains text that can be referenced by the model.
+
+### Show properties
+
+- exclude_domainsDeprecatedarray or nullOptional  
+  Deprecated: Use search_settings.exclude_domains instead. A list of domains to exclude from the search results when the model uses a web search tool.
+- frequency_penaltynumber or nullOptionalDefaults to 0  
+  Range: \-2 - 2  
+  This is not yet supported by any of our models. Number between -2.0 and 2.0\. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim.
+- function_callDeprecatedstring / object or nullOptional  
+  Deprecated in favor of `tool_choice`.  
+  Controls which (if any) function is called by the model.`none` means the model will not call a function and instead generates a message.`auto` means the model can pick between generating a message or calling a function. Specifying a particular function via `{"name": "my_function"}` forces the model to call that function.  
+  `none` is the default when no functions are present. `auto` is the default if functions are present.
+
+### Show possible types
+
+- functionsDeprecatedarray or nullOptional  
+  Deprecated in favor of `tools`.  
+  A list of functions the model may generate JSON inputs for.
+
+### Show properties
+
+- include_domainsDeprecatedarray or nullOptional  
+  Deprecated: Use search_settings.include_domains instead. A list of domains to include in the search results when the model uses a web search tool.
+- include_reasoningboolean or nullOptional  
+  Whether to include reasoning in the response. If true, the response will include a `reasoning` field. If false, the model's reasoning will not be included in the response. This field is mutually exclusive with `reasoning_format`.
+- logit_biasobject or nullOptional  
+  This is not yet supported by any of our models. Modify the likelihood of specified tokens appearing in the completion.
+- logprobsboolean or nullOptionalDefaults to false  
+  This is not yet supported by any of our models. Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
+- max_completion_tokensinteger or nullOptional  
+  The maximum number of tokens that can be generated in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length.
+- max_tokensDeprecatedinteger or nullOptional  
+  Deprecated in favor of `max_completion_tokens`. The maximum number of tokens that can be generated in the chat completion. The total length of input tokens and generated tokens is limited by the model's context length.
+- metadataobject or nullOptional  
+  This parameter is not currently supported.
+- ninteger or nullOptionalDefaults to 1  
+  Range: 1 - 1  
+  How many chat completion choices to generate for each input message. Note that the current moment, only n=1 is supported. Other values will result in a 400 response.
+- parallel_tool_callsboolean or nullOptionalDefaults to true  
+  Whether to enable parallel function calling during tool use.
+- presence_penaltynumber or nullOptionalDefaults to 0  
+  Range: \-2 - 2  
+  This is not yet supported by any of our models. Number between -2.0 and 2.0\. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.
+- reasoning_effortstring or nullOptional  
+  Allowed values: `none, default, low, medium, high`  
+  qwen3 models support the following values Set to 'none' to disable reasoning. Set to 'default' or null to let Qwen reason.  
+  openai/gpt-oss-20b and openai/gpt-oss-120b support 'low', 'medium', or 'high'. 'medium' is the default value.
+- reasoning_formatstring or nullOptional  
+  Allowed values: `hidden, raw, parsed`  
+  Specifies how to output reasoning tokens This field is mutually exclusive with `include_reasoning`.
+- response_formatobject / object / object or nullOptional  
+  An object specifying the format that the model must output. Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema. `json_schema` response format is only available on [supported models](https://console.groq.com/docs/structured-outputs#supported-models). Setting to `{ "type": "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON. Using `json_schema` is preferred for models that support it.
+
+### Show possible types
+
+- search_settingsobject or nullOptional  
+  Settings for web search functionality when the model uses a web search tool.
+
+### Show properties
+
+- seedinteger or nullOptional  
+  If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result. Determinism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.
+- service_tierstring or nullOptional  
+  Allowed values: `auto, on_demand, flex, performance, null`  
+  The service tier to use for the request. Defaults to `on_demand`.
+  - `auto` will automatically select the highest tier available within the rate limits of your organization.
+  - `flex` uses the flex tier, which will succeed or fail quickly.
+- stopstring / array or nullOptional  
+  Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence.
+
+### Show possible types
+
+- storeboolean or nullOptional  
+  This parameter is not currently supported.
+- streamboolean or nullOptionalDefaults to false  
+  If set, partial message deltas will be sent. Tokens will be sent as data-only [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent%5Fevents/Using%5Fserver-sent%5Fevents#Event%5Fstream%5Fformat) as they become available, with the stream terminated by a `data: [DONE]` message. [Example code](https://console.groq.com/docs/text-chat#streaming-a-chat-completion).
+- stream_optionsobject or nullOptional  
+  Options for streaming response. Only set this when you set `stream: true`.
+
+### Show properties
+
+- temperaturenumber or nullOptionalDefaults to 1  
+  Range: 0 - 2  
+  What sampling temperature to use, between 0 and 2\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both.
+- tool_choicestring / object or nullOptional  
+  Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
+  `none` is the default when no tools are present. `auto` is the default if tools are present.
+
+### Show possible types
+
+- toolsarray or nullOptional  
+  A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for. A max of 128 functions are supported.
+
+### Show properties
+
+- top_logprobsinteger or nullOptional  
+  Range: 0 - 20  
+  This is not yet supported by any of our models. An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability. `logprobs` must be set to `true` if this parameter is used.
+- top_pnumber or nullOptionalDefaults to 1  
+  Range: 0 - 1  
+  An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both.
+- userstring or nullOptional  
+  A unique identifier representing your end-user, which can help us monitor and detect abuse.
+
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#chat-create-returns)
 
-* choicesarray  
-A list of chat completion choices. Can be more than one if `n` is greater than 1.  
+- choicesarray  
+  A list of chat completion choices. Can be more than one if `n` is greater than 1.
+
 ### Show properties
-* createdinteger  
-The Unix timestamp (in seconds) of when the chat completion was created.
-* idstring  
-A unique identifier for the chat completion.
-* mcp\_list\_toolsarray or null  
-List of discovered MCP tools from connected servers.  
+
+- createdinteger  
+  The Unix timestamp (in seconds) of when the chat completion was created.
+- idstring  
+  A unique identifier for the chat completion.
+- mcp_list_toolsarray or null  
+  List of discovered MCP tools from connected servers.
+
 ### Show properties
-* modelstring  
-The model used for the chat completion.
-* objectstring  
-Allowed values: `chat.completion`  
-The object type, which is always `chat.completion`.
-* service\_tierstring or null  
-Allowed values: `auto, on_demand, flex, performance, null`  
-The service tier used for the request.
-* system\_fingerprintstring  
-This fingerprint represents the backend configuration that the model runs with.  
-Can be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.
-* usageobject  
-Usage statistics for the completion request.  
+
+- modelstring  
+  The model used for the chat completion.
+- objectstring  
+  Allowed values: `chat.completion`  
+  The object type, which is always `chat.completion`.
+- service_tierstring or null  
+  Allowed values: `auto, on_demand, flex, performance, null`  
+  The service tier used for the request.
+- system_fingerprintstring  
+  This fingerprint represents the backend configuration that the model runs with.  
+  Can be used in conjunction with the `seed` request parameter to understand when backend changes have been made that might impact determinism.
+- usageobject  
+  Usage statistics for the completion request.
+
 ### Show properties
-* usage\_breakdownobject  
-Usage statistics for compound AI completion requests.  
+
+- usage_breakdownobject  
+  Usage statistics for compound AI completion requests.
+
 ### Show properties
-* x\_groqobject  
-Groq-specific metadata for non-streaming chat completion responses.  
+
+- x_groqobject  
+  Groq-specific metadata for non-streaming chat completion responses.
+
 ### Show properties
 
 curl
@@ -336,126 +369,152 @@ POSThttps://api.groq.com/openai/v1/responses
 
 Creates a model response for the given input.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#responses-create-request-body)
 
-* inputstring / arrayRequired  
-Text input to the model, used to generate a response.  
-### Show possible types
-* modelstringRequired  
-ID of the model to use. For details on which models are compatible with the Responses API, see available [models](https://console.groq.com/docs/models)
-* instructionsstring or nullOptional  
-Inserts a system (or developer) message as the first item in the model's context.
-* max\_output\_tokensinteger or nullOptional  
-An upper bound for the number of tokens that can be generated for a response, including visible output tokens and reasoning tokens.
-* metadataobject or nullOptional  
-Custom key-value pairs for storing additional information. Maximum of 16 pairs.
-* parallel\_tool\_callsboolean or nullOptionalDefaults to true  
-Enable parallel execution of multiple tool calls.
-* reasoningobject or nullOptional  
-Configuration for reasoning capabilities when using [models that support reasoning](https://console.groq.com/docs/reasoning).  
-### Show properties
-* service\_tierstring or nullOptionalDefaults to auto  
-Allowed values: `auto, default, flex`  
-Specifies the latency tier to use for processing the request.
-* storeboolean or nullOptionalDefaults to false  
-Response storage flag. Note: Currently only supports false or null values.
-* streamboolean or nullOptionalDefaults to false  
-Enable streaming mode to receive response data as server-sent events.
-* temperaturenumber or nullOptionalDefaults to 1  
-Range: 0 - 2  
-Controls randomness in the response generation. Range: 0 to 2\. Lower values produce more deterministic outputs, higher values increase variety and creativity.
-* textobjectOptional  
-Response format configuration. Supports plain text or structured JSON output.  
-### Show properties
-* tool\_choicestring / object or nullOptional  
-Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
-`none` is the default when no tools are present. `auto` is the default if tools are present.  
-### Show possible types
-* toolsarray or nullOptional  
-List of tools available to the model. Currently supports function definitions only. Maximum of 128 functions.  
-### Show properties
-* top\_pnumber or nullOptionalDefaults to 1  
-Range: 0 - 1  
-Nucleus sampling parameter that controls the cumulative probability cutoff. Range: 0 to 1\. A value of 0.1 restricts sampling to tokens within the top 10% probability mass.
-* truncationstring or nullOptionalDefaults to disabled  
-Allowed values: `auto, disabled`  
-Context truncation strategy. Supported values: `auto` or `disabled`.
-* userstringOptional  
-Optional identifier for tracking end-user requests. Useful for usage monitoring and compliance.
+- inputstring / arrayRequired  
+  Text input to the model, used to generate a response.
 
-### 
+### Show possible types
+
+- modelstringRequired  
+  ID of the model to use. For details on which models are compatible with the Responses API, see available [models](https://console.groq.com/docs/models)
+- instructionsstring or nullOptional  
+  Inserts a system (or developer) message as the first item in the model's context.
+- max_output_tokensinteger or nullOptional  
+  An upper bound for the number of tokens that can be generated for a response, including visible output tokens and reasoning tokens.
+- metadataobject or nullOptional  
+  Custom key-value pairs for storing additional information. Maximum of 16 pairs.
+- parallel_tool_callsboolean or nullOptionalDefaults to true  
+  Enable parallel execution of multiple tool calls.
+- reasoningobject or nullOptional  
+  Configuration for reasoning capabilities when using [models that support reasoning](https://console.groq.com/docs/reasoning).
+
+### Show properties
+
+- service_tierstring or nullOptionalDefaults to auto  
+  Allowed values: `auto, default, flex`  
+  Specifies the latency tier to use for processing the request.
+- storeboolean or nullOptionalDefaults to false  
+  Response storage flag. Note: Currently only supports false or null values.
+- streamboolean or nullOptionalDefaults to false  
+  Enable streaming mode to receive response data as server-sent events.
+- temperaturenumber or nullOptionalDefaults to 1  
+  Range: 0 - 2  
+  Controls randomness in the response generation. Range: 0 to 2\. Lower values produce more deterministic outputs, higher values increase variety and creativity.
+- textobjectOptional  
+  Response format configuration. Supports plain text or structured JSON output.
+
+### Show properties
+
+- tool_choicestring / object or nullOptional  
+  Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
+  `none` is the default when no tools are present. `auto` is the default if tools are present.
+
+### Show possible types
+
+- toolsarray or nullOptional  
+  List of tools available to the model. Currently supports function definitions only. Maximum of 128 functions.
+
+### Show properties
+
+- top_pnumber or nullOptionalDefaults to 1  
+  Range: 0 - 1  
+  Nucleus sampling parameter that controls the cumulative probability cutoff. Range: 0 to 1\. A value of 0.1 restricts sampling to tokens within the top 10% probability mass.
+- truncationstring or nullOptionalDefaults to disabled  
+  Allowed values: `auto, disabled`  
+  Context truncation strategy. Supported values: `auto` or `disabled`.
+- userstringOptional  
+  Optional identifier for tracking end-user requests. Useful for usage monitoring and compliance.
+
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#responses-create-returns)
 
-* backgroundboolean  
-Whether the response was generated in the background.
-* created\_atinteger  
-The Unix timestamp (in seconds) of when the response was created.
-* errorobject or null  
-An error object if the response failed.  
+- backgroundboolean  
+  Whether the response was generated in the background.
+- created_atinteger  
+  The Unix timestamp (in seconds) of when the response was created.
+- errorobject or null  
+  An error object if the response failed.
+
 ### Show properties
-* idstring  
-A unique identifier for the response.
-* incomplete\_detailsobject or null  
-Details about why the response is incomplete.  
+
+- idstring  
+  A unique identifier for the response.
+- incomplete_detailsobject or null  
+  Details about why the response is incomplete.
+
 ### Show properties
-* instructionsstring or null  
-The system instructions used for the response.
-* max\_output\_tokensinteger or null  
-The maximum number of tokens configured for the response.
-* max\_tool\_callsinteger or null  
-The maximum number of tool calls allowed.
-* metadataobject or null  
-Metadata attached to the response.
-* modelstring  
-The model used for the response.
-* objectstring  
-Allowed values: `response`  
-The object type, which is always `response`.
-* outputarray  
-An array of content items generated by the model.  
+
+- instructionsstring or null  
+  The system instructions used for the response.
+- max_output_tokensinteger or null  
+  The maximum number of tokens configured for the response.
+- max_tool_callsinteger or null  
+  The maximum number of tool calls allowed.
+- metadataobject or null  
+  Metadata attached to the response.
+- modelstring  
+  The model used for the response.
+- objectstring  
+  Allowed values: `response`  
+  The object type, which is always `response`.
+- outputarray  
+  An array of content items generated by the model.
+
 ### Show possible types
-* parallel\_tool\_callsboolean  
-Whether the model can run tool calls in parallel.
-* previous\_response\_idstring or null  
-Not supported. Always null.
-* reasoningobject or null  
-Configuration options for [models that support reasoning](https://console.groq.com/docs/reasoning).  
+
+- parallel_tool_callsboolean  
+  Whether the model can run tool calls in parallel.
+- previous_response_idstring or null  
+  Not supported. Always null.
+- reasoningobject or null  
+  Configuration options for [models that support reasoning](https://console.groq.com/docs/reasoning).
+
 ### Show properties
-* service\_tierstring  
-Allowed values: `auto, default, flex`  
-The service tier used for processing.
-* statusstring  
-Allowed values: `completed, failed, in_progress, incomplete`  
-The status of the response generation. One of `completed`, `failed`, `in_progress`, or `incomplete`.
-* storeboolean  
-Whether the response was stored.
-* temperaturenumber  
-The sampling temperature used.
-* textobject  
-Text format configuration used for the response.  
+
+- service_tierstring  
+  Allowed values: `auto, default, flex`  
+  The service tier used for processing.
+- statusstring  
+  Allowed values: `completed, failed, in_progress, incomplete`  
+  The status of the response generation. One of `completed`, `failed`, `in_progress`, or `incomplete`.
+- storeboolean  
+  Whether the response was stored.
+- temperaturenumber  
+  The sampling temperature used.
+- textobject  
+  Text format configuration used for the response.
+
 ### Show properties
-* tool\_choicestring / object or null  
-Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
-`none` is the default when no tools are present. `auto` is the default if tools are present.  
+
+- tool_choicestring / object or null  
+  Controls which (if any) tool is called by the model.`none` means the model will not call any tool and instead generates a message.`auto` means the model can pick between generating a message or calling one or more tools.`required` means the model must call one or more tools. Specifying a particular tool via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool.  
+  `none` is the default when no tools are present. `auto` is the default if tools are present.
+
 ### Show possible types
-* toolsarray  
-The tools that were available to the model.  
+
+- toolsarray  
+  The tools that were available to the model.
+
 ### Show properties
-* top\_logprobsinteger  
-The number of top log probabilities returned.
-* top\_pnumber  
-The nucleus sampling parameter used.
-* truncationstring  
-Allowed values: `auto, disabled`  
-The truncation strategy used.
-* usageobject  
-Usage statistics for the response request.  
+
+- top_logprobsinteger  
+  The number of top log probabilities returned.
+- top_pnumber  
+  The nucleus sampling parameter used.
+- truncationstring  
+  Allowed values: `auto, disabled`  
+  The truncation strategy used.
+- usageobject  
+  Usage statistics for the response request.
+
 ### Show properties
-* userstring or null  
-The user identifier.
+
+- userstring or null  
+  The user identifier.
 
 Example request
 
@@ -539,34 +598,34 @@ POSThttps://api.groq.com/openai/v1/audio/transcriptions
 
 Transcribes audio into the input language.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#audio-transcription-request-body)
 
-* modelstringRequired  
-ID of the model to use. `whisper-large-v3` and `whisper-large-v3-turbo` are currently available.
-* filestringOptional  
-The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm. Either a file or a URL must be provided. Note that the file field is not supported in Batch API requests.
-* languagestringOptional  
-The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List%5Fof%5FISO%5F639-1%5Fcodes) format will improve accuracy and latency.
-* promptstringOptional  
-An optional text to guide the model's style or continue a previous audio segment. The [prompt](https://console.groq.com/docs/speech-text) should match the audio language.
-* response\_formatstringOptionalDefaults to json  
-Allowed values: `json, text, verbose_json`  
-The format of the transcript output, in one of these options: `json`, `text`, or `verbose_json`.
-* temperaturenumberOptionalDefaults to 0  
-The sampling temperature, between 0 and 1\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log%5Fprobability) to automatically increase the temperature until certain thresholds are hit.
-* timestamp\_granularities\[\]arrayOptionalDefaults to segment  
-The timestamp granularities to populate for this transcription. `response_format` must be set `verbose_json` to use timestamp granularities. Either or both of these options are supported: `word`, or `segment`. Note: There is no additional latency for segment timestamps, but generating word timestamps incurs additional latency.
-* urlstringOptional  
-The audio URL to translate/transcribe (supports Base64URL). Either a file or a URL must be provided. For Batch API requests, the URL field is required since the file field is not supported.
+- modelstringRequired  
+  ID of the model to use. `whisper-large-v3` and `whisper-large-v3-turbo` are currently available.
+- filestringOptional  
+  The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm. Either a file or a URL must be provided. Note that the file field is not supported in Batch API requests.
+- languagestringOptional  
+  The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List%5Fof%5FISO%5F639-1%5Fcodes) format will improve accuracy and latency.
+- promptstringOptional  
+  An optional text to guide the model's style or continue a previous audio segment. The [prompt](https://console.groq.com/docs/speech-text) should match the audio language.
+- response_formatstringOptionalDefaults to json  
+  Allowed values: `json, text, verbose_json`  
+  The format of the transcript output, in one of these options: `json`, `text`, or `verbose_json`.
+- temperaturenumberOptionalDefaults to 0  
+  The sampling temperature, between 0 and 1\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log%5Fprobability) to automatically increase the temperature until certain thresholds are hit.
+- timestamp_granularities\[\]arrayOptionalDefaults to segment  
+  The timestamp granularities to populate for this transcription. `response_format` must be set `verbose_json` to use timestamp granularities. Either or both of these options are supported: `word`, or `segment`. Note: There is no additional latency for segment timestamps, but generating word timestamps incurs additional latency.
+- urlstringOptional  
+  The audio URL to translate/transcribe (supports Base64URL). Either a file or a URL must be provided. For Batch API requests, the URL field is required since the file field is not supported.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#audio-transcription-returns)
 
-* textstring  
-The transcribed text.
+- textstring  
+  The transcribed text.
 
 curl
 
@@ -633,29 +692,29 @@ POSThttps://api.groq.com/openai/v1/audio/translations
 
 Translates audio into English.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#audio-translation-request-body)
 
-* modelstringRequired  
-ID of the model to use. `whisper-large-v3` and `whisper-large-v3-turbo` are currently available.
-* filestringOptional  
-The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
-* promptstringOptional  
-An optional text to guide the model's style or continue a previous audio segment. The [prompt](https://console.groq.com/docs/guides/speech-to-text/prompting) should be in English.
-* response\_formatstringOptionalDefaults to json  
-Allowed values: `json, text, verbose_json`  
-The format of the transcript output, in one of these options: `json`, `text`, or `verbose_json`.
-* temperaturenumberOptionalDefaults to 0  
-The sampling temperature, between 0 and 1\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log%5Fprobability) to automatically increase the temperature until certain thresholds are hit.
-* urlstringOptional  
-The audio URL to translate/transcribe (supports Base64URL). Either file or url must be provided. When using the Batch API only url is supported.
+- modelstringRequired  
+  ID of the model to use. `whisper-large-v3` and `whisper-large-v3-turbo` are currently available.
+- filestringOptional  
+  The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
+- promptstringOptional  
+  An optional text to guide the model's style or continue a previous audio segment. The [prompt](https://console.groq.com/docs/guides/speech-to-text/prompting) should be in English.
+- response_formatstringOptionalDefaults to json  
+  Allowed values: `json, text, verbose_json`  
+  The format of the transcript output, in one of these options: `json`, `text`, or `verbose_json`.
+- temperaturenumberOptionalDefaults to 0  
+  The sampling temperature, between 0 and 1\. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use [log probability](https://en.wikipedia.org/wiki/Log%5Fprobability) to automatically increase the temperature until certain thresholds are hit.
+- urlstringOptional  
+  The audio URL to translate/transcribe (supports Base64URL). Either file or url must be provided. When using the Batch API only url is supported.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#audio-translation-returns)
 
-* textstring
+- textstring
 
 curl
 
@@ -722,27 +781,27 @@ POSThttps://api.groq.com/openai/v1/audio/speech
 
 Generates audio from the input text.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#audio-speech-request-body)
 
-* inputstringRequired  
-The text to generate audio for.
-* modelstringRequired  
-One of the [available TTS models](https://console.groq.com/docs/text-to-speech).
-* voicestringRequired  
-The voice to use when generating the audio. List of voices can be found [here](https://console.groq.com/docs/text-to-speech).
-* response\_formatstringOptionalDefaults to mp3  
-Allowed values: `flac, mp3, mulaw, ogg, wav`  
-The format of the generated audio. Supported formats are `flac, mp3, mulaw, ogg, wav`.
-* sample\_rateintegerOptionalDefaults to 48000  
-Allowed values: `8000, 16000, 22050, 24000, 32000, 44100, 48000`  
-The sample rate for generated audio
-* speednumberOptionalDefaults to 1  
-Range: 0.5 - 5  
-The speed of the generated audio.
+- inputstringRequired  
+  The text to generate audio for.
+- modelstringRequired  
+  One of the [available TTS models](https://console.groq.com/docs/text-to-speech).
+- voicestringRequired  
+  The voice to use when generating the audio. List of voices can be found [here](https://console.groq.com/docs/text-to-speech).
+- response_formatstringOptionalDefaults to mp3  
+  Allowed values: `flac, mp3, mulaw, ogg, wav`  
+  The format of the generated audio. Supported formats are `flac, mp3, mulaw, ogg, wav`.
+- sample_rateintegerOptionalDefaults to 48000  
+  Allowed values: `8000, 16000, 22050, 24000, 32000, 44100, 48000`  
+  The sample rate for generated audio
+- speednumberOptionalDefaults to 1  
+  Range: 0.5 - 5  
+  The speed of the generated audio.
 
-### 
+###
 
 [Returns](https://console.groq.com/docs/api-reference#audio-speech-returns)
 
@@ -828,14 +887,16 @@ GEThttps://api.groq.com/openai/v1/models
 
 List all available [models](https://console.groq.com/docs/models).
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#models-list-returns)
 
-* dataarray  
+- dataarray
+
 ### Show properties
-* objectstring  
-Allowed values: `list`
+
+- objectstring  
+  Allowed values: `list`
 
 curl
 
@@ -959,19 +1020,19 @@ GEThttps://api.groq.com/openai/v1/models/{model}
 
 Get detailed information about a [model](https://console.groq.com/docs/models).
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#models-retrieve-returns)
 
-* createdinteger  
-The Unix timestamp (in seconds) when the model was created.
-* idstring  
-The model identifier, which can be referenced in the API endpoints.
-* objectstring  
-Allowed values: `model`  
-The object type, which is always "model".
-* owned\_bystring  
-The organization that owns the model.
+- createdinteger  
+  The Unix timestamp (in seconds) when the model was created.
+- idstring  
+  The model identifier, which can be referenced in the API endpoints.
+- objectstring  
+  Allowed values: `model`  
+  The object type, which is always "model".
+- owned_bystring  
+  The organization that owns the model.
 
 curl
 
@@ -1030,68 +1091,72 @@ POSThttps://api.groq.com/openai/v1/batches
 
 Creates and executes a batch from an uploaded file of requests. [Learn more](https://console.groq.com/docs/batch).
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#batches-create-request-body)
 
-* completion\_windowstringRequired  
-The time frame within which the batch should be processed. Durations from `24h` to `7d` are supported.
-* endpointstringRequired  
-Allowed values: `/v1/chat/completions`  
-The endpoint to be used for all requests in the batch. Currently `/v1/chat/completions` is supported.
-* input\_file\_idstringRequired  
-The ID of an uploaded file that contains requests for the new batch.  
-See [upload file](https://console.groq.com/docs/api-reference#files-upload) for how to upload a file.  
-Your input file must be formatted as a [JSONL file](https://console.groq.com/docs/batch), and must be uploaded with the purpose `batch`. The file can be up to 100 MB in size.
-* metadataobject or nullOptional  
-Optional custom metadata for the batch.
+- completion_windowstringRequired  
+  The time frame within which the batch should be processed. Durations from `24h` to `7d` are supported.
+- endpointstringRequired  
+  Allowed values: `/v1/chat/completions`  
+  The endpoint to be used for all requests in the batch. Currently `/v1/chat/completions` is supported.
+- input_file_idstringRequired  
+  The ID of an uploaded file that contains requests for the new batch.  
+  See [upload file](https://console.groq.com/docs/api-reference#files-upload) for how to upload a file.  
+  Your input file must be formatted as a [JSONL file](https://console.groq.com/docs/batch), and must be uploaded with the purpose `batch`. The file can be up to 100 MB in size.
+- metadataobject or nullOptional  
+  Optional custom metadata for the batch.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#batches-create-returns)
 
-* cancelled\_atinteger  
-The Unix timestamp (in seconds) for when the batch was cancelled.
-* cancelling\_atinteger  
-The Unix timestamp (in seconds) for when the batch started cancelling.
-* completed\_atinteger  
-The Unix timestamp (in seconds) for when the batch was completed.
-* completion\_windowstring  
-The time frame within which the batch should be processed.
-* created\_atinteger  
-The Unix timestamp (in seconds) for when the batch was created.
-* endpointstring  
-The API endpoint used by the batch.
-* error\_file\_idstring  
-The ID of the file containing the outputs of requests with errors.
-* errorsobject  
+- cancelled_atinteger  
+  The Unix timestamp (in seconds) for when the batch was cancelled.
+- cancelling_atinteger  
+  The Unix timestamp (in seconds) for when the batch started cancelling.
+- completed_atinteger  
+  The Unix timestamp (in seconds) for when the batch was completed.
+- completion_windowstring  
+  The time frame within which the batch should be processed.
+- created_atinteger  
+  The Unix timestamp (in seconds) for when the batch was created.
+- endpointstring  
+  The API endpoint used by the batch.
+- error_file_idstring  
+  The ID of the file containing the outputs of requests with errors.
+- errorsobject
+
 ### Show properties
-* expired\_atinteger  
-The Unix timestamp (in seconds) for when the batch expired.
-* expires\_atinteger  
-The Unix timestamp (in seconds) for when the batch will expire.
-* failed\_atinteger  
-The Unix timestamp (in seconds) for when the batch failed.
-* finalizing\_atinteger  
-The Unix timestamp (in seconds) for when the batch started finalizing.
-* idstring
-* in\_progress\_atinteger  
-The Unix timestamp (in seconds) for when the batch started processing.
-* input\_file\_idstring  
-The ID of the input file for the batch.
-* metadataobject or null  
-Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
-* objectstring  
-Allowed values: `batch`  
-The object type, which is always `batch`.
-* output\_file\_idstring  
-The ID of the file containing the outputs of successfully executed requests.
-* request\_countsobject  
-The request counts for different statuses within the batch.  
+
+- expired_atinteger  
+  The Unix timestamp (in seconds) for when the batch expired.
+- expires_atinteger  
+  The Unix timestamp (in seconds) for when the batch will expire.
+- failed_atinteger  
+  The Unix timestamp (in seconds) for when the batch failed.
+- finalizing_atinteger  
+  The Unix timestamp (in seconds) for when the batch started finalizing.
+- idstring
+- in_progress_atinteger  
+  The Unix timestamp (in seconds) for when the batch started processing.
+- input_file_idstring  
+  The ID of the input file for the batch.
+- metadataobject or null  
+  Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
+- objectstring  
+  Allowed values: `batch`  
+  The object type, which is always `batch`.
+- output_file_idstring  
+  The ID of the file containing the outputs of successfully executed requests.
+- request_countsobject  
+  The request counts for different statuses within the batch.
+
 ### Show properties
-* statusstring  
-Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
-The current status of the batch.
+
+- statusstring  
+  Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
+  The current status of the batch.
 
 curl
 
@@ -1177,52 +1242,56 @@ GEThttps://api.groq.com/openai/v1/batches/{batch\_id}
 
 Retrieves a batch.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#batches-retrieve-returns)
 
-* cancelled\_atinteger  
-The Unix timestamp (in seconds) for when the batch was cancelled.
-* cancelling\_atinteger  
-The Unix timestamp (in seconds) for when the batch started cancelling.
-* completed\_atinteger  
-The Unix timestamp (in seconds) for when the batch was completed.
-* completion\_windowstring  
-The time frame within which the batch should be processed.
-* created\_atinteger  
-The Unix timestamp (in seconds) for when the batch was created.
-* endpointstring  
-The API endpoint used by the batch.
-* error\_file\_idstring  
-The ID of the file containing the outputs of requests with errors.
-* errorsobject  
+- cancelled_atinteger  
+  The Unix timestamp (in seconds) for when the batch was cancelled.
+- cancelling_atinteger  
+  The Unix timestamp (in seconds) for when the batch started cancelling.
+- completed_atinteger  
+  The Unix timestamp (in seconds) for when the batch was completed.
+- completion_windowstring  
+  The time frame within which the batch should be processed.
+- created_atinteger  
+  The Unix timestamp (in seconds) for when the batch was created.
+- endpointstring  
+  The API endpoint used by the batch.
+- error_file_idstring  
+  The ID of the file containing the outputs of requests with errors.
+- errorsobject
+
 ### Show properties
-* expired\_atinteger  
-The Unix timestamp (in seconds) for when the batch expired.
-* expires\_atinteger  
-The Unix timestamp (in seconds) for when the batch will expire.
-* failed\_atinteger  
-The Unix timestamp (in seconds) for when the batch failed.
-* finalizing\_atinteger  
-The Unix timestamp (in seconds) for when the batch started finalizing.
-* idstring
-* in\_progress\_atinteger  
-The Unix timestamp (in seconds) for when the batch started processing.
-* input\_file\_idstring  
-The ID of the input file for the batch.
-* metadataobject or null  
-Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
-* objectstring  
-Allowed values: `batch`  
-The object type, which is always `batch`.
-* output\_file\_idstring  
-The ID of the file containing the outputs of successfully executed requests.
-* request\_countsobject  
-The request counts for different statuses within the batch.  
+
+- expired_atinteger  
+  The Unix timestamp (in seconds) for when the batch expired.
+- expires_atinteger  
+  The Unix timestamp (in seconds) for when the batch will expire.
+- failed_atinteger  
+  The Unix timestamp (in seconds) for when the batch failed.
+- finalizing_atinteger  
+  The Unix timestamp (in seconds) for when the batch started finalizing.
+- idstring
+- in_progress_atinteger  
+  The Unix timestamp (in seconds) for when the batch started processing.
+- input_file_idstring  
+  The ID of the input file for the batch.
+- metadataobject or null  
+  Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
+- objectstring  
+  Allowed values: `batch`  
+  The object type, which is always `batch`.
+- output_file_idstring  
+  The ID of the file containing the outputs of successfully executed requests.
+- request_countsobject  
+  The request counts for different statuses within the batch.
+
 ### Show properties
-* statusstring  
-Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
-The current status of the batch.
+
+- statusstring  
+  Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
+  The current status of the batch.
 
 curl
 
@@ -1297,14 +1366,16 @@ GEThttps://api.groq.com/openai/v1/batches
 
 List your organization's batches.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#batches-list-returns)
 
-* dataarray  
+- dataarray
+
 ### Show properties
-* objectstring  
-Allowed values: `list`
+
+- objectstring  
+  Allowed values: `list`
 
 curl
 
@@ -1382,52 +1453,56 @@ POSThttps://api.groq.com/openai/v1/batches/{batch\_id}/cancel
 
 Cancels a batch.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#batches-cancel-returns)
 
-* cancelled\_atinteger  
-The Unix timestamp (in seconds) for when the batch was cancelled.
-* cancelling\_atinteger  
-The Unix timestamp (in seconds) for when the batch started cancelling.
-* completed\_atinteger  
-The Unix timestamp (in seconds) for when the batch was completed.
-* completion\_windowstring  
-The time frame within which the batch should be processed.
-* created\_atinteger  
-The Unix timestamp (in seconds) for when the batch was created.
-* endpointstring  
-The API endpoint used by the batch.
-* error\_file\_idstring  
-The ID of the file containing the outputs of requests with errors.
-* errorsobject  
+- cancelled_atinteger  
+  The Unix timestamp (in seconds) for when the batch was cancelled.
+- cancelling_atinteger  
+  The Unix timestamp (in seconds) for when the batch started cancelling.
+- completed_atinteger  
+  The Unix timestamp (in seconds) for when the batch was completed.
+- completion_windowstring  
+  The time frame within which the batch should be processed.
+- created_atinteger  
+  The Unix timestamp (in seconds) for when the batch was created.
+- endpointstring  
+  The API endpoint used by the batch.
+- error_file_idstring  
+  The ID of the file containing the outputs of requests with errors.
+- errorsobject
+
 ### Show properties
-* expired\_atinteger  
-The Unix timestamp (in seconds) for when the batch expired.
-* expires\_atinteger  
-The Unix timestamp (in seconds) for when the batch will expire.
-* failed\_atinteger  
-The Unix timestamp (in seconds) for when the batch failed.
-* finalizing\_atinteger  
-The Unix timestamp (in seconds) for when the batch started finalizing.
-* idstring
-* in\_progress\_atinteger  
-The Unix timestamp (in seconds) for when the batch started processing.
-* input\_file\_idstring  
-The ID of the input file for the batch.
-* metadataobject or null  
-Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
-* objectstring  
-Allowed values: `batch`  
-The object type, which is always `batch`.
-* output\_file\_idstring  
-The ID of the file containing the outputs of successfully executed requests.
-* request\_countsobject  
-The request counts for different statuses within the batch.  
+
+- expired_atinteger  
+  The Unix timestamp (in seconds) for when the batch expired.
+- expires_atinteger  
+  The Unix timestamp (in seconds) for when the batch will expire.
+- failed_atinteger  
+  The Unix timestamp (in seconds) for when the batch failed.
+- finalizing_atinteger  
+  The Unix timestamp (in seconds) for when the batch started finalizing.
+- idstring
+- in_progress_atinteger  
+  The Unix timestamp (in seconds) for when the batch started processing.
+- input_file_idstring  
+  The ID of the input file for the batch.
+- metadataobject or null  
+  Set of key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format.
+- objectstring  
+  Allowed values: `batch`  
+  The object type, which is always `batch`.
+- output_file_idstring  
+  The ID of the file containing the outputs of successfully executed requests.
+- request_countsobject  
+  The request counts for different statuses within the batch.
+
 ### Show properties
-* statusstring  
-Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
-The current status of the batch.
+
+- statusstring  
+  Allowed values: `validating, failed, in_progress, finalizing, completed, expired, cancelling, cancelled`  
+  The current status of the batch.
 
 curl
 
@@ -1508,34 +1583,34 @@ The Batch API only supports `.jsonl` files up to 100 MB in size. The input also 
 
 Please contact us if you need to increase these storage limits.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#files-upload-request-body)
 
-* filestringRequired  
-The File object (not file name) to be uploaded.
-* purposestringRequired  
-Allowed values: `batch`  
-The intended purpose of the uploaded file. Use "batch" for [Batch API](https://console.groq.com/docs/api-reference#batches).
+- filestringRequired  
+  The File object (not file name) to be uploaded.
+- purposestringRequired  
+  Allowed values: `batch`  
+  The intended purpose of the uploaded file. Use "batch" for [Batch API](https://console.groq.com/docs/api-reference#batches).
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#files-upload-returns)
 
-* bytesinteger  
-The size of the file, in bytes.
-* created\_atinteger  
-The Unix timestamp (in seconds) for when the file was created.
-* filenamestring  
-The name of the file.
-* idstring  
-The file identifier, which can be referenced in the API endpoints.
-* objectstring  
-Allowed values: `file`  
-The object type, which is always `file`.
-* purposestring  
-Allowed values: `batch, batch_output`  
-The intended purpose of the file. Supported values are `batch`, and `batch_output`.
+- bytesinteger  
+  The size of the file, in bytes.
+- created_atinteger  
+  The Unix timestamp (in seconds) for when the file was created.
+- filenamestring  
+  The name of the file.
+- idstring  
+  The file identifier, which can be referenced in the API endpoints.
+- objectstring  
+  Allowed values: `file`  
+  The object type, which is always `file`.
+- purposestring  
+  Allowed values: `batch, batch_output`  
+  The intended purpose of the file. Supported values are `batch`, and `batch_output`.
 
 curl
 
@@ -1621,14 +1696,16 @@ GEThttps://api.groq.com/openai/v1/files
 
 Returns a list of files.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#files-list-returns)
 
-* dataarray  
+- dataarray
+
 ### Show properties
-* objectstring  
-Allowed values: `list`
+
+- objectstring  
+  Allowed values: `list`
 
 curl
 
@@ -1688,14 +1765,14 @@ DELETEhttps://api.groq.com/openai/v1/files/{file\_id}
 
 Delete a file.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#files-delete-returns)
 
-* deletedboolean
-* idstring
-* objectstring  
-Allowed values: `file`
+- deletedboolean
+- idstring
+- objectstring  
+  Allowed values: `file`
 
 curl
 
@@ -1749,24 +1826,24 @@ GEThttps://api.groq.com/openai/v1/files/{file\_id}
 
 Returns information about a file.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#files-retrieve-returns)
 
-* bytesinteger  
-The size of the file, in bytes.
-* created\_atinteger  
-The Unix timestamp (in seconds) for when the file was created.
-* filenamestring  
-The name of the file.
-* idstring  
-The file identifier, which can be referenced in the API endpoints.
-* objectstring  
-Allowed values: `file`  
-The object type, which is always `file`.
-* purposestring  
-Allowed values: `batch, batch_output`  
-The intended purpose of the file. Supported values are `batch`, and `batch_output`.
+- bytesinteger  
+  The size of the file, in bytes.
+- created_atinteger  
+  The Unix timestamp (in seconds) for when the file was created.
+- filenamestring  
+  The name of the file.
+- idstring  
+  The file identifier, which can be referenced in the API endpoints.
+- objectstring  
+  Allowed values: `file`  
+  The object type, which is always `file`.
+- purposestring  
+  Allowed values: `batch, batch_output`  
+  The intended purpose of the file. Supported values are `batch`, and `batch_output`.
 
 curl
 
@@ -1823,7 +1900,7 @@ GEThttps://api.groq.com/openai/v1/files/{file\_id}/content
 
 Returns the contents of the specified file.
 
-### 
+###
 
 [Returns](https://console.groq.com/docs/api-reference#files-download-returns)
 
@@ -1879,13 +1956,15 @@ GEThttps://api.groq.com/v1/fine\_tunings
 
 Lists all previously created fine tunings. This endpoint is in closed beta. [Contact us](https://groq.com/contact) for more information.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#fine-tuning-list-returns)
 
-* dataarray  
+- dataarray
+
 ### Show properties
-* objectstring
+
+- objectstring
 
 curl
 
@@ -1948,27 +2027,29 @@ POSThttps://api.groq.com/v1/fine\_tunings
 
 Creates a new fine tuning for the already uploaded files This endpoint is in closed beta. [Contact us](https://groq.com/contact) for more information.
 
-### 
+###
 
 [Request Body](https://console.groq.com/docs/api-reference#fine-tuning-create-request-body)
 
-* base\_modelstringOptional  
-BaseModel is the model that the fine tune was originally trained on.
-* input\_file\_idstringOptional  
-InputFileID is the id of the file that was uploaded via the /files api.
-* namestringOptional  
-Name is the given name to a fine tuned model.
-* typestringOptional  
-Type is the type of fine tuning format such as "lora".
+- base_modelstringOptional  
+  BaseModel is the model that the fine tune was originally trained on.
+- input_file_idstringOptional  
+  InputFileID is the id of the file that was uploaded via the /files api.
+- namestringOptional  
+  Name is the given name to a fine tuned model.
+- typestringOptional  
+  Type is the type of fine tuning format such as "lora".
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#fine-tuning-create-returns)
 
-* dataobject  
+- dataobject
+
 ### Show properties
-* idstring
-* objectstring
+
+- idstring
+- objectstring
 
 curl
 
@@ -2046,14 +2127,16 @@ GEThttps://api.groq.com/v1/fine\_tunings/{id}
 
 Retrieves an existing fine tuning by id This endpoint is in closed beta. [Contact us](https://groq.com/contact) for more information.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#fine-tuning-get-returns)
 
-* dataobject  
+- dataobject
+
 ### Show properties
-* idstring
-* objectstring
+
+- idstring
+- objectstring
 
 curl
 
@@ -2115,13 +2198,13 @@ DELETEhttps://api.groq.com/v1/fine\_tunings/{id}
 
 Deletes an existing fine tuning by id This endpoint is in closed beta. [Contact us](https://groq.com/contact) for more information.
 
-### 
+###
 
 [Response Object](https://console.groq.com/docs/api-reference#fine-tuning-delete-returns)
 
-* deletedboolean
-* idstring
-* objectstring
+- deletedboolean
+- idstring
+- objectstring
 
 curl
 

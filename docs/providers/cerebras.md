@@ -1,5 +1,6 @@
 > ## Documentation Index [Cerebras](https://inference-docs.cerebras.ai/introduction)
-> Fetch the complete documentation index at: https://inference-docs.cerebras.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://inference-docs.cerebras.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # Rate Limits
@@ -12,8 +13,8 @@ Rate limits ensure fair usage and system stability by regulating how often users
 
 We measure rate limits in requests sent and tokens used within a specified timeframe:
 
-* Requests per minute/hour/day (RPM, RPH, RPD)
-* Tokens per minute/hour/day (TPM, TPH, TPD)
+- Requests per minute/hour/day (RPM, RPH, RPD)
+- Tokens per minute/hour/day (TPM, TPH, TPD)
 
 Rate limiting can be triggered by any metric, whichever comes first. For example, you have a rate limit of 50 RPM and 200K TPM. If you submit 50 requests in one minute with just 100 tokens each, you'll hit your limit even though your total token usage (5,000) is far below the 200K token threshold.
 
@@ -65,6 +66,7 @@ This provides an overview of general limits, though specific cases may vary. For
     | `zai-glm-4.7`                    | 500K | 500 |
 
     <Note>Hourly and daily restrictions don't apply to developer tier users. Since this tier uses pay-as-you-go pricing, you can use as many tokens as needed within your budget.</Note>
+
   </Tab>
 </Tabs>
 
@@ -89,7 +91,7 @@ These values update with each API call, giving you immediate visibility into you
 
 You can view these headers by adding the `--verbose` flag to a cURL request:
 
-```bash  theme={null}
+```bash theme={null}
 curl --location 'https://api.cerebras.ai/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header "Authorization: Bearer ${CEREBRAS_API_KEY}" \
@@ -123,12 +125,13 @@ x-ratelimit-reset-tokens-minute: 11.382867097854614
 If you have questions about your usage or need higher rate limits, [contact us](https://www.cerebras.ai/contact) via our website, or reach out to your account representative.
 
 > ## Documentation Index
-> Fetch the complete documentation index at: https://inference-docs.cerebras.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://inference-docs.cerebras.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # Authentication
 
-The Cerebras API uses API keys for authentication. Create and manage API keys from our [Inference Cloud Console](https://cloud.cerebras.ai?utm_source=3pi_authentication\&utm_campaign=api_reference).
+The Cerebras API uses API keys for authentication. Create and manage API keys from our [Inference Cloud Console](https://cloud.cerebras.ai?utm_source=3pi_authentication&utm_campaign=api_reference).
 
 <Danger>
   **Keep your API key secure.** Never share it publicly or include it in client-side code (such as browsers or mobile apps). Instead, load it safely from an environment variable or a server-side key management service.
@@ -142,7 +145,7 @@ Authorization: Bearer CEREBRAS_API_KEY
 
 ## Example Request
 
-```bash  theme={null}
+```bash theme={null}
 curl --location 'https://api.cerebras.ai/v1/chat/completions' \
   --header 'Content-Type: application/json' \
   --header "Authorization: Bearer ${CEREBRAS_API_KEY}" \
@@ -163,31 +166,33 @@ You can also authenticate automatically when using the official SDKs for Python 
   import os
   from cerebras.cloud.sdk import Cerebras
 
-  client = Cerebras(
-      # This is the default and can be omitted
-      api_key=os.environ.get("CEREBRAS_API_KEY"),
-  )
-  ```
+client = Cerebras( # This is the default and can be omitted
+api_key=os.environ.get("CEREBRAS_API_KEY"),
+)
 
-  ```javascript Node.js theme={null}
-  import Cerebras from 'cerebras_cloud_sdk';
+````
 
-  const client = new Cerebras({
-    apiKey: process.env['CEREBRAS_API_KEY'], // This is the default and can be omitted
-  });
-  ```
+```javascript Node.js theme={null}
+import Cerebras from 'cerebras_cloud_sdk';
+
+const client = new Cerebras({
+  apiKey: process.env['CEREBRAS_API_KEY'], // This is the default and can be omitted
+});
+````
+
 </CodeGroup>
 
 ## Set Your API Key
 
 For security reasons, and to avoid configuring your API key each time, we recommend setting your API key as an environment variable. You can do this by running the following command in your terminal:
 
-```bash  theme={null}
+```bash theme={null}
 export CEREBRAS_API_KEY="your-api-key"
 ```
 
 > ## Documentation Index
-> Fetch the complete documentation index at: https://inference-docs.cerebras.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://inference-docs.cerebras.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # Tool Calling
@@ -229,6 +234,7 @@ Tool calling (also known as tool use or function calling) enables models to inte
         api_key=os.environ.get("CEREBRAS_API_KEY"),
     )
     ```
+
   </Step>
 
   <Step title="Setting Up the Tool">
@@ -237,13 +243,14 @@ Tool calling (also known as tool use or function calling) enables models to inte
     ```python  theme={null}
     def calculate(expression):
         expression = re.sub(r'[^0-9+\-*/().]', '', expression)
-        
+
         try:
             result = eval(expression)
             return str(result)
         except (SyntaxError, ZeroDivisionError, NameError, TypeError, OverflowError):
             return "Error: Invalid expression"
     ```
+
   </Step>
 
   <Step title="Defining the Tool Schema">
@@ -276,6 +283,7 @@ Tool calling (also known as tool use or function calling) enables models to inte
         }
     ]
     ```
+
   </Step>
 
   <Step title="Making the API Call">
@@ -296,6 +304,7 @@ Tool calling (also known as tool use or function calling) enables models to inte
         parallel_tool_calls=False,
     )
     ```
+
   </Step>
 
   <Step title="Handling Tool Calls">
@@ -318,20 +327,20 @@ Tool calling (also known as tool use or function calling) enables models to inte
 
             # Note: This is the result of executing the model's request (the tool call), not the model's own output.
             print(f"Calculation result sent to model: {result}")
-           
+
            # Send the result back to the model to fulfill the request.
             messages.append({
                 "role": "tool",
                 "content": json.dumps(result),
                 "tool_call_id": choice.tool_calls[0].id
             })
-     
+
            # Request the final response from the model, now that it has the calculation result.
             final_response = client.chat.completions.create(
                 model="gpt-oss-120b",
                 messages=messages,
             )
-            
+
             # Handle and display the model's final response.
             if final_response:
                 print("Final model output:", final_response.choices[0].message.content)
@@ -341,6 +350,7 @@ Tool calling (also known as tool use or function calling) enables models to inte
         # Handle cases where the model's response does not include expected tool calls.
         print("Unexpected response from the model")
     ```
+
   </Step>
 </Steps>
 
@@ -360,10 +370,10 @@ Strict mode ensures that the model generates tool call arguments that exactly ma
 
 Without strict mode, tool calls might include:
 
-* Wrong parameter types (e.g., `"2"` instead of `2`)
-* Missing required parameters
-* Unexpected extra parameters
-* Malformed argument JSON
+- Wrong parameter types (e.g., `"2"` instead of `2`)
+- Missing required parameters
+- Unexpected extra parameters
+- Malformed argument JSON
 
 With strict mode, you get guaranteed schema compliance for every tool call.
 
@@ -430,7 +440,7 @@ It works as follows:
 
 The example below demonstrates multi-turn tool calling as an extension of the calculator example above. Before continuing, make sure you’ve completed Steps 1–3 from the calculator setup section.
 
-```python  theme={null}
+```python theme={null}
 messages = [
     {
         "role": "system",
@@ -461,7 +471,7 @@ while True:
         break
 
     # Save the assistant turn exactly as returned
-    messages.append(msg.model_dump())    
+    messages.append(msg.model_dump())
 
     # Run the requested tool
     call  = msg.tool_calls[0]
@@ -489,9 +499,9 @@ For example, if a user asks "Is Toronto warmer than Montreal?", the model needs 
 
 Parallel tool calling is most beneficial when:
 
-* A single query requires multiple independent data points (e.g., comparing weather in different cities)
-* Multiple tools need to be invoked that don't have dependencies on each other
-* You want to reduce the number of API calls and overall response time
+- A single query requires multiple independent data points (e.g., comparing weather in different cities)
+- Multiple tools need to be invoked that don't have dependencies on each other
+- You want to reduce the number of API calls and overall response time
 
 ### Enable Parallel Tool Calling
 
@@ -569,6 +579,7 @@ Let's walk through a complete example that demonstrates parallel tool calling by
         }
     ]
     ```
+
   </Step>
 
   <Step title="Make the API Call with Parallel Tool Calling Enabled">
@@ -593,6 +604,7 @@ Let's walk through a complete example that demonstrates parallel tool calling by
         parallel_tool_calls=True,
     )
     ```
+
   </Step>
 
   <Step title="Handle Multiple Tool Calls">
@@ -609,26 +621,26 @@ Let's walk through a complete example that demonstrates parallel tool calling by
         for tool_call in choice.tool_calls:
             function_call = tool_call.function
             print(f"Model executing function '{function_call.name}' with arguments {function_call.arguments}")
-            
+
             # Parse arguments and execute the function
             arguments = json.loads(function_call.arguments)
             result = get_weather(arguments["location"])
-            
+
             print(f"Weather data sent to model: {result}")
-            
+
             # Append each tool result to messages
             messages.append({
                 "role": "tool",
                 "content": result,
                 "tool_call_id": tool_call.id
             })
-        
+
         # Get final response after all tool calls are processed
         final_response = client.chat.completions.create(
             model="zai-glm-4.7",
             messages=messages,
         )
-        
+
         if final_response:
             print("Final model output:", final_response.choices[0].message.content)
         else:
@@ -636,5 +648,6 @@ Let's walk through a complete example that demonstrates parallel tool calling by
     else:
         print("No tool calls in response")
     ```
+
   </Step>
 </Steps>

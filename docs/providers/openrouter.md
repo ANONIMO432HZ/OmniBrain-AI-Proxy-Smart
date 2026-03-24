@@ -1,11 +1,11 @@
-***
+---
 
 title: Quickstart
 subtitle: Get started with OpenRouter
 slug: quickstart
 headline: OpenRouter Quickstart Guide | Developer Documentation
 canonical-url: '[https://openrouter.ai/docs/quickstart](https://openrouter.ai/docs/quickstart)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': OpenRouter Quickstart Guide
 'og:description': >-
 Get started with OpenRouter's unified API for hundreds of AI models. Learn how
@@ -13,14 +13,15 @@ to integrate using OpenAI SDK, direct API calls, or third-party frameworks.
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?pathname=quickstart\&title=Quick%20Start\&description=Start%20using%20OpenRouter%20API%20in%20minutes%20with%20any%20SDK](https://openrouter.ai/dynamic-og?pathname=quickstart\&title=Quick%20Start\&description=Start%20using%20OpenRouter%20API%20in%20minutes%20with%20any%20SDK)
+[https://openrouter.ai/dynamic-og?pathname=quickstart\&title=Quick%20Start\&description=Start%20using%20OpenRouter%20API%20in%20minutes%20with%20any%20SDK](https://openrouter.ai/dynamic-og?pathname=quickstart&title=Quick%20Start&description=Start%20using%20OpenRouter%20API%20in%20minutes%20with%20any%20SDK)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 OpenRouter provides a unified API that gives you access to hundreds of AI models through a single endpoint, while automatically handling fallbacks and selecting the most cost-effective options. Get started with just a few lines of code using your preferred SDK or framework.
 
@@ -45,13 +46,14 @@ First, install the SDK:
   npm install @openrouter/sdk
   ```
 
-  ```bash title="yarn"
-  yarn add @openrouter/sdk
-  ```
+```bash title="yarn"
+yarn add @openrouter/sdk
+```
 
-  ```bash title="pnpm"
-  pnpm add @openrouter/sdk
-  ```
+```bash title="pnpm"
+pnpm add @openrouter/sdk
+```
+
 </CodeGroup>
 
 Then use it in your code:
@@ -60,94 +62,96 @@ Then use it in your code:
   ```typescript title="TypeScript SDK"
   import { OpenRouter } from '@openrouter/sdk';
 
-  const openRouter = new OpenRouter({
-    apiKey: '<OPENROUTER_API_KEY>',
-    defaultHeaders: {
-      'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Site URL for rankings on openrouter.ai.
-      'X-OpenRouter-Title': '<YOUR_SITE_NAME>', // Optional. Site title for rankings on openrouter.ai.
-    },
-  });
+const openRouter = new OpenRouter({
+apiKey: '<OPENROUTER_API_KEY>',
+defaultHeaders: {
+'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Site URL for rankings on openrouter.ai.
+'X-OpenRouter-Title': '<YOUR_SITE_NAME>', // Optional. Site title for rankings on openrouter.ai.
+},
+});
 
-  const completion = await openRouter.chat.send({
-    model: 'openai/gpt-5.2',
-    messages: [
-      {
-        role: 'user',
-        content: 'What is the meaning of life?',
-      },
-    ],
-    stream: false,
-  });
+const completion = await openRouter.chat.send({
+model: 'openai/gpt-5.2',
+messages: [
+{
+role: 'user',
+content: 'What is the meaning of life?',
+},
+],
+stream: false,
+});
 
-  console.log(completion.choices[0].message.content);
-  ```
+console.log(completion.choices[0].message.content);
+
+````
 </CodeGroup>
 
 ## Using the OpenRouter API directly
 
 <Tip>
-  You can use the interactive [Request Builder](/request-builder) to generate OpenRouter API requests in the language of your choice.
+You can use the interactive [Request Builder](/request-builder) to generate OpenRouter API requests in the language of your choice.
 </Tip>
 
 <CodeGroup>
-  ```python title="Python"
-  import requests
-  import json
+```python title="Python"
+import requests
+import json
 
-  response = requests.post(
-    url="https://openrouter.ai/api/v1/chat/completions",
-    headers={
-      "Authorization": "Bearer <OPENROUTER_API_KEY>",
-      "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
-      "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
-    },
-    data=json.dumps({
-      "model": "openai/gpt-5.2", # Optional
-      "messages": [
-        {
-          "role": "user",
-          "content": "What is the meaning of life?"
-        }
-      ]
-    })
-  )
-  ```
-
-  ```typescript title="TypeScript (fetch)"
-  fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer <OPENROUTER_API_KEY>',
-      'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Site URL for rankings on openrouter.ai.
-      'X-OpenRouter-Title': '<YOUR_SITE_NAME>', // Optional. Site title for rankings on openrouter.ai.
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'openai/gpt-5.2',
-      messages: [
-        {
-          role: 'user',
-          content: 'What is the meaning of life?',
-        },
-      ],
-    }),
-  });
-  ```
-
-  ```shell title="Shell"
-  curl https://openrouter.ai/api/v1/chat/completions \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer $OPENROUTER_API_KEY" \
-    -d '{
-    "model": "openai/gpt-5.2",
+response = requests.post(
+  url="https://openrouter.ai/api/v1/chat/completions",
+  headers={
+    "Authorization": "Bearer <OPENROUTER_API_KEY>",
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  data=json.dumps({
+    "model": "openai/gpt-5.2", # Optional
     "messages": [
       {
         "role": "user",
         "content": "What is the meaning of life?"
       }
     ]
-  }'
-  ```
+  })
+)
+````
+
+```typescript title="TypeScript (fetch)"
+fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    Authorization: "Bearer <OPENROUTER_API_KEY>",
+    "HTTP-Referer": "<YOUR_SITE_URL>", // Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", // Optional. Site title for rankings on openrouter.ai.
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "openai/gpt-5.2",
+    messages: [
+      {
+        role: "user",
+        content: "What is the meaning of life?",
+      },
+    ],
+  }),
+});
+```
+
+```shell title="Shell"
+curl https://openrouter.ai/api/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+  -d '{
+  "model": "openai/gpt-5.2",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the meaning of life?"
+    }
+  ]
+}'
+```
+
 </CodeGroup>
 
 ## Using the OpenAI SDK
@@ -156,56 +160,59 @@ Then use it in your code:
   ```typescript title="Typescript"
   import OpenAI from 'openai';
 
-  const openai = new OpenAI({
-    baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: '<OPENROUTER_API_KEY>',
-    defaultHeaders: {
-      'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Site URL for rankings on openrouter.ai.
-      'X-OpenRouter-Title': '<YOUR_SITE_NAME>', // Optional. Site title for rankings on openrouter.ai.
-    },
-  });
+const openai = new OpenAI({
+baseURL: '<https://openrouter.ai/api/v1>',
+apiKey: '<OPENROUTER_API_KEY>',
+defaultHeaders: {
+'HTTP-Referer': '<YOUR_SITE_URL>', // Optional. Site URL for rankings on openrouter.ai.
+'X-OpenRouter-Title': '<YOUR_SITE_NAME>', // Optional. Site title for rankings on openrouter.ai.
+},
+});
 
-  async function main() {
-    const completion = await openai.chat.completions.create({
-      model: 'openai/gpt-5.2',
-      messages: [
-        {
-          role: 'user',
-          content: 'What is the meaning of life?',
-        },
-      ],
-    });
+async function main() {
+const completion = await openai.chat.completions.create({
+model: 'openai/gpt-5.2',
+messages: [
+{
+role: 'user',
+content: 'What is the meaning of life?',
+},
+],
+});
 
     console.log(completion.choices[0].message);
-  }
 
-  main();
-  ```
+}
 
-  ```python title="Python"
-  from openai import OpenAI
+main();
 
-  client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key="<OPENROUTER_API_KEY>",
-  )
+````
 
-  completion = client.chat.completions.create(
-    extra_headers={
-      "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
-      "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
-    },
-    model="openai/gpt-5.2",
-    messages=[
-      {
-        "role": "user",
-        "content": "What is the meaning of life?"
-      }
-    ]
-  )
+```python title="Python"
+from openai import OpenAI
 
-  print(completion.choices[0].message.content)
-  ```
+client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key="<OPENROUTER_API_KEY>",
+)
+
+completion = client.chat.completions.create(
+  extra_headers={
+    "HTTP-Referer": "<YOUR_SITE_URL>", # Optional. Site URL for rankings on openrouter.ai.
+    "X-OpenRouter-Title": "<YOUR_SITE_NAME>", # Optional. Site title for rankings on openrouter.ai.
+  },
+  model="openai/gpt-5.2",
+  messages=[
+    {
+      "role": "user",
+      "content": "What is the meaning of life?"
+    }
+  ]
+)
+
+print(completion.choices[0].message.content)
+````
+
 </CodeGroup>
 
 The API also supports [streaming](/docs/api/reference/streaming).
@@ -214,13 +221,13 @@ The API also supports [streaming](/docs/api/reference/streaming).
 
 For information about using third-party SDKs and frameworks with OpenRouter, please [see our frameworks documentation.](/docs/guides/community/frameworks-and-integrations-overview)
 
-***
+---
 
 title: Model Fallbacks
 subtitle: Automatic failover between models
 headline: Model Fallbacks | Reliable AI with Automatic Failover
 canonical-url: '[https://openrouter.ai/docs/guides/routing/model-fallbacks](https://openrouter.ai/docs/guides/routing/model-fallbacks)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': Model Fallbacks - Automatic Failover Between Models
 'og:description': >-
 Configure automatic failover between AI models when providers are down,
@@ -228,14 +235,15 @@ rate-limited, or refuse requests.
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?title=Model%20Fallbacks\&description=Automatic%20failover%20between%20AI%20models](https://openrouter.ai/dynamic-og?title=Model%20Fallbacks\&description=Automatic%20failover%20between%20AI%20models)
+[https://openrouter.ai/dynamic-og?title=Model%20Fallbacks\&description=Automatic%20failover%20between%20AI%20models](https://openrouter.ai/dynamic-og?title=Model%20Fallbacks&description=Automatic%20failover%20between%20AI%20models)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 The `models` parameter lets you automatically try other models if the primary model's providers are down, rate-limited, or refuse to reply due to content moderation.
 
@@ -247,11 +255,32 @@ Provide an array of model IDs in priority order. If the first model returns an e
   ```typescript title="TypeScript SDK"
   import { OpenRouter } from '@openrouter/sdk';
 
-  const openRouter = new OpenRouter({
-    apiKey: '<OPENROUTER_API_KEY>',
-  });
+const openRouter = new OpenRouter({
+apiKey: '<OPENROUTER_API_KEY>',
+});
 
-  const completion = await openRouter.chat.send({
+const completion = await openRouter.chat.send({
+models: ['anthropic/claude-3.5-sonnet', 'gryphe/mythomax-l2-13b'],
+messages: [
+{
+role: 'user',
+content: 'What is the meaning of life?',
+},
+],
+});
+
+console.log(completion.choices[0].message.content);
+
+````
+
+```typescript title="TypeScript (fetch)"
+const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer <OPENROUTER_API_KEY>',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
     models: ['anthropic/claude-3.5-sonnet', 'gryphe/mythomax-l2-13b'],
     messages: [
       {
@@ -259,57 +288,38 @@ Provide an array of model IDs in priority order. If the first model returns an e
         content: 'What is the meaning of life?',
       },
     ],
-  });
+  }),
+});
 
-  console.log(completion.choices[0].message.content);
-  ```
+const data = await response.json();
+console.log(data.choices[0].message.content);
+````
 
-  ```typescript title="TypeScript (fetch)"
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer <OPENROUTER_API_KEY>',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      models: ['anthropic/claude-3.5-sonnet', 'gryphe/mythomax-l2-13b'],
-      messages: [
-        {
-          role: 'user',
-          content: 'What is the meaning of life?',
-        },
-      ],
-    }),
-  });
+```python title="Python"
+import requests
+import json
 
-  const data = await response.json();
-  console.log(data.choices[0].message.content);
-  ```
+response = requests.post(
+  url="https://openrouter.ai/api/v1/chat/completions",
+  headers={
+    "Authorization": "Bearer <OPENROUTER_API_KEY>",
+    "Content-Type": "application/json",
+  },
+  data=json.dumps({
+    "models": ["anthropic/claude-3.5-sonnet", "gryphe/mythomax-l2-13b"],
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the meaning of life?"
+      }
+    ]
+  })
+)
 
-  ```python title="Python"
-  import requests
-  import json
+data = response.json()
+print(data['choices'][0]['message']['content'])
+```
 
-  response = requests.post(
-    url="https://openrouter.ai/api/v1/chat/completions",
-    headers={
-      "Authorization": "Bearer <OPENROUTER_API_KEY>",
-      "Content-Type": "application/json",
-    },
-    data=json.dumps({
-      "models": ["anthropic/claude-3.5-sonnet", "gryphe/mythomax-l2-13b"],
-      "messages": [
-        {
-          "role": "user",
-          "content": "What is the meaning of life?"
-        }
-      ]
-    })
-  )
-
-  data = response.json()
-  print(data['choices'][0]['message']['content'])
-  ```
 </CodeGroup>
 
 ## Fallback Behavior
@@ -318,22 +328,22 @@ If the model you selected returns an error, OpenRouter will try to use the fallb
 
 By default, any error can trigger the use of a fallback model, including:
 
-* Context length validation errors
-* Moderation flags for filtered models
-* Rate-limiting
-* Downtime
+- Context length validation errors
+- Moderation flags for filtered models
+- Rate-limiting
+- Downtime
 
 ## Pricing
 
 Requests are priced using the model that was ultimately used, which will be returned in the `model` attribute of the response body.
 
-***
+---
 
 title: Free Models Router
 subtitle: Get started with free AI inference using the OpenRouter Chat Playground
 headline: Free Models Router | OpenRouter
 canonical-url: '[https://openrouter.ai/docs/guides/get-started/free-models-router-playground](https://openrouter.ai/docs/guides/get-started/free-models-router-playground)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': Free Models Router
 'og:description': >-
 Learn how to use the Free Models Router in the OpenRouter Chat Playground for
@@ -341,14 +351,15 @@ zero-cost inference.
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?title=Free%20Models%20Router%20in%20Chat%20Playground\&description=Get%20started%20with%20free%20AI%20inference](https://openrouter.ai/dynamic-og?title=Free%20Models%20Router%20in%20Chat%20Playground\&description=Get%20started%20with%20free%20AI%20inference)
+[https://openrouter.ai/dynamic-og?title=Free%20Models%20Router%20in%20Chat%20Playground\&description=Get%20started%20with%20free%20AI%20inference](https://openrouter.ai/dynamic-og?title=Free%20Models%20Router%20in%20Chat%20Playground&description=Get%20started%20with%20free%20AI%20inference)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 OpenRouter offers free models that let you experiment with AI without any cost. The easiest way to try these models is through the [Chat Playground](https://openrouter.ai/chat), where you can start chatting immediately.
 
@@ -386,10 +397,10 @@ In this example, the Free Models Router selected Solar Pro 3 (free) to respond t
 
 If you prefer to use a specific free model rather than the Free Models Router, you can select any model with "(free)" in its name from the model selector. Some popular free models include:
 
-* **Trinity Large Preview (free)** - A frontier-scale open-weight model from Arcee
-* **Trinity Mini (free)** - A smaller, faster variant
-* **DeepSeek R1 (free)** - DeepSeek's reasoning model
-* **Llama models (free)** - Various Meta Llama models
+- **Trinity Large Preview (free)** - A frontier-scale open-weight model from Arcee
+- **Trinity Mini (free)** - A smaller, faster variant
+- **DeepSeek R1 (free)** - DeepSeek's reasoning model
+- **Llama models (free)** - Various Meta Llama models
 
 ## Using Free Models via API
 
@@ -413,21 +424,21 @@ Free models may have different rate limits and availability compared to paid mod
 
 ## Related Resources
 
-* [Free Variant Documentation](/docs/guides/routing/model-variants/free) - Learn about the `:free` variant suffix
-* [Models Page](https://openrouter.ai/models) - Browse all available models
-* [Free Models Router API](https://openrouter.ai/openrouter/free/api) - API quickstart for the Free Models Router
-
+- [Free Variant Documentation](/docs/guides/routing/model-variants/free) - Learn about the `:free` variant suffix
+- [Models Page](https://openrouter.ai/models) - Browse all available models
+- [Free Models Router API](https://openrouter.ai/openrouter/free/api) - API quickstart for the Free Models Router
 
 ## Using with OpenAI SDK
 
 To use the `models` array with the OpenAI SDK, include it in the `extra_body` parameter. In the example below, gpt-4o will be tried first, and the `models` array will be tried in order as fallbacks.
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```python
     from openai import OpenAI
 
@@ -477,6 +488,7 @@ To use the `models` array with the OpenAI SDK, include it in the `extra_body` pa
 
     main();
     ```
+
   </CodeGroup>
 </Template>
 ***
@@ -485,20 +497,21 @@ title: Free Variant
 subtitle: 'Access free models with the :free variant'
 headline: Free Variant | Free Model Access
 canonical-url: '[https://openrouter.ai/docs/guides/routing/model-variants/free](https://openrouter.ai/docs/guides/routing/model-variants/free)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': Free Variant - Free Model Access
 'og:description': 'Access free models using the :free variant suffix.'
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?title=Free%20Variant\&description=Free%20model%20access](https://openrouter.ai/dynamic-og?title=Free%20Variant\&description=Free%20model%20access)
+[https://openrouter.ai/dynamic-og?title=Free%20Variant\&description=Free%20model%20access](https://openrouter.ai/dynamic-og?title=Free%20Variant&description=Free%20model%20access)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 The `:free` variant allows you to access free versions of models on OpenRouter.
 
@@ -518,71 +531,72 @@ Free variants provide access to models without cost, but may have different rate
 
 ## Related Resources
 
-* [Free Models Router](/docs/guides/get-started/free-models-router-playground) - Learn how to use the Free Models Router in the Chat Playground for zero-cost inference
+- [Free Models Router](/docs/guides/get-started/free-models-router-playground) - Learn how to use the Free Models Router in the Chat Playground for zero-cost inference
 
-***
+---
 
 import { OpenRouter } from "@openrouter/sdk";
 
 const openrouter = new OpenRouter({
-  apiKey: "<OPENROUTER_API_KEY>"
+apiKey: "<OPENROUTER_API_KEY>"
 });
 
 // Stream the response to get reasoning tokens in usage
 const stream = await openrouter.chat.send({
-  model: "openrouter/free",
-  messages: [
-    {
-      role: "user",
-      content: "How many r's are in the word 'strawberry'?"
-    }
-  ],
-  stream: true
+model: "openrouter/free",
+messages: [
+{
+role: "user",
+content: "How many r's are in the word 'strawberry'?"
+}
+],
+stream: true
 });
 
 let response = "";
 for await (const chunk of stream) {
-  const content = chunk.choices[0]?.delta?.content;
-  if (content) {
-    response += content;
-    process.stdout.write(content);
-  }
-
-  // Usage information comes in the final chunk
-  if (chunk.usage) {
-    console.log("\nReasoning tokens:", chunk.usage.reasoningTokens);
-  }
+const content = chunk.choices[0]?.delta?.content;
+if (content) {
+response += content;
+process.stdout.write(content);
 }
 
-***
+// Usage information comes in the final chunk
+if (chunk.usage) {
+console.log("\nReasoning tokens:", chunk.usage.reasoningTokens);
+}
+}
+
+---
 
 title: Model Variants
 subtitle: 'Access different model versions with variants'
 headline: Model Variants | Access Different Model Versions
 canonical-url: '[https://openrouter.ai/docs/guides/routing/model-variants](https://openrouter.ai/docs/guides/routing/model-variants)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': Model Variants - Access Different Model Versions
 'og:description': 'Access different model versions using variants like :free, :fast, or :best'
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?title=Model%20Variants\&description=Access%20different%20model%20versions](https://openrouter.ai/dynamic-og?title=Model%20Variants\&description=Access%20different%20model%20versions)
+[https://openrouter.ai/dynamic-og?title=Model%20Variants\&description=Access%20different%20model%20versions](https://openrouter.ai/dynamic-og?title=Model%20Variants&description=Access%20different%20model%20versions)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 Variants allow you to access different versions of a model, such as free, fast, or best-quality versions.
 
 ## Available Variants
 
-| Variant | Description |
-|---------|-------------|
-| `:free` | Access free versions of models |
-| `:fast` | Access fast versions of models |
+| Variant | Description                            |
+| ------- | -------------------------------------- |
+| `:free` | Access free versions of models         |
+| `:fast` | Access fast versions of models         |
 | `:best` | Access best-quality versions of models |
 
 ## Usage
@@ -597,26 +611,27 @@ Append the variant to the model ID:
 
 ## Related Resources
 
-* [Free Models Router](/docs/guides/get-started/free-models-router-playground) - Learn how to use the Free Models Router in the Chat Playground for zero-cost inference
+- [Free Models Router](/docs/guides/get-started/free-models-router-playground) - Learn how to use the Free Models Router in the Chat Playground for zero-cost inference
 
-***
+---
+
 // First API call with reasoning
-let response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${<OPENROUTER_API_KEY>}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    "model": "openrouter/free",
-    "messages": [
-      {
-        "role": "user",
-        "content": "How many r's are in the word 'strawberry'?"
-      }
-    ],
-    "reasoning": {"enabled": true}
-  })
+let response = await fetch("<https://openrouter.ai/api/v1/chat/completions>", {
+method: "POST",
+headers: {
+"Authorization": `Bearer ${<OPENROUTER_API_KEY>}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+"model": "openrouter/free",
+"messages": [
+{
+"role": "user",
+"content": "How many r's are in the word 'strawberry'?"
+}
+],
+"reasoning": {"enabled": true}
+})
 });
 
 // Extract the assistant message with reasoning_details and save it to the response variable
@@ -625,42 +640,43 @@ response = result.choices[0].message;
 
 // Preserve the assistant message with reasoning_details
 const messages = [
-  {
-    role: 'user',
-    content: "How many r's are in the word 'strawberry'?",
-  },
-  {
-    role: 'assistant',
-    content: response.content,
-    reasoning_details: response.reasoning_details, // Pass back unmodified
-  },
-  {
-    role: 'user',
-    content: "Are you sure? Think carefully.",
-  },
+{
+role: 'user',
+content: "How many r's are in the word 'strawberry'?",
+},
+{
+role: 'assistant',
+content: response.content,
+reasoning_details: response.reasoning_details, // Pass back unmodified
+},
+{
+role: 'user',
+content: "Are you sure? Think carefully.",
+},
 ];
 
 // Second API call - model continues reasoning from where it left off
-const response2 = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${<OPENROUTER_API_KEY>}`,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    "model": "openrouter/free",
-    "messages": messages  // Includes preserved reasoning_details
-  })
+const response2 = await fetch("<https://openrouter.ai/api/v1/chat/completions>", {
+method: "POST",
+headers: {
+"Authorization": `Bearer ${<OPENROUTER_API_KEY>}`,
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+"model": "openrouter/free",
+"messages": messages // Includes preserved reasoning_details
+})
 });
 
-***
-***
+---
+
+---
 
 title: Tool & Function Calling
 subtitle: Use tools in your prompts
 headline: Tool & Function Calling | Use Tools with OpenRouter
 canonical-url: '[https://openrouter.ai/docs/guides/features/tool-calling](https://openrouter.ai/docs/guides/features/tool-calling)'
-'og:site\_name': OpenRouter Documentation
+'og:site_name': OpenRouter Documentation
 'og:title': Tool & Function Calling - Use Tools with OpenRouter
 'og:description': >-
 Use tools (or functions) in your prompts with OpenRouter. Learn how to use
@@ -668,20 +684,21 @@ tools with OpenAI, Anthropic, and other models that support tool calling.
 'og:image':
 type: url
 value: >-
-[https://openrouter.ai/dynamic-og?title=Tool%20&%20Function%20Calling\&description=Use%20tools%20with%20OpenRouter](https://openrouter.ai/dynamic-og?title=Tool%20&%20Function%20Calling\&description=Use%20tools%20with%20OpenRouter)
+[https://openrouter.ai/dynamic-og?title=Tool%20&%20Function%20Calling\&description=Use%20tools%20with%20OpenRouter](https://openrouter.ai/dynamic-og?title=Tool%20&%20Function%20Calling&description=Use%20tools%20with%20OpenRouter)
 'og:image:width': 1200
 'og:image:height': 630
-'twitter:card': summary\_large\_image
+'twitter:card': summary_large_image
 'twitter:site': '@OpenRouter'
 noindex: false
 nofollow: false
----------------
+
+---
 
 Tool calls (also known as function calls) give an LLM access to external tools. The LLM does not call the tools directly. Instead, it suggests the tool to call. The user then calls the tool separately and provides the results back to the LLM. Finally, the LLM formats the response into an answer to the user's original question.
 
 OpenRouter standardizes the tool calling interface across models and providers, making it easy to integrate external tools with any supported model.
 
-**Supported Models**: You can find models that support tool calling by filtering on [openrouter.ai/models?supported\_parameters=tools](https://openrouter.ai/models?supported_parameters=tools).
+**Supported Models**: You can find models that support tool calling by filtering on [openrouter.ai/models?supported_parameters=tools](https://openrouter.ai/models?supported_parameters=tools).
 
 If you prefer to learn from a full end-to-end example, keep reading.
 
@@ -711,7 +728,7 @@ Tool calling with OpenRouter involves three key steps. Here are the essential re
           "properties": {
             "search_terms": {
               "type": "array",
-              "items": {"type": "string"},
+              "items": { "type": "string" },
               "description": "List of search terms to find books"
             }
           },
@@ -773,7 +790,7 @@ const toolResult = await searchGutenbergBooks(["James", "Joyce"]);
           "properties": {
             "search_terms": {
               "type": "array",
-              "items": {"type": "string"},
+              "items": { "type": "string" },
               "description": "List of search terms to find books"
             }
           },
@@ -794,12 +811,13 @@ Here is Python code that gives LLMs the ability to call an external API -- in th
 First, let's do some basic setup:
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     import { OpenRouter } from '@openrouter/sdk';
 
@@ -874,20 +892,22 @@ First, let's do some basic setup:
       }),
     });
     ```
+
   </CodeGroup>
 </Template>
 
 ### Define the Tool
 
-Next, we define the tool that we want to call. Remember, the tool is going to get *requested* by the LLM, but the code we are writing here is ultimately responsible for executing the call and returning the results to the LLM.
+Next, we define the tool that we want to call. Remember, the tool is going to get _requested_ by the LLM, but the code we are writing here is ultimately responsible for executing the call and returning the results to the LLM.
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     async function searchGutenbergBooks(searchTerms: string[]): Promise<Book[]> {
       const searchQuery = searchTerms.join(' ');
@@ -976,6 +996,7 @@ Next, we define the tool that we want to call. Remember, the tool is going to ge
     }
 
     ```
+
   </CodeGroup>
 </Template>
 
@@ -986,12 +1007,13 @@ Note that the "tool" is just a normal function. We then write a JSON "spec" comp
 Let's make the first OpenRouter API call to the model:
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     const result = await openRouter.chat.send({
       model: '{{MODEL}}',
@@ -1030,18 +1052,20 @@ Let's make the first OpenRouter API call to the model:
     const data = await request_1.json();
     const response_1 = data.choices[0].message;
     ```
+
   </CodeGroup>
 </Template>
 
 The LLM responds with a finish reason of `tool_calls`, and a `tool_calls` array. In a generic LLM response-handler, you would want to check the `finish_reason` before processing tool calls, but here we will assume it's the case. Let's keep going, by processing the tool call:
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     // Append the response to the messages array so the LLM has the full context
     // It's easy to forget this step!
@@ -1082,6 +1106,7 @@ The LLM responds with a finish reason of `tool_calls`, and a `tool_calls` array.
           "content": json.dumps(tool_response),
         })
     ```
+
   </CodeGroup>
 </Template>
 
@@ -1094,12 +1119,13 @@ The messages array now has:
 Now, we can make a second OpenRouter API call, and hopefully get our result!
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     const response_2 = await openRouter.chat.send({
       model: '{{MODEL}}',
@@ -1140,6 +1166,7 @@ Now, we can make a second OpenRouter API call, and hopefully get our result!
     const data = await response.json();
     console.log(data.choices[0].message.content);
     ```
+
   </CodeGroup>
 </Template>
 
@@ -1167,10 +1194,10 @@ Interleaved thinking allows models to reason between tool calls, enabling more s
 
 With interleaved thinking, the model can:
 
-* Reason about the results of a tool call before deciding what to do next
-* Chain multiple tool calls with reasoning steps in between
-* Make more nuanced decisions based on intermediate results
-* Provide transparent reasoning for its tool selection process
+- Reason about the results of a tool call before deciding what to do next
+- Chain multiple tool calls with reasoning steps in between
+- Make more nuanced decisions based on intermediate results
+- Provide transparent reasoning for its tool selection process
 
 ### Example: Multi-Step Research with Reasoning
 
@@ -1196,8 +1223,8 @@ Here's an example showing how a model might use interleaved thinking to research
         "parameters": {
           "type": "object",
           "properties": {
-            "query": {"type": "string"},
-            "field": {"type": "string"}
+            "query": { "type": "string" },
+            "field": { "type": "string" }
           },
           "required": ["query"]
         }
@@ -1211,8 +1238,8 @@ Here's an example showing how a model might use interleaved thinking to research
         "parameters": {
           "type": "object",
           "properties": {
-            "topic": {"type": "string"},
-            "year": {"type": "integer"}
+            "topic": { "type": "string" },
+            "year": { "type": "integer" }
           },
           "required": ["topic"]
         }
@@ -1240,19 +1267,19 @@ Here's an example showing how a model might use interleaved thinking to research
 
 ### Best Practices for Interleaved Thinking
 
-* **Clear Tool Descriptions**: Provide detailed descriptions so the model can reason about when to use each tool
-* **Structured Parameters**: Use well-defined parameter schemas to help the model make precise tool calls
-* **Context Preservation**: Maintain conversation context across multiple tool interactions
-* **Error Handling**: Design tools to provide meaningful error messages that help the model adjust its approach
+- **Clear Tool Descriptions**: Provide detailed descriptions so the model can reason about when to use each tool
+- **Structured Parameters**: Use well-defined parameter schemas to help the model make precise tool calls
+- **Context Preservation**: Maintain conversation context across multiple tool interactions
+- **Error Handling**: Design tools to provide meaningful error messages that help the model adjust its approach
 
 ### Implementation Considerations
 
 When implementing interleaved thinking:
 
-* Models may take longer to respond due to additional reasoning steps
-* Token usage will be higher due to the reasoning process
-* The quality of reasoning depends on the model's capabilities
-* Some models may be better suited for this approach than others
+- Models may take longer to respond due to additional reasoning steps
+- Token usage will be higher due to the reasoning process
+- The quality of reasoning depends on the model's capabilities
+- Some models may be better suited for this approach than others
 
 ## A Simple Agentic Loop
 
@@ -1261,12 +1288,13 @@ In the example above, the calls are made explicitly and sequentially. To handle 
 Here's an example of a simple agentic loop (using the same `tools` and initial `messages` as above):
 
 <Template
-  data={{
+data={{
   API_KEY_REF,
   MODEL: 'google/gemini-3-flash-preview'
 }}
->
-  <CodeGroup>
+
+>   <CodeGroup>
+
     ```typescript title="TypeScript SDK"
     async function callLLM(messages: Message[]): Promise<ChatResponse> {
       const result = await openRouter.chat.send({
@@ -1361,6 +1389,7 @@ Here's an example of a simple agentic loop (using the same `tools` and initial `
     print(messages[-1]['content'])
 
     ```
+
   </CodeGroup>
 </Template>
 
@@ -1411,15 +1440,15 @@ When defining tools for LLMs, follow these best practices:
 When using streaming responses with tool calls, handle the different content types appropriately:
 
 ```typescript
-const stream = await fetch('/api/chat/completions', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+const stream = await fetch("/api/chat/completions", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    model: 'anthropic/claude-sonnet-4.5',
+    model: "anthropic/claude-sonnet-4.5",
     messages: messages,
     tools: tools,
-    stream: true
-  })
+    stream: true,
+  }),
 });
 
 const reader = stream.body.getReader();
@@ -1432,19 +1461,19 @@ while (true) {
   }
 
   const chunk = new TextDecoder().decode(value);
-  const lines = chunk.split('\n').filter(line => line.trim());
+  const lines = chunk.split("\n").filter((line) => line.trim());
 
   for (const line of lines) {
-    if (line.startsWith('data: ')) {
+    if (line.startsWith("data: ")) {
       const data = JSON.parse(line.slice(6));
 
       if (data.choices[0].delta.tool_calls) {
         toolCalls.push(...data.choices[0].delta.tool_calls);
       }
 
-      if (data.choices[0].delta.finish_reason === 'tool_calls') {
+      if (data.choices[0].delta.finish_reason === "tool_calls") {
         await handleToolCalls(toolCalls);
-      } else if (data.choices[0].delta.finish_reason === 'stop') {
+      } else if (data.choices[0].delta.finish_reason === "stop") {
         // Regular completion without tool calls
         break;
       }
@@ -1472,7 +1501,7 @@ Control tool usage with the `tool_choice` parameter:
 {
   "tool_choice": {
     "type": "function",
-    "function": {"name": "search_database"}
+    "function": { "name": "search_database" }
   }
 }
 ```

@@ -33,91 +33,111 @@ export const cerebrasProvider: AIProvider = {
       throw new Error("CEREBRAS_API_KEY no configurada");
     }
 
-    console.log(`[cerebras] Iniciando streaming para modelo: ${params.model || CEREBRAS_DEFAULT_MODEL}`);
+    const keys = env.CEREBRAS_API_KEY.split(",").map((k) => k.trim()).filter(Boolean);
+    let lastError: Error | null = null;
+    const modelToSend = params.model || CEREBRAS_DEFAULT_MODEL;
 
-    const response = await fetch(CEREBRAS_BASE_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.CEREBRAS_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: params.model || CEREBRAS_DEFAULT_MODEL,
-        messages: params.messages,
-        temperature: params.temperature,
-        stream: true,
-        tools: params.tools,
-        tool_choice: params.tool_choice,
-      }),
-    });
+    // Probar keys en rotación
+    for (let i = 0; i < keys.length; i++) {
+        const activeKey = keys[i] as string;
+        console.log(`[cerebras] Intentando con Key ${i + 1}/${keys.length} (${maskApiKey(activeKey)})`);
 
-    if (!response.ok || !response.body) {
-      const errorText = await response.text();
-      throw new Error(`Cerebras ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
-    }
+        try {
+            const response = await fetch(CEREBRAS_BASE_URL, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${activeKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model: modelToSend,
+                messages: params.messages,
+                temperature: params.temperature,
+                stream: true,
+                tools: params.tools,
+                tool_choice: params.tool_choice,
+              }),
+            });
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
+            if (!response.ok || !response.body) {
+              const errorText = await response.text();
+              const statusStr = String(response.status);
+              const isRateLimit = statusStr === "429" || errorText.toLowerCase().includes("rate limit") || errorText.toLowerCase().includes("quota") || errorText.toLowerCase().includes("limit exceeded");
 
-    try {
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
+              if (isRateLimit && i < keys.length - 1) {
+                console.log(`[cerebras] Key ${i + 1} agotada o rate-limited. Rotando a la siguiente disponible...`);
+                continue; 
+              }
+              throw new Error(`Cerebras ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
+            }
 
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
 
-        for (const line of lines) {
-          const event = decodeSseLine(line);
-          if (!event) continue;
+            try {
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+                buffer += decoder.decode(value, { stream: true });
 
-          const delta = event.choices?.[0]?.delta;
-          const usage = event.usage;
+                const lines = buffer.split("\n");
+                buffer = lines.pop() ?? "";
 
-          if (!delta && !usage) continue;
+                for (const line of lines) {
+                  const event = decodeSseLine(line);
+                  if (!event) continue;
 
-          const chunk: StreamChunk = {};
+                  const delta = event.choices?.[0]?.delta;
+                  const usage = event.usage;
 
-          if (delta?.content) {
-            chunk.content = delta.content;
-          }
-          if (delta?.reasoning_content) {
-            chunk.reasoning = delta.reasoning_content;
-          }
+                  if (!delta && !usage) continue;
 
-          if (delta?.tool_calls) {
-            chunk.tool_calls = delta.tool_calls;
-          }
+                  const chunk: StreamChunk = {};
 
-          const reasoningTokens =
-            usage?.completion_tokens_details?.reasoning_tokens ??
-            usage?.completionTokensDetails?.reasoningTokens;
+                  if (delta?.content) {
+                    chunk.content = delta.content;
+                  }
+                  if (delta?.reasoning_content) {
+                    chunk.reasoning = delta.reasoning_content;
+                  }
 
-          if (typeof reasoningTokens === "number") {
-            chunk.reasoningTokens = reasoningTokens;
-          }
+                  if (delta?.tool_calls) {
+                    chunk.tool_calls = delta.tool_calls;
+                  }
 
-          const finishReason = event.choices?.[0]?.finish_reason;
-          if (finishReason) {
-            chunk.finishReason = finishReason;
-          }
+                  const reasoningTokens = usage?.completion_tokens_details?.reasoning_tokens ?? usage?.completionTokensDetails?.reasoningTokens;
+                  if (typeof reasoningTokens === "number") {
+                    chunk.reasoningTokens = reasoningTokens;
+                  }
 
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
-            yield chunk;
-          }
+                  const finishReason = event.choices?.[0]?.finish_reason;
+                  if (finishReason) {
+                    chunk.finishReason = finishReason;
+                  }
+
+                  if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
+                    yield chunk;
+                  }
+                }
+              }
+              return; 
+            } finally {
+              reader.releaseLock();
+            }
+
+        } catch (err: any) {
+            console.error(`[cerebras] Error con Key ${i + 1}: ${err.message}`);
+            lastError = err;
+            if (i < keys.length - 1 && !err.message.includes("404")) {
+               console.log(`[cerebras] Error preliminar. Probando con siguiente key...`);
+               continue; 
+            }
+            throw err; 
         }
-      }
-    } finally {
-      reader.releaseLock();
     }
+    if (lastError) throw lastError;
   }
 };
 
 console.log("[cerebras] Proveedor inicializado");
-console.log(
-  `[cerebras] API key ${
-    cerebrasProvider.isAvailable() ? `detectada (${maskApiKey(env.CEREBRAS_API_KEY)})` : "no configurada"
-  }`,
-);

@@ -26,7 +26,10 @@ db.run(`
 `);
 
 // Insert data
-db.run("INSERT INTO users (name, email) VALUES (?, ?)", ["Alice", "alice@example.com"]);
+db.run("INSERT INTO users (name, email) VALUES (?, ?)", [
+  "Alice",
+  "alice@example.com",
+]);
 
 // Query data
 const users = db.query("SELECT * FROM users").all();
@@ -111,7 +114,9 @@ stmt.run(["Charlie", "charlie@example.com"]);
 ### Named Parameters
 
 ```typescript
-const stmt = db.prepare("INSERT INTO users (name, email) VALUES ($name, $email)");
+const stmt = db.prepare(
+  "INSERT INTO users (name, email) VALUES ($name, $email)",
+);
 stmt.run({ $name: "Dave", $email: "dave@example.com" });
 
 // Also works with : and @
@@ -147,13 +152,17 @@ db.prepare("DELETE FROM cache WHERE expires < ?").run(Date.now());
 
 ```typescript
 // Simple transaction
-const insertMany = db.transaction((users: { name: string; email: string }[]) => {
-  const insert = db.prepare("INSERT INTO users (name, email) VALUES ($name, $email)");
-  for (const user of users) {
-    insert.run(user);
-  }
-  return users.length;
-});
+const insertMany = db.transaction(
+  (users: { name: string; email: string }[]) => {
+    const insert = db.prepare(
+      "INSERT INTO users (name, email) VALUES ($name, $email)",
+    );
+    for (const user of users) {
+      insert.run(user);
+    }
+    return users.length;
+  },
+);
 
 const count = insertMany([
   { name: "User1", email: "user1@example.com" },
@@ -162,13 +171,16 @@ const count = insertMany([
 
 // Transaction modes
 const tx = db.transaction(() => {
-  db.run('INSERT INTO users (name, email) VALUES (?, ?)', ['Alice', 'alice@example.com']);
-  db.run('UPDATE accounts SET balance = balance - 100 WHERE user_id = ?', [1]);
+  db.run("INSERT INTO users (name, email) VALUES (?, ?)", [
+    "Alice",
+    "alice@example.com",
+  ]);
+  db.run("UPDATE accounts SET balance = balance - 100 WHERE user_id = ?", [1]);
 });
 
-tx.deferred();   // Default: defer lock until first write
-tx.immediate();  // Lock immediately on transaction start
-tx.exclusive();  // Exclusive lock, blocks all other connections
+tx.deferred(); // Default: defer lock until first write
+tx.immediate(); // Lock immediately on transaction start
+tx.exclusive(); // Exclusive lock, blocks all other connections
 ```
 
 ## Batch Operations
@@ -223,7 +235,7 @@ const columns = stmt.columnNames;
 
 // Type annotations (Bun extension)
 const typedStmt = db.prepare<{ id: number; name: string }, [number]>(
-  "SELECT id, name FROM users WHERE id = ?"
+  "SELECT id, name FROM users WHERE id = ?",
 );
 const user = typedStmt.get(1);
 // user is typed as { id: number; name: string } | null
@@ -294,8 +306,12 @@ class UserRepository {
     this.stmts = {
       findById: db.prepare("SELECT * FROM users WHERE id = ?"),
       findAll: db.prepare("SELECT * FROM users"),
-      create: db.prepare("INSERT INTO users (name, email) VALUES ($name, $email)"),
-      update: db.prepare("UPDATE users SET name = $name, email = $email WHERE id = $id"),
+      create: db.prepare(
+        "INSERT INTO users (name, email) VALUES ($name, $email)",
+      ),
+      update: db.prepare(
+        "UPDATE users SET name = $name, email = $email WHERE id = $id",
+      ),
       delete: db.prepare("DELETE FROM users WHERE id = ?"),
     };
   }
@@ -317,12 +333,12 @@ class UserRepository {
 
 ## Common Errors
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `SQLITE_CONSTRAINT` | Constraint violation | Check UNIQUE/FK constraints |
-| `SQLITE_BUSY` | Database locked | Use WAL mode, add retry logic |
-| `no such table` | Table doesn't exist | Run CREATE TABLE first |
-| `database is locked` | Concurrent access | Enable WAL mode |
+| Error                | Cause                | Fix                           |
+| -------------------- | -------------------- | ----------------------------- |
+| `SQLITE_CONSTRAINT`  | Constraint violation | Check UNIQUE/FK constraints   |
+| `SQLITE_BUSY`        | Database locked      | Use WAL mode, add retry logic |
+| `no such table`      | Table doesn't exist  | Run CREATE TABLE first        |
+| `database is locked` | Concurrent access    | Enable WAL mode               |
 
 ## Performance Tips
 
@@ -343,10 +359,12 @@ PRAGMA foreign_keys = ON;
 ## When to Load References
 
 Load `references/pragmas.md` when:
+
 - Performance tuning
 - Journal modes
 - Memory configuration
 
 Load `references/fts.md` when:
+
 - Full-text search
 - FTS5 configuration

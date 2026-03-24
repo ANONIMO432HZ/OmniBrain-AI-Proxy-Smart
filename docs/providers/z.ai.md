@@ -1,6 +1,8 @@
-https://docs.z.ai/guides/overview/pricing
+<https://docs.z.ai/guides/overview/pricing>
+
 > ## Documentation Index
-> Fetch the complete documentation index at: https://docs.z.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://docs.z.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # Pricing
@@ -84,11 +86,11 @@ Prices per video.
 | General-Purpose Translation             | \$3 / MTok    |
 | Popular Special Effects Video Templates | \$0.2 / video |
 
-
 Built with [Mintlify](https://mintlify.com).
 
 > ## Documentation Index
-> Fetch the complete documentation index at: https://docs.z.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://docs.z.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # HTTP API Calls
@@ -138,7 +140,7 @@ https://api.z.ai/api/paas/v4/
 
 ### Request Header Requirements
 
-```http  theme={null}
+```http theme={null}
 Content-Type: application/json
 Authorization: Bearer YOUR_API_KEY
 ```
@@ -164,6 +166,7 @@ Authorization: Bearer YOUR_API_KEY
         ]
     }'
     ```
+
   </Tab>
 
   <Tab title="JWT Token Authentication">
@@ -200,6 +203,7 @@ Authorization: Bearer YOUR_API_KEY
     # Use the generated token
     token = generate_token("your-api-key", 3600)  # 1 hour validity
     ```
+
   </Tab>
 </Tabs>
 
@@ -207,7 +211,7 @@ Authorization: Bearer YOUR_API_KEY
 
 ### Simple Conversation
 
-```bash  theme={null}
+```bash theme={null}
 curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
 --header 'Authorization: Bearer YOUR_API_KEY' \
 --header 'Accept-Language: en-US,en' \
@@ -227,7 +231,7 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
 
 ### Streaming Response
 
-```bash  theme={null}
+```bash theme={null}
 curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
 --header 'Authorization: Bearer YOUR_API_KEY' \
 --header 'Accept-Language: en-US,en' \
@@ -246,7 +250,7 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
 
 ### Multi-turn Conversation
 
-```bash  theme={null}
+```bash theme={null}
 curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
 --header 'Authorization: Bearer YOUR_API_KEY' \
 --header 'Accept-Language: en-US,en' \
@@ -312,6 +316,7 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
     result = call_zai_api(messages)
     print(result['choices'][0]['message']['content'])
     ```
+
   </Tab>
 
   <Tab title="JavaScript">
@@ -353,6 +358,7 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
             console.error('Error:', error);
         });
     ```
+
   </Tab>
 
   <Tab title="Java">
@@ -397,6 +403,7 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
         }
     }
     ```
+
   </Tab>
 </Tabs>
 
@@ -444,10 +451,11 @@ curl --location 'https://api.z.ai/api/paas/v4/chat/completions' \
   It is recommended to use HTTPS protocol in production environments and implement appropriate security measures to protect your API keys and data transmission.
 </Note>
 
-
 Built with [Mintlify](https://mintlify.com).
+
 > ## Documentation Index
-> Fetch the complete documentation index at: https://docs.z.ai/llms.txt
+>
+> Fetch the complete documentation index at: <https://docs.z.ai/llms.txt>
 > Use this file to discover all available pages before exploring further.
 
 # Introduction
@@ -488,9 +496,9 @@ Authorization: Bearer ZAI_API_KEY
 
 The API Playground allows developers to quickly try out API calls. Simply click **Try it** on the API details page to get started.
 
-* On the API details page, there are many interactive options, such as **switching input types**, **switching tabs**, and **adding new content**.
-* You can click **Add an item** or **Add new property** to add more properties the API need.
-* **Note** that when switching the tabs, the previous properties value you need re-input or re-switch.
+- On the API details page, there are many interactive options, such as **switching input types**, **switching tabs**, and **adding new content**.
+- You can click **Add an item** or **Add new property** to add more properties the API need.
+- **Note** that when switching the tabs, the previous properties value you need re-input or re-switch.
 
 ## Call Examples
 
@@ -563,6 +571,7 @@ The API Playground allows developers to quickly try out API calls. Simply click 
     # Get response
     print(response.choices[0].message.content)
     ```
+
   </Tab>
 
   <Tab title="Official Java SDK">
@@ -618,6 +627,7 @@ The API Playground allows developers to quickly try out API calls. Simply click 
         }
     }
     ```
+
   </Tab>
 
   <Tab title="OpenAI Python SDK">
@@ -654,6 +664,7 @@ The API Playground allows developers to quickly try out API calls. Simply click 
 
     print(completion.choices[0].message.content)
     ```
+
   </Tab>
 
   <Tab title="OpenAI NodeJs SDK">
@@ -691,6 +702,7 @@ The API Playground allows developers to quickly try out API calls. Simply click 
 
     main();
     ```
+
   </Tab>
 
   <Tab title="OpenAI Java SDK">
@@ -743,9 +755,10 @@ The API Playground allows developers to quickly try out API calls. Simply click 
         }
     }
     ```
+
   </Tab>
 </Tabs>
 
-
 Built with [Mintlify](https://mintlify.com).
+
 # RATE LIMITS [Z.AI](https://z.ai/manage-apikey/rate-limits)

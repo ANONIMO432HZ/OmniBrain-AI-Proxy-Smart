@@ -7,12 +7,14 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 1: Fundación y Configuración
+
 **Duración estimada:** 1-2 días
 **Objetivo:** Preparar el proyecto base con estructura profesional
 
 ### Tareas Técnicas
 
 1. **Estructura del proyecto**
+
    ```
    src/
    ├── config/         # Variables de entorno y configuración
@@ -32,6 +34,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - [ ] Implementar sistema de migraciones
 
 3. **Setup de dependencias**
+
    ```json
    {
      "dependencies": {
@@ -54,6 +57,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Implementamos paginación desde el inicio?
 
 2. **Variables de Entorno**
+
    ```
    # Requeridas
    DATABASE_URL=./data/api.db
@@ -76,6 +80,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Logs en formato JSON para producción?
 
 ### Checklist Fase 1
+
 - [ ] Estructura de carpetas creada
 - [ ] Configuración de TypeScript lista
 - [ ] Variables de entorno documentadas en `.env.example`
@@ -86,12 +91,14 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 2: Implementación de Servicios de IA
+
 **Duración estimada:** 3-4 días
 **Objetivo:** Integrar los tres proveedores de IA con interfaz unificada
 
 ### Tareas Técnicas
 
 1. **Interfaz común para servicios**
+
    ```typescript
    // src/types/provider.ts
    export interface AIProvider {
@@ -144,6 +151,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Manejo de reconexión del cliente?
 
 ### Checklist Fase 2
+
 - [ ] Interfaz AIProvider definida
 - [ ] OpenRouter implementado y testeado
 - [ ] Groq implementado y testeado
@@ -155,12 +163,14 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 3: Endpoints REST y Router
+
 **Duración estimada:** 2-3 días
 **Objetivo:** Crear API REST completa con todas las funcionalidades
 
 ### Tareas Técnicas
 
 1. **Endpoints core**
+
    ```
    POST   /v1/chat/completions          # Chat principal
    GET    /v1/models                   # Lista modelos disponibles
@@ -202,6 +212,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿JWT para sesiones?
 
 ### Checklist Fase 3
+
 - [ ] Endpoint `/v1/chat/completions` funciona
 - [ ] Endpoint `/v1/models` lista todos los modelos
 - [ ] Endpoint `/v1/providers` muestra estado
@@ -213,6 +224,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 4: Integración con Claude Code
+
 **Duración estimada:** 2-3 días
 **Objetivo:** Optimizar la API para uso específico con Claude Code
 
@@ -251,6 +263,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Dashboard simple de estadísticas?
 
 ### Checklist Fase 4
+
 - [ ] Landing page funcional
 - [ ] Endpoint específico para Claude Code
 - [ ] Tests de integración con Claude
@@ -260,6 +273,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 5: Testing y Calidad
+
 **Duración estimada:** 2-3 días
 **Objetivo:** Asegurar calidad y estabilidad del sistema
 
@@ -296,6 +310,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Type checking estricto?
 
 ### Checklist Fase 5
+
 - [ ] Tests unitarios > 80% cobertura
 - [ ] Tests de integración pasan
 - [ ] Tests E2E configurados
@@ -305,6 +320,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 ---
 
 ## FASE 6: Deployment y Producción
+
 **Duración estimada:** 2 días
 **Objetivo:** Preparar el sistema para producción
 
@@ -343,6 +359,7 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿Validación de API keys?
 
 ### Checklist Fase 6
+
 - [ ] Docker funciona localmente
 - [ ] Deploy de prueba exitoso
 - [ ] Variables de entorno de producción configuradas
@@ -355,13 +372,13 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 
 ### Arquitectura
 
-| Decisión | Opción recomendada | Justificación |
-|----------|-------------------|---------------|
-| Runtime | Bun | Rápido, moderno, built-in SQLite, SSE |
+| Decisión      | Opción recomendada  | Justificación                          |
+| ------------- | ------------------- | -------------------------------------- |
+| Runtime       | Bun                 | Rápido, moderno, built-in SQLite, SSE  |
 | Base de datos | SQLite (bun:sqlite) | Suficiente para MVP, sin deps externas |
-| Router | Custom | Ligero, entendible, extensible |
-| Streaming | SSE | Estándar, compatible con fetch API |
-| Auth | API Keys simples | Para empezar, fácil de implementar |
+| Router        | Custom              | Ligero, entendible, extensible         |
+| Streaming     | SSE                 | Estándar, compatible con fetch API     |
+| Auth          | API Keys simples    | Para empezar, fácil de implementar     |
 
 ### Stack Tecnológico
 
@@ -376,10 +393,10 @@ Deploy: Docker + Fly.io/Railway
 
 ### Modelos Recomendados por Proveedor
 
-| Proveedor | Modelo rápido | Modelo razonamiento | Modelo balanceado |
-|-----------|--------------|---------------------|-------------------|
-| Groq | `llama-3.1-8b` | `deepseek-r1-distill` | `mixtral-8x7b` |
-| Cerebras | `llama-3.1-8b` | `deepseek-r1` | `llama-3.3-70b` |
+| Proveedor  | Modelo rápido     | Modelo razonamiento    | Modelo balanceado             |
+| ---------- | ----------------- | ---------------------- | ----------------------------- |
+| Groq       | `llama-3.1-8b`    | `deepseek-r1-distill`  | `mixtral-8x7b`                |
+| Cerebras   | `llama-3.1-8b`    | `deepseek-r1`          | `llama-3.3-70b`               |
 | OpenRouter | `google/gemma-2b` | `deepseek/deepseek-r1` | `anthropic/claude-3.5-sonnet` |
 
 ---
@@ -387,18 +404,21 @@ Deploy: Docker + Fly.io/Railway
 ## Roadmap Post-MVP
 
 ### Versión 1.1
+
 - [ ] Autenticación JWT
 - [ ] Rate limiting por usuario
 - [ ] Cache de respuestas frecuentes
 - [ ] Webhooks para eventos
 
 ### Versión 1.2
+
 - [ ] Soporte para imágenes (multimodal)
 - [ ] Soporte para function calling
 - [ ] Métricas avanzadas (tokens, costos)
 - [ ] Dashboard administrativo
 
 ### Versión 2.0
+
 - [ ] Soporte para embeddings
 - [ ] RAG (Retrieval Augmented Generation)
 - [ ] Fine-tuning de modelos
@@ -409,17 +429,20 @@ Deploy: Docker + Fly.io/Railway
 ## Recursos y Referencias
 
 ### Documentación de APIs
+
 - [OpenRouter API](https://openrouter.ai/docs)
 - [Groq API](https://console.groq.com/docs)
 - [Cerebras API](https://docs.cerebras.ai/)
 - [OpenAI API](https://platform.openai.com/docs) (para compatibilidad)
 
 ### Recursos Bun
+
 - [Bun Documentation](https://bun.sh/docs)
 - [bun:sqlite](https://bun.sh/docs/api/sqlite)
 - [Bun.serve](https://bun.sh/docs/api/http)
 
 ### Mejores Prácticas
+
 - [REST API Design](https://restfulapi.net/)
 - [SSE Specification](https://html.spec.whatwg.org/multipage/server-sent-events.html)
 - [OpenAPI Specification](https://swagger.io/specification/)
@@ -458,8 +481,12 @@ console.log(`[${timestamp}][${level}][${context}] ${message}`);
 
 // Ejemplos:
 console.log(`[2024-01-15T10:30:00Z][INFO][openrouter] Inicializando cliente`);
-console.log(`[2024-01-15T10:30:01Z][DEBUG][chat][req-123] Usando proveedor: groq`);
-console.error(`[2024-01-15T10:30:02Z][ERROR][chat][req-123] Timeout en proveedor`);
+console.log(
+  `[2024-01-15T10:30:01Z][DEBUG][chat][req-123] Usando proveedor: groq`,
+);
+console.error(
+  `[2024-01-15T10:30:02Z][ERROR][chat][req-123] Timeout en proveedor`,
+);
 ```
 
 ---
@@ -467,23 +494,27 @@ console.error(`[2024-01-15T10:30:02Z][ERROR][chat][req-123] Timeout en proveedor
 ## Checklist Final Pre-Lanzamiento
 
 ### Funcionalidad
+
 - [ ] Todos los proveedores responden correctamente
 - [ ] Streaming funciona sin interrupciones
 - [ ] Fallbacks operan automáticamente
 - [ ] Persistencia de conversaciones funciona
 
 ### Performance
+
 - [ ] Response time < 500ms para modelos rápidos
 - [ ] Memory usage estable (sin leaks)
 - [ ] Concurrency: soporta 10+ requests simultáneos
 
 ### Seguridad
+
 - [ ] API keys validadas
 - [ ] Sin exposición de secrets en logs
 - [ ] CORS configurado correctamente
 - [ ] Validación de inputs
 
 ### Documentación
+
 - [ ] README completo
 - [ ] API documentation (OpenAPI/Swagger)
 - [ ] Guía de contribución

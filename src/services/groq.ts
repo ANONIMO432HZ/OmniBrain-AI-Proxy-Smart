@@ -33,92 +33,121 @@ export const groqProvider: AIProvider = {
       throw new Error("GROQ_API_KEY no configurada");
     }
 
+    const keys = env.GROQ_API_KEY.split(",").map((k) => k.trim()).filter(Boolean);
+    let lastError: Error | null = null;
     let modelToSend = params.model || GROQ_DEFAULT_MODEL;
 
-    // Corregir ID para Llama 4 si le falta el prefijo mandatorio de Groq
     if (modelToSend === "llama-4-scout-17b-16e-instruct") {
       modelToSend = "meta-llama/llama-4-scout-17b-16e-instruct";
     }
 
-    console.log(`[groq] Iniciando streaming para modelo: ${modelToSend}`);
+    // Probar keys en rotación
+    for (let i = 0; i < keys.length; i++) {
+      const activeKey = keys[i] as string;
+      console.log(`[groq] Intentando con Key ${i + 1}/${keys.length} (${maskApiKey(activeKey)})`);
 
-    const response = await fetch(GROQ_BASE_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: modelToSend,
-        messages: params.messages,
-        temperature: params.temperature,
-        stream: true,
-        tools: params.tools,
-        tool_choice: params.tool_choice,
-      }),
-    });
+      try {
+        const response = await fetch(GROQ_BASE_URL, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${activeKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: modelToSend,
+            messages: params.messages,
+            temperature: params.temperature,
+            stream: true,
+            tools: params.tools,
+            tool_choice: params.tool_choice,
+          }),
+        });
 
-    if (!response.ok || !response.body) {
-      const errorText = await response.text();
-      throw new Error(`Groq ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-
-    try {
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          const event = decodeSseLine(line);
-          if (!event) continue;
-
-          const delta = event.choices?.[0]?.delta;
-          const usage = event.usage;
-
-          if (!delta && !usage) continue;
-
-          const chunk: StreamChunk = {};
-
-          if (delta?.content) {
-            chunk.content = delta.content;
+        if (!response.ok || !response.body) {
+          const errorText = await response.text();
+          // Si es un rate limit u error común, y hay más keys pendientes, rotamos
+          const statusStr = String(response.status);
+          const isRateLimit = statusStr === "429" || errorText.toLowerCase().includes("rate limit") || errorText.toLowerCase().includes("quota");
+          
+          if (isRateLimit && i < keys.length - 1) {
+            console.log(`[groq] Key ${i + 1} agotada o rate-limited. Rotando a la siguiente disponible...`);
+            continue; // Saltar a la siguiente key en el loop
           }
-          if (delta?.reasoning_content) {
-            chunk.reasoning = delta.reasoning_content;
-          }
-
-          if (delta?.tool_calls) {
-            chunk.tool_calls = delta.tool_calls;
-          }
-
-          const reasoningTokens =
-            usage?.completion_tokens_details?.reasoning_tokens ??
-            usage?.completionTokensDetails?.reasoningTokens;
-
-          if (typeof reasoningTokens === "number") {
-            chunk.reasoningTokens = reasoningTokens;
-          }
-
-          const finishReason = event.choices?.[0]?.finish_reason;
-          if (finishReason) {
-            chunk.finishReason = finishReason;
-          }
-
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
-            yield chunk;
-          }
+          throw new Error(`Groq ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
         }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        try {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+
+            for (const line of lines) {
+              const event = decodeSseLine(line);
+              if (!event) continue;
+
+              const delta = event.choices?.[0]?.delta;
+              const usage = event.usage;
+
+              if (!delta && !usage) continue;
+
+              const chunk: StreamChunk = {};
+
+              if (delta?.content) {
+                chunk.content = delta.content;
+              }
+              if (delta?.reasoning_content) {
+                chunk.reasoning = delta.reasoning_content;
+              }
+
+              if (delta?.tool_calls) {
+                chunk.tool_calls = delta.tool_calls;
+              }
+
+              const reasoningTokens =
+                usage?.completion_tokens_details?.reasoning_tokens ??
+                usage?.completionTokensDetails?.reasoningTokens;
+
+              if (typeof reasoningTokens === "number") {
+                chunk.reasoningTokens = reasoningTokens;
+              }
+
+              const finishReason = event.choices?.[0]?.finish_reason;
+              if (finishReason) {
+                chunk.finishReason = finishReason;
+              }
+
+              if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
+                yield chunk;
+              }
+            }
+          }
+          return; // Finalizar Generator con éxito si completó el stream
+        } finally {
+          reader.releaseLock();
+        }
+
+      } catch (err: any) {
+        console.error(`[groq] Error con Key ${i + 1}: ${err.message}`);
+        lastError = err;
+        
+        // Si hay más keys y es un error antes de arrojar chunks (i < keys.length - 1) podemos saltar
+        if (i < keys.length - 1 && !err.message.includes("404")) {
+           console.log(`[groq] Error preliminar. Probando con siguiente key...`);
+           continue; 
+        }
+        throw err; // Re-lanzar si es insalvable
       }
-    } finally {
-      reader.releaseLock();
     }
+    
+    if (lastError) throw lastError;
   }
 };
 

@@ -7,6 +7,7 @@ pip install cerebras_cloud_sdk
 ```
 
 For aiohttp async backend:
+
 ```bash
 pip install 'cerebras_cloud_sdk[aiohttp]'
 ```

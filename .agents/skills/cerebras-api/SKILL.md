@@ -9,11 +9,11 @@ Cerebras provides the world's fastest AI inference (2,000+ tokens/s). OpenAI-com
 
 ## Quick Reference
 
-| Resource | Location |
-|----------|----------|
-| API Base URL | `https://api.cerebras.ai/v1` |
-| Get API Key | https://cloud.cerebras.ai |
-| Python SDK | `pip install cerebras_cloud_sdk` |
+| Resource       | Location                                   |
+| -------------- | ------------------------------------------ |
+| API Base URL   | `https://api.cerebras.ai/v1`               |
+| Get API Key    | https://cloud.cerebras.ai                  |
+| Python SDK     | `pip install cerebras_cloud_sdk`           |
 | TypeScript SDK | `npm install @cerebras/cerebras_cloud_sdk` |
 
 ## Available Models
@@ -24,47 +24,47 @@ Cerebras provides the world's fastest AI inference (2,000+ tokens/s). OpenAI-com
 
 Fully supported for production use.
 
-| Model | Model ID | Parameters | Speed |
-|-------|----------|------------|-------|
-| [Llama 3.1 8B](https://inference-docs.cerebras.ai/models/llama-31-8b) | `llama3.1-8b` | 8B | ~2200 tok/s |
-| [Llama 3.3 70B](https://inference-docs.cerebras.ai/models/llama-33-70b) | `llama-3.3-70b` | 70B | ~2100 tok/s |
-| [OpenAI GPT OSS](https://inference-docs.cerebras.ai/models/openai-oss) | `gpt-oss-120b` | 120B | ~3000 tok/s |
-| [Qwen 3 32B](https://inference-docs.cerebras.ai/models/qwen-3-32b) | `qwen-3-32b` | 32B | ~2600 tok/s |
+| Model                                                                   | Model ID        | Parameters | Speed       |
+| ----------------------------------------------------------------------- | --------------- | ---------- | ----------- |
+| [Llama 3.1 8B](https://inference-docs.cerebras.ai/models/llama-31-8b)   | `llama3.1-8b`   | 8B         | ~2200 tok/s |
+| [Llama 3.3 70B](https://inference-docs.cerebras.ai/models/llama-33-70b) | `llama-3.3-70b` | 70B        | ~2100 tok/s |
+| [OpenAI GPT OSS](https://inference-docs.cerebras.ai/models/openai-oss)  | `gpt-oss-120b`  | 120B       | ~3000 tok/s |
+| [Qwen 3 32B](https://inference-docs.cerebras.ai/models/qwen-3-32b)      | `qwen-3-32b`    | 32B        | ~2600 tok/s |
 
 ### Preview Models
 
 For evaluation only - may be discontinued with short notice.
 
-| Model | Model ID | Parameters | Speed |
-|-------|----------|------------|-------|
-| [Qwen 3 235B Instruct](https://inference-docs.cerebras.ai/models/qwen-3-235b-2507) | `qwen-3-235b-a22b-instruct-2507` | 235B | ~1400 tok/s |
-| [Z.ai GLM 4.7](https://inference-docs.cerebras.ai/models/zai-glm-47) | `zai-glm-4.7` | 355B | ~1000 tok/s |
+| Model                                                                              | Model ID                         | Parameters | Speed       |
+| ---------------------------------------------------------------------------------- | -------------------------------- | ---------- | ----------- |
+| [Qwen 3 235B Instruct](https://inference-docs.cerebras.ai/models/qwen-3-235b-2507) | `qwen-3-235b-a22b-instruct-2507` | 235B       | ~1400 tok/s |
+| [Z.ai GLM 4.7](https://inference-docs.cerebras.ai/models/zai-glm-47)               | `zai-glm-4.7`                    | 355B       | ~1000 tok/s |
 
 Migrating to GLM? See [GLM 4.7 Migration Guide](https://inference-docs.cerebras.ai/resources/glm-47-migration).
 
 ### Model Selection Guide
 
-| Use Case | Recommended Model |
-|----------|-------------------|
-| Speed-critical (real-time chat) | `llama3.1-8b` |
-| Balanced (chat, coding, math) | `llama-3.3-70b` |
-| Hybrid reasoning | `qwen-3-32b` |
+| Use Case                            | Recommended Model                |
+| ----------------------------------- | -------------------------------- |
+| Speed-critical (real-time chat)     | `llama3.1-8b`                    |
+| Balanced (chat, coding, math)       | `llama-3.3-70b`                  |
+| Hybrid reasoning                    | `qwen-3-32b`                     |
 | Multilingual, instruction following | `qwen-3-235b-a22b-instruct-2507` |
-| Science, math, complex reasoning | `gpt-oss-120b` |
-| Agents, superior tool use | `zai-glm-4.7` |
+| Science, math, complex reasoning    | `gpt-oss-120b`                   |
+| Agents, superior tool use           | `zai-glm-4.7`                    |
 
 ### Model Compression
 
 All models are unpruned original versions. Precision varies:
 
-| Model | Precision | Weights |
-|-------|-----------|---------|
-| `llama3.1-8b` | FP16 | [HuggingFace](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct) |
-| `llama-3.3-70b` | FP16 | [HuggingFace](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct) |
-| `gpt-oss-120b` | FP16/FP8 (weights only) | [HuggingFace](https://huggingface.co/openai/gpt-oss-120b) |
-| `qwen-3-32b` | FP16 | [HuggingFace](https://huggingface.co/Qwen/Qwen3-32B) |
+| Model                            | Precision               | Weights                                                                  |
+| -------------------------------- | ----------------------- | ------------------------------------------------------------------------ |
+| `llama3.1-8b`                    | FP16                    | [HuggingFace](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)   |
+| `llama-3.3-70b`                  | FP16                    | [HuggingFace](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct)  |
+| `gpt-oss-120b`                   | FP16/FP8 (weights only) | [HuggingFace](https://huggingface.co/openai/gpt-oss-120b)                |
+| `qwen-3-32b`                     | FP16                    | [HuggingFace](https://huggingface.co/Qwen/Qwen3-32B)                     |
 | `qwen-3-235b-a22b-instruct-2507` | FP16/FP8 (weights only) | [HuggingFace](https://huggingface.co/Qwen/Qwen3-235B-A22B-Instruct-2507) |
-| `zai-glm-4.7` | FP16/FP8 (weights only) | [HuggingFace](https://huggingface.co/zai-org/GLM-4.7) |
+| `zai-glm-4.7`                    | FP16/FP8 (weights only) | [HuggingFace](https://huggingface.co/zai-org/GLM-4.7)                    |
 
 Note: FP16/FP8 models use selective weight-only quantization for storage. Sensitive layers remain at full precision, with dequantization on-the-fly. Activations and KV cache remain unquantized.
 
@@ -88,13 +88,13 @@ print(response.choices[0].message.content)
 ### TypeScript
 
 ```typescript
-import Cerebras from '@cerebras/cerebras_cloud_sdk';
+import Cerebras from "@cerebras/cerebras_cloud_sdk";
 
 const client = new Cerebras({ apiKey: process.env.CEREBRAS_API_KEY });
 
 const response = await client.chat.completions.create({
-    model: 'llama-3.3-70b',
-    messages: [{ role: 'user', content: 'Explain quantum computing' }]
+  model: "llama-3.3-70b",
+  messages: [{ role: "user", content: "Explain quantum computing" }],
 });
 console.log(response.choices[0].message.content);
 ```
@@ -120,13 +120,13 @@ for chunk in stream:
 
 ```typescript
 const stream = await client.chat.completions.create({
-    model: 'llama-3.3-70b',
-    messages: [{ role: 'user', content: 'Why is fast inference important?' }],
-    stream: true
+  model: "llama-3.3-70b",
+  messages: [{ role: "user", content: "Why is fast inference important?" }],
+  stream: true,
 });
 
 for await (const chunk of stream) {
-    process.stdout.write(chunk.choices[0]?.delta?.content || '');
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
 }
 ```
 
@@ -140,17 +140,17 @@ for await (const chunk of stream) {
 
 ```typescript
 const stream = await client.chat.completions.create({
-    model: 'llama-3.3-70b',
-    messages: [{ role: 'user', content: 'Long response' }],
-    stream: true
+  model: "llama-3.3-70b",
+  messages: [{ role: "user", content: "Long response" }],
+  stream: true,
 });
 
 for await (const chunk of stream) {
-    if (shouldStop) {
-        stream.controller.abort();
-        break;
-    }
-    process.stdout.write(chunk.choices[0]?.delta?.content || '');
+  if (shouldStop) {
+    stream.controller.abort();
+    break;
+  }
+  process.stdout.write(chunk.choices[0]?.delta?.content || "");
 }
 ```
 
@@ -285,34 +285,36 @@ response = client.chat.completions.create(
 ### TypeScript Example
 
 ```typescript
-const tools: Cerebras.Chat.ChatCompletionTool[] = [{
-    type: 'function',
+const tools: Cerebras.Chat.ChatCompletionTool[] = [
+  {
+    type: "function",
     function: {
-        name: 'get_weather',
-        strict: true,
-        description: 'Get temperature for a given location.',
-        parameters: {
-            type: 'object',
-            properties: {
-                location: { type: 'string', description: 'City name' }
-            },
-            required: ['location'],
-            additionalProperties: false
-        }
-    }
-}];
+      name: "get_weather",
+      strict: true,
+      description: "Get temperature for a given location.",
+      parameters: {
+        type: "object",
+        properties: {
+          location: { type: "string", description: "City name" },
+        },
+        required: ["location"],
+        additionalProperties: false,
+      },
+    },
+  },
+];
 
 const response = await client.chat.completions.create({
-    model: 'zai-glm-4.7',
-    messages: [{ role: 'user', content: 'Weather in Paris?' }],
-    tools
+  model: "zai-glm-4.7",
+  messages: [{ role: "user", content: "Weather in Paris?" }],
+  tools,
 });
 
 if (response.choices[0].message.tool_calls) {
-    for (const toolCall of response.choices[0].message.tool_calls) {
-        const args = JSON.parse(toolCall.function.arguments);
-        // Execute tool and continue conversation
-    }
+  for (const toolCall of response.choices[0].message.tool_calls) {
+    const args = JSON.parse(toolCall.function.arguments);
+    // Execute tool and continue conversation
+  }
 }
 ```
 
@@ -398,40 +400,43 @@ response = client.chat.completions.create(
 ### TypeScript (with Zod)
 
 ```typescript
-import { z } from 'zod';
-import { zodToJsonSchema } from 'zod-to-json-schema';
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 const MovieSchema = z.object({
-    title: z.string(),
-    director: z.string(),
-    year: z.number().int()
+  title: z.string(),
+  director: z.string(),
+  year: z.number().int(),
 });
 
 const response = await client.chat.completions.create({
-    model: 'llama-3.3-70b',
-    messages: [{ role: 'user', content: 'Suggest a sci-fi movie' }],
-    response_format: {
-        type: 'json_schema',
-        json_schema: {
-            name: 'movie',
-            strict: true,
-            schema: zodToJsonSchema(MovieSchema)
-        }
-    }
+  model: "llama-3.3-70b",
+  messages: [{ role: "user", content: "Suggest a sci-fi movie" }],
+  response_format: {
+    type: "json_schema",
+    json_schema: {
+      name: "movie",
+      strict: true,
+      schema: zodToJsonSchema(MovieSchema),
+    },
+  },
 });
 
-const movie = MovieSchema.parse(JSON.parse(response.choices[0].message.content || '{}'));
+const movie = MovieSchema.parse(
+  JSON.parse(response.choices[0].message.content || "{}"),
+);
 ```
 
 ### Response Format Modes
 
-| Mode | Valid JSON | Adheres to Schema | Extra Fields | Constrained Decoding |
-|------|------------|-------------------|--------------|----------------------|
-| `json_schema` (strict: true) | Yes | Yes (guaranteed) | No | Yes |
-| `json_schema` (strict: false) | Yes (best-effort) | Yes | Yes | No |
-| `json_object` | Yes | No (flexible) | No | No |
+| Mode                          | Valid JSON        | Adheres to Schema | Extra Fields | Constrained Decoding |
+| ----------------------------- | ----------------- | ----------------- | ------------ | -------------------- |
+| `json_schema` (strict: true)  | Yes               | Yes (guaranteed)  | No           | Yes                  |
+| `json_schema` (strict: false) | Yes (best-effort) | Yes               | Yes          | No                   |
+| `json_object`                 | Yes               | No (flexible)     | No           | No                   |
 
 **Enabling each mode:**
+
 - **Strict**: `response_format: { type: "json_schema", json_schema: { strict: true, schema: ... } }`
 - **Non-strict**: `response_format: { type: "json_schema", json_schema: { strict: false, schema: ... } }`
 - **JSON object**: `response_format: { type: "json_object" }`
@@ -453,14 +458,15 @@ Reasoning models generate intermediate thinking tokens before their final respon
 
 ### Reasoning Format Options
 
-| Format | Behavior | Use Case |
-|--------|----------|----------|
-| `parsed` | Reasoning in separate `reasoning` field, logprobs split into `reasoning_logprobs` | When you need structured access to thinking |
-| `raw` | Reasoning prepended to content with wrapper tokens (`<think>...</think>` for GLM/Qwen) | When you want full visibility |
-| `hidden` | Reasoning text dropped from response (tokens still counted/billed) | When you want benefits without exposing thinking |
-| `none` | Uses model's default behavior | Default |
+| Format   | Behavior                                                                               | Use Case                                         |
+| -------- | -------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `parsed` | Reasoning in separate `reasoning` field, logprobs split into `reasoning_logprobs`      | When you need structured access to thinking      |
+| `raw`    | Reasoning prepended to content with wrapper tokens (`<think>...</think>` for GLM/Qwen) | When you want full visibility                    |
+| `hidden` | Reasoning text dropped from response (tokens still counted/billed)                     | When you want benefits without exposing thinking |
+| `none`   | Uses model's default behavior                                                          | Default                                          |
 
 **Default behaviors by model:**
+
 - Qwen3: `raw` (or `hidden` for JSON output)
 - GLM: `text_parsed`
 - GPT-OSS: `text_parsed`
@@ -479,12 +485,12 @@ print("Answer:", response.choices[0].message.content)
 
 ```typescript
 const response = await client.chat.completions.create({
-    model: 'qwen-3-32b',
-    messages: [{ role: 'user', content: 'Solve: 15% of 240' }],
-    reasoning_format: 'parsed'
+  model: "qwen-3-32b",
+  messages: [{ role: "user", content: "Solve: 15% of 240" }],
+  reasoning_format: "parsed",
 });
-console.log('Thinking:', response.choices[0].message.reasoning);
-console.log('Answer:', response.choices[0].message.content);
+console.log("Thinking:", response.choices[0].message.reasoning);
+console.log("Answer:", response.choices[0].message.content);
 ```
 
 ### GPT-OSS: Reasoning Effort
@@ -516,6 +522,7 @@ response = client.chat.completions.create(
 To retain reasoning awareness across conversation turns, include prior reasoning in assistant messages using the model's native format.
 
 **GPT-OSS** (reasoning prepended directly):
+
 ```python
 messages = [
     {"role": "user", "content": "What is 25 * 4?"},
@@ -526,6 +533,7 @@ response = client.chat.completions.create(model="gpt-oss-120b", messages=message
 ```
 
 **GLM/Qwen** (reasoning in `<think>` tags):
+
 ```python
 messages = [
     {"role": "user", "content": "What is 25 * 4?"},
@@ -578,12 +586,15 @@ html {
 `;
 
 const response = await client.chat.completions.create({
-    model: 'gpt-oss-120b',
-    messages: [
-        { role: 'user', content: "Change the color to blue. Respond only with code." },
-        { role: 'user', content: code }
-    ],
-    prediction: { type: 'content', content: code }
+  model: "gpt-oss-120b",
+  messages: [
+    {
+      role: "user",
+      content: "Change the color to blue. Respond only with code.",
+    },
+    { role: "user", content: code },
+  ],
+  prediction: { type: "content", content: code },
 });
 ```
 
@@ -633,7 +644,7 @@ Store and reuse previously processed prompts to reduce latency. Designed to sign
 4. **Cache Miss** - Prompt processed normally, prefix stored for future matches
 5. **Auto Expiration** - TTL guaranteed 5 minutes, may persist up to 1 hour
 
-> The entire beginning of your prompt must match *exactly* with a cached prefix. Even a single character difference causes a cache miss.
+> The entire beginning of your prompt must match _exactly_ with a cached prefix. Even a single character difference causes a cache miss.
 
 ### Checking Cache Usage
 
@@ -724,23 +735,24 @@ asyncio.run(main())
 ## Error Handling
 
 All errors inherit from `cerebras.cloud.sdk.APIError`. Main categories:
+
 - `APIConnectionError` - Unable to connect to the API
 - `APIStatusError` - API returns non-success status code (4xx or 5xx)
 
 ### Error Codes
 
-| Status | Exception | Description |
-|--------|-----------|-------------|
-| 400 | `BadRequestError` | Invalid request parameters |
-| 401 | `AuthenticationError` | Invalid or missing API key |
-| 402 | `PaymentRequired` | Payment required |
-| 403 | `PermissionDeniedError` | Insufficient permissions |
-| 404 | `NotFoundError` | Resource not found |
-| 422 | `UnprocessableEntityError` | Validation error |
-| 429 | `RateLimitError` | Too many requests |
-| 500 | `InternalServerError` | Server error |
-| 503 | `ServiceUnavailable` | Service temporarily unavailable |
-| N/A | `APIConnectionError` | Network/connection issue |
+| Status | Exception                  | Description                     |
+| ------ | -------------------------- | ------------------------------- |
+| 400    | `BadRequestError`          | Invalid request parameters      |
+| 401    | `AuthenticationError`      | Invalid or missing API key      |
+| 402    | `PaymentRequired`          | Payment required                |
+| 403    | `PermissionDeniedError`    | Insufficient permissions        |
+| 404    | `NotFoundError`            | Resource not found              |
+| 422    | `UnprocessableEntityError` | Validation error                |
+| 429    | `RateLimitError`           | Too many requests               |
+| 500    | `InternalServerError`      | Server error                    |
+| 503    | `ServiceUnavailable`       | Service temporarily unavailable |
+| N/A    | `APIConnectionError`       | Network/connection issue        |
 
 ### Python Example
 
@@ -768,18 +780,18 @@ except cerebras.cloud.sdk.APIStatusError as e:
 
 ```typescript
 try {
-    const response = await client.chat.completions.create({
-        model: 'llama-3.3-70b',
-        messages: [{ role: 'user', content: 'Hello' }]
-    });
+  const response = await client.chat.completions.create({
+    model: "llama-3.3-70b",
+    messages: [{ role: "user", content: "Hello" }],
+  });
 } catch (err) {
-    if (err instanceof Cerebras.APIError) {
-        console.log(err.status);   // 400
-        console.log(err.name);     // BadRequestError
-        console.log(err.headers);  // Response headers
-    } else {
-        throw err;
-    }
+  if (err instanceof Cerebras.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // Response headers
+  } else {
+    throw err;
+  }
 }
 ```
 
@@ -788,10 +800,11 @@ try {
 ### Automatic Retries
 
 By default, these errors are retried 2 times with exponential backoff:
+
 - Connection errors
 - 408 Request Timeout
 - 429 Rate Limit
-- >= 500 Internal errors
+- > = 500 Internal errors
 
 ```python
 # Python - configure retries
@@ -849,21 +862,22 @@ const client = new Cerebras({ warmTCPConnection: false });
 
 ## Key Parameters
 
-| Parameter | Description |
-|-----------|-------------|
-| `model` | Model identifier (required) |
-| `messages` | Conversation history (required) |
-| `temperature` | Randomness 0-1.5 (default varies) |
-| `max_completion_tokens` | Max output tokens |
-| `stop` | Up to 4 stop sequences |
-| `stream` | Enable streaming |
-| `response_format` | `text`, `json_object`, or `json_schema` |
-| `tools` | Function definitions for tool calling |
-| `reasoning_format` | `parsed`, `raw`, `hidden` |
-| `reasoning_effort` | `low`, `medium`, `high` (gpt-oss only) |
+| Parameter               | Description                             |
+| ----------------------- | --------------------------------------- |
+| `model`                 | Model identifier (required)             |
+| `messages`              | Conversation history (required)         |
+| `temperature`           | Randomness 0-1.5 (default varies)       |
+| `max_completion_tokens` | Max output tokens                       |
+| `stop`                  | Up to 4 stop sequences                  |
+| `stream`                | Enable streaming                        |
+| `response_format`       | `text`, `json_object`, or `json_schema` |
+| `tools`                 | Function definitions for tool calling   |
+| `reasoning_format`      | `parsed`, `raw`, `hidden`               |
+| `reasoning_effort`      | `low`, `medium`, `high` (gpt-oss only)  |
 
 ## References
 
 For detailed SDK documentation:
+
 - Python: See [references/python.md](references/python.md)
 - TypeScript: See [references/typescript.md](references/typescript.md)

@@ -7,6 +7,7 @@ description: Probar el streaming de Tool Calls en el Proxy para certificar que e
 Este workflow sirve para verificar que el proxy traduzca correctamente las peticiones de herramientas a los proveedores y devuelva la estructura `tool_calls` estándar de OpenAI.
 
 ### 1. Iniciar Servidor en Modo Debug
+
 Ejecuta el servidor en background o en una terminal separada:
 
 ```bash
@@ -14,6 +15,7 @@ bun --hot index.ts
 ```
 
 ### 2. Ejecutar Prueba de Tool Call
+
 Envía una petición con una función simulada (`get_weather`) para forzar al modelo a usarla.
 
 ```bash
@@ -45,7 +47,9 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 ---
 
 ### Verdificación de Éxito ✅
+
 El endpoint debe responder con un listado JSON que incluya:
+
 1.  `"finish_reason": "tool_calls"`
 2.  Un objeto `tool_calls` con la función `get_weather` y el parámetro `location: "Monterrey"`.
 

@@ -13,6 +13,7 @@ Get a free API key at the [Cerebras Cloud](https://cloud.cerebras.ai).
 ## Quickstart
 
 **Python:**
+
 ```python
 import os
 from cerebras.cloud.sdk import Cerebras
@@ -35,17 +36,18 @@ print(chat_completion)
 ```
 
 **Node.js:**
+
 ```javascript
-import Cerebras from '@cerebras/cerebras_cloud_sdk';
+import Cerebras from "@cerebras/cerebras_cloud_sdk";
 
 const client = new Cerebras({
-  apiKey: process.env['CEREBRAS_API_KEY'],
+  apiKey: process.env["CEREBRAS_API_KEY"],
 });
 
 async function main() {
   const completionCreateResponse = await client.chat.completions.create({
-    messages: [{ role: 'user', content: 'Why is fast inference important?' }],
-    model: 'llama-3.3-70b',
+    messages: [{ role: "user", content: "Why is fast inference important?" }],
+    model: "llama-3.3-70b",
   });
 
   console.log(completionCreateResponse);
@@ -55,6 +57,7 @@ main();
 ```
 
 **cURL:**
+
 ```bash
 curl --location 'https://api.cerebras.ai/v1/chat/completions' \
 --header 'Content-Type: application/json' \
@@ -78,28 +81,30 @@ curl --location 'https://api.cerebras.ai/v1/chat/completions' \
 
 This skill provides guidance and patterns for working with Cerebras's API, covering:
 
-* Chat completions with world's fastest inference (2,000+ tokens/s)
-* Streaming responses
-* Tool use/function calling
-* Structured outputs with JSON schema enforcement
-* Reasoning models with thinking tokens
+- Chat completions with world's fastest inference (2,000+ tokens/s)
+- Streaming responses
+- Tool use/function calling
+- Structured outputs with JSON schema enforcement
+- Reasoning models with thinking tokens
 
 ---
 
 ## When to Use This Skill
 
 **Triggers:**
-* Mentions of Cerebras, Cerebras Inference, or Cerebras Cloud
-* Working with fast LLM inference needs
-* Using Python SDK (`cerebras_cloud_sdk`) or TypeScript SDK (`@cerebras/cerebras_cloud_sdk`)
-* Tasks involving Llama, Qwen, or GLM models on Cerebras
+
+- Mentions of Cerebras, Cerebras Inference, or Cerebras Cloud
+- Working with fast LLM inference needs
+- Using Python SDK (`cerebras_cloud_sdk`) or TypeScript SDK (`@cerebras/cerebras_cloud_sdk`)
+- Tasks involving Llama, Qwen, or GLM models on Cerebras
 
 **Use cases:**
-* Implementing chat completions with Llama 3.1/3.3, Qwen 3, GPT-OSS, or GLM models
-* Building real-time chat applications requiring low latency
-* Creating agents with tool use/function calling
-* Generating structured JSON outputs with schema validation
-* Using reasoning models with thinking tokens
+
+- Implementing chat completions with Llama 3.1/3.3, Qwen 3, GPT-OSS, or GLM models
+- Building real-time chat applications requiring low latency
+- Creating agents with tool use/function calling
+- Generating structured JSON outputs with schema validation
+- Using reasoning models with thinking tokens
 
 ---
 
@@ -124,6 +129,7 @@ export CEREBRAS_API_KEY=<your-api-key>
 ### Basic Usage
 
 **Python:**
+
 ```python
 from cerebras.cloud.sdk import Cerebras
 
@@ -136,14 +142,15 @@ response = client.chat.completions.create(
 ```
 
 **TypeScript:**
+
 ```typescript
 import Cerebras from "@cerebras/cerebras_cloud_sdk";
 
 const client = new Cerebras();
 
 const response = await client.chat.completions.create({
-    model: "llama-3.3-70b",
-    messages: [{ role: "user", content: "Hello" }],
+  model: "llama-3.3-70b",
+  messages: [{ role: "user", content: "Hello" }],
 });
 ```
 
@@ -155,19 +162,19 @@ const response = await client.chat.completions.create({
 
 ### Production Models
 
-| Model | Model ID | Parameters | Speed | Use Case |
-|-------|----------|------------|-------|----------|
-| Llama 3.1 8B | `llama3.1-8b` | 8B | ~2200 tok/s | Real-time chat, interactive apps |
-| Llama 3.3 70B | `llama-3.3-70b` | 70B | ~2100 tok/s | Chat, coding, math, reasoning |
-| OpenAI GPT OSS | `gpt-oss-120b` | 120B | ~3000 tok/s | Reasoning with effort control |
-| Qwen 3 32B | `qwen-3-32b` | 32B | ~2600 tok/s | Hybrid reasoning with `<think>` tags |
+| Model          | Model ID        | Parameters | Speed       | Use Case                             |
+| -------------- | --------------- | ---------- | ----------- | ------------------------------------ |
+| Llama 3.1 8B   | `llama3.1-8b`   | 8B         | ~2200 tok/s | Real-time chat, interactive apps     |
+| Llama 3.3 70B  | `llama-3.3-70b` | 70B        | ~2100 tok/s | Chat, coding, math, reasoning        |
+| OpenAI GPT OSS | `gpt-oss-120b`  | 120B       | ~3000 tok/s | Reasoning with effort control        |
+| Qwen 3 32B     | `qwen-3-32b`    | 32B        | ~2600 tok/s | Hybrid reasoning with `<think>` tags |
 
 ### Preview Models
 
-| Model | Model ID | Parameters | Speed | Use Case |
-|-------|----------|------------|-------|----------|
-| Qwen 3 235B | `qwen-3-235b-a22b-instruct-2507` | 235B | ~1400 tok/s | Multilingual, instruction following |
-| Z.ai GLM 4.7 | `zai-glm-4.7` | 355B | ~1000 tok/s | Superior tool use, #1 on BFCL |
+| Model        | Model ID                         | Parameters | Speed       | Use Case                            |
+| ------------ | -------------------------------- | ---------- | ----------- | ----------------------------------- |
+| Qwen 3 235B  | `qwen-3-235b-a22b-instruct-2507` | 235B       | ~1400 tok/s | Multilingual, instruction following |
+| Z.ai GLM 4.7 | `zai-glm-4.7`                    | 355B       | ~1000 tok/s | Superior tool use, #1 on BFCL       |
 
 ---
 
@@ -292,24 +299,28 @@ except cerebras.cloud.sdk.APIStatusError as e:
 ## Resources
 
 **Skill Files:**
-* [SKILL.md](cerebras-api/SKILL.md) - Full API reference and patterns
-* [references/python.md](cerebras-api/references/python.md) - Python SDK reference
-* [references/typescript.md](cerebras-api/references/typescript.md) - TypeScript SDK reference
+
+- [SKILL.md](cerebras-api/SKILL.md) - Full API reference and patterns
+- [references/python.md](cerebras-api/references/python.md) - Python SDK reference
+- [references/typescript.md](cerebras-api/references/typescript.md) - TypeScript SDK reference
 
 **Getting Started:**
-* [API Playground](https://cloud.cerebras.ai) - Get API key and experiment
-* [Live Chatbot Demo](https://inference.cerebras.ai) - Try the inference
-* [Pricing](https://inference-docs.cerebras.ai/support/pricing) - View pricing details
+
+- [API Playground](https://cloud.cerebras.ai) - Get API key and experiment
+- [Live Chatbot Demo](https://inference.cerebras.ai) - Try the inference
+- [Pricing](https://inference-docs.cerebras.ai/support/pricing) - View pricing details
 
 **Documentation:**
-* [Official Docs](https://inference-docs.cerebras.ai) - Full documentation
-* [API Reference](https://inference-docs.cerebras.ai/api-reference/chat-completions) - API endpoints
-* [Models Overview](https://inference-docs.cerebras.ai/models/overview) - Available models
-* [OpenAI Compatibility](https://inference-docs.cerebras.ai/resources/openai) - Migration guide
+
+- [Official Docs](https://inference-docs.cerebras.ai) - Full documentation
+- [API Reference](https://inference-docs.cerebras.ai/api-reference/chat-completions) - API endpoints
+- [Models Overview](https://inference-docs.cerebras.ai/models/overview) - Available models
+- [OpenAI Compatibility](https://inference-docs.cerebras.ai/resources/openai) - Migration guide
 
 **SDKs:**
-* [Python SDK](https://github.com/Cerebras/cerebras-cloud-sdk-python)
-* [TypeScript SDK](https://github.com/Cerebras/cerebras-cloud-sdk-node)
+
+- [Python SDK](https://github.com/Cerebras/cerebras-cloud-sdk-python)
+- [TypeScript SDK](https://github.com/Cerebras/cerebras-cloud-sdk-node)
 
 ---
 

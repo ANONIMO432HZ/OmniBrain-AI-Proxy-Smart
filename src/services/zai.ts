@@ -18,6 +18,10 @@ function decodeSseLine(rawLine: string): any | null {
   }
 }
 
+function maskApiKey(apiKey: string): string {
+  return apiKey.length > 10 ? `${apiKey.slice(0, 6)}...${apiKey.slice(-4)}` : "***";
+}
+
 export const zaiProvider: AIProvider = {
   name: "Z.AI",
   id: "zai",
@@ -29,89 +33,114 @@ export const zaiProvider: AIProvider = {
       throw new Error("ZAI_API_KEY no configurada");
     }
 
+    const keys = env.ZAI_API_KEY.split(",").map((k) => k.trim()).filter(Boolean);
+    let lastError: Error | null = null;
     const modelToSend = params.model || ZAI_DEFAULT_MODEL;
-    console.log(`[zai] Iniciando streaming para modelo: ${modelToSend}`);
 
-    const response = await fetch(ZAI_BASE_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.ZAI_API_KEY}`,
-        "Content-Type": "application/json",
-        "Accept-Language": "en-US,en"
-      },
-      body: JSON.stringify({
-        model: modelToSend,
-        messages: params.messages,
-        temperature: params.temperature,
-        stream: true,
-        tools: params.tools,
-        tool_choice: params.tool_choice,
-      }),
-    });
+    // Probar keys en rotación
+    for (let i = 0; i < keys.length; i++) {
+      const activeKey = keys[i] as string;
+      console.log(`[zai] Intentando con Key ${i + 1}/${keys.length} (${maskApiKey(activeKey)})`);
 
-    console.log(`[zai] Respuesta HTTP de Z.AI: ${response.status} ${response.statusText}`);
+      try {
+        const response = await fetch(ZAI_BASE_URL, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${activeKey}`,
+            "Content-Type": "application/json",
+            "Accept-Language": "en-US,en"
+          },
+          body: JSON.stringify({
+            model: modelToSend,
+            messages: params.messages,
+            temperature: params.temperature,
+            stream: true,
+            tools: params.tools,
+            tool_choice: params.tool_choice,
+          }),
+        });
 
-    if (!response.ok || !response.body) {
-      const errorText = await response.text();
-      throw new Error(`Z.AI ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
-    }
+        console.log(`[zai] [Key ${i + 1}] Respuesta HTTP de Z.AI: ${response.status} ${response.statusText}`);
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
+        if (!response.ok || !response.body) {
+          const errorText = await response.text();
+          const statusStr = String(response.status);
+          const isRateLimit = statusStr === "429" || errorText.toLowerCase().includes("rate limit") || errorText.toLowerCase().includes("quota");
 
-    try {
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          const event = decodeSseLine(line);
-          if (!event) continue;
-
-          const delta = event.choices?.[0]?.delta;
-          const usage = event.usage;
-
-          if (!delta && !usage) continue;
-
-          const chunk: StreamChunk = {};
-
-          if (delta?.content) {
-            chunk.content = delta.content;
+          if (isRateLimit && i < keys.length - 1) {
+             console.log(`[zai] Key ${i + 1} agotada o rate-limited. Rotando a la siguiente disponible...`);
+             continue;
           }
-          if (delta?.reasoning_content) {
-            // Guardar en campo separado para que la UI lo oculte
-            chunk.reasoning = delta.reasoning_content;
-          }
-
-          if (delta?.tool_calls) {
-            chunk.tool_calls = delta.tool_calls;
-          }
-
-          const reasoningTokens =
-            usage?.completion_tokens_details?.reasoning_tokens ??
-            usage?.completionTokensDetails?.reasoningTokens;
-
-          if (typeof reasoningTokens === "number") {
-            chunk.reasoningTokens = reasoningTokens;
-          }
-
-          const finishReason = event.choices?.[0]?.finish_reason;
-          if (finishReason) {
-            chunk.finishReason = finishReason;
-          }
-
-          if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
-            yield chunk;
-          }
+          throw new Error(`Z.AI ${response.status}: ${errorText || "Respuesta no valida del proveedor"}`);
         }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        try {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
+
+            for (const line of lines) {
+              const event = decodeSseLine(line);
+              if (!event) continue;
+
+              const delta = event.choices?.[0]?.delta;
+              const usage = event.usage;
+
+              if (!delta && !usage) continue;
+
+              const chunk: StreamChunk = {};
+
+              if (delta?.content) {
+                chunk.content = delta.content;
+              }
+              if (delta?.reasoning_content) {
+                chunk.reasoning = delta.reasoning_content;
+              }
+
+              if (delta?.tool_calls) {
+                chunk.tool_calls = delta.tool_calls;
+              }
+
+              const reasoningTokens = usage?.completion_tokens_details?.reasoning_tokens ?? usage?.completionTokensDetails?.reasoningTokens;
+              if (typeof reasoningTokens === "number") {
+                chunk.reasoningTokens = reasoningTokens;
+              }
+
+              const finishReason = event.choices?.[0]?.finish_reason;
+              if (finishReason) {
+                chunk.finishReason = finishReason;
+              }
+
+              if (chunk.content !== undefined || chunk.tool_calls !== undefined || chunk.reasoning !== undefined) {
+                yield chunk;
+              }
+            }
+          }
+          return; // Finalizar Generator con éxito si completó el stream
+        } finally {
+          reader.releaseLock();
+        }
+
+      } catch (err: any) {
+        console.error(`[zai] Error con Key ${i + 1}: ${err.message}`);
+        lastError = err;
+        
+        if (i < keys.length - 1 && !err.message.includes("404")) {
+           console.log(`[zai] Error preliminar. Probando con siguiente key...`);
+           continue; 
+        }
+        throw err;
       }
-    } finally {
-      reader.releaseLock();
     }
+
+    if (lastError) throw lastError;
   }
 };
