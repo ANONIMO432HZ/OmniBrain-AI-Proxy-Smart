@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OmniBrain | Premium Dashboard</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090b10;
+        --panel: #11141c;
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --accent: #10b981; 
+        --border: rgba(255, 255, 255, 0.04);
+        --success: #10b981;
+        --danger: #ef4444;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: var(--bg); color: var(--text); line-height: 1.5;
+        background-image: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0, transparent 40%), radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.06) 0, transparent 40%);
+        min-height: 100vh;
+      }
+      nav {
+        background: rgba(17, 20, 28, 0.75); backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border); padding: 14px 24px;
+        position: sticky; top: 0; z-index: 100;
+        display: flex; justify-content: space-between; align-items: center;
+      }
+      nav h1 { margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--accent); cursor: pointer; letter-spacing: -0.02em;}
+      .tab-bar { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+      .tab-btn {
+        background: transparent; border: none; color: var(--muted);
+        padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+        cursor: pointer; transition: all 0.2s ease;
+      }
+      .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+      .tab-btn.active { background: var(--panel); color: var(--accent); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid var(--border); }
+      
+      main { max-width: 1200px; margin: 32px auto; padding: 0 16px; }
+      
+      .tab-content { display: none; margin-top: 16px; }
+      .tab-content.active { display: flex; flex-direction: column; gap: 24px; } /* ⚠️ STACKED VERTICAL LAYOUT */
+
+      .panel { 
+        background: var(--panel); border: 1px solid var(--border); border-radius: 16px; 
+        padding: 24px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+      }
+
+      h2 { margin-top: 0; font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #fff; }
+      label { display: block; margin: 14px 0 6px; font-size: 0.82rem; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+      
+      input, select, textarea {
+        width: 100%; border: 1px solid var(--border); border-radius: 12px;
+        background: #0d1017; color: var(--text); padding: 12px 14px; font: inherit; outline: none;
+      }
+      textarea { min-height: 110px; resize: vertical; }
+
+      button {
+        background: var(--accent); color: #000; font-weight: 700; border: none;
+        border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s ease;
+        display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%;
+      }
+      button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+      button:active { transform: translateY(0); }
+      button:disabled { opacity: 0.6; cursor: wait; }
+      
+      .result-container {
+        margin-top: 5px; border: 1px solid var(--border); border-radius: 12px;
+        background: #090b10; min-height: 120px; max-height: 520px; overflow-y: auto; padding: 16px;
+        white-space: pre-wrap !important; 
+        overflow-wrap: anywhere !important; 
+      }
+      .crud-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+      .crud-controls input { flex: 1; }
+      
+      .table-responsive { width: 100%; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+      table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; background: #0b0e14;}
+      th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+      
+      .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; background: rgba(16,185,129,0.08); color: var(--accent); }
+      
+      .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #1e293b; transition: .3s; border-radius: 20px; }
+      .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: #94a3b8; transition: .3s; border-radius: 50%; }
+      input:checked + .slider { background-color: var(--accent); }
+      input:checked + .slider:before { transform: translateX(16px); background-color: #fff; }
+
+      .snippet-group { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+      .snippet-title { font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; }
+      .quick-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+      .quick-buttons button { width: auto; padding: 6px 12px; font-size: 0.78rem; background: #0d1017; color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .spinner-thinking { width: 14px; height: 14px; border: 2px solid rgba(16,185,129,0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h1 onclick="window.location.reload()">🧠 OmniBrain</h1>
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="chat-api">💬 Chat</button>
+        <button class="tab-btn" data-tab="crud-visual">📊 Historial</button>
+        <button class="tab-btn" data-tab="rest-quick">🛠️ REST Manual</button>
+      </div>
+    </nav>
+    <main>
+      <section class="panel" style="margin-bottom: 24px; padding: 16px 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap: 10px;">
+          <h2 style="margin:0; font-size:0.95rem; font-weight:600; color:var(--muted);">🔑 Token Local</h2>
+          <input type="password" id="local-api-key" value="omnibrain-dev-token" style="width: 220px; padding: 8px 12px; font-size:0.85rem;" />
+        </div>
+      </section>
+
+      <!-- 💬 TAB 1: CHAT -->
+      <div id="tab-chat-api" class="tab-content active">
+        <section class="panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h2 style="margin:0;">💬 POST /chat</h2>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; color:var(--muted); font-weight:600;">VISTA DETALLADA</span>
+              <label class="switch">
+                <input type="checkbox" id="toggle-detailed-models" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <form id="chat-form">
+            <label>Modelo Proveedor</label>
+            <select id="model"></select>
+            <label>Mensaje</label>
+            <textarea id="message" placeholder="Escribe tu consulta aquí..."></textarea>
+            <button id="send" type="submit">Enviar al Proxy</button>
+          </form>
+        </section>
+        <section class="panel">
+          <h2>🔍 Stream Output</h2>
+          <div id="result" class="result-container">Esperando mensaje...</div>
+          <p id="meta" style="margin: 10px 0 0; font-size: 0.78rem; color: var(--accent); font-weight:500;"></p>
+        </section>
+      </div>
+
+      <!-- 📊 TAB 2: CRUD VISUAL -->
+      <div id="tab-crud-visual" class="tab-content">
+        <section class="panel">
+          <h2>📊 Auditoría de Mensajes</h2>
+          <div class="crud-controls">
+            <input type="text" id="search-input" placeholder="Filtrar mensajes por texto..." />
+            <button id="btn-search" style="width:auto; padding: 12px 16px;">Buscar</button>
+            <button id="btn-refresh" style="width:auto; background: #0d1017; color: #fff;">🔄</button>
+            <button id="btn-clear" style="width:auto; background:rgba(239,68,68,0.05); color:var(--danger);">🗑️ Borrar Todo</button>
+          </div>
+          <div class="table-responsive">
+            <table id="history-table">
+              <thead><tr><th>Rol</th><th>Contenido</th><th>Proveedor</th><th>Modelo</th><th>Fecha</th></tr></thead>
+              <tbody><tr><td colspan="5" style="text-align:center;">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- 🛠️ TAB 3: REST QUICK -->
+      <div id="tab-rest-quick" class="tab-content">
+        <section class="panel">
+          <h2>🛠️ REST Client</h2>
+          <form id="rest-form">
+            <label>Método</label>
+            <select id="rest-method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select>
+            <label>Ruta</label>
+            <input id="rest-path" value="/history" />
+            <label>Body (JSON)</label>
+            <textarea id="rest-body" placeholder='{"prompt":"..."}' style="min-height:90px;"></textarea>
+            <button id="rest-send" type="submit" style="margin-top:14px;">Ejecutar request</button>
+          </form>
+
+          <div class="snippet-group">
+            <div class="snippet-title">📂 Snippets SQLite (Drizzle Proxy)</div>
+            <div class="quick-buttons">
+              <button data-method="GET" data-path="/history" data-body="">📌 All History</button>
+              <button data-method="GET" data-path="/history/search?q=hola" data-body="">🔍 Search "hola"</button>
+              <button data-method="DELETE" data-path="/history" data-body="">🗑️ Clear Audit</button>
+            </div>
+          </div>
+          <div class="snippet-group" style="border:none; padding:0; margin-top:12px;">
+            <div class="snippet-title">📂 Snippets Postgres (Deprecated/Ref Manual)</div>
+            <div class="quick-buttons">
+              <button data-method="GET" data-path="/api/users" data-body="">👤 List Users</button>
+              <button data-method="POST" data-path="/api/users" data-body='{"username":"demo","email":"demo@mail.com"}'>➕ Add User</button>
+              <button data-method="GET" data-path="/api/conversations" data-body="">🗣️ View Conversations</button>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <h2>📋 Response</h2>
+          <div id="rest-result" class="result-container">Esperando request REST...</div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      /* --- 🧭 MODEL list --- */
+      const shortModels = `<option value="">🚀 Auto Global (Garantizado)</option><option value="auto:openrouter">Auto OpenRouter</option><option value="auto:groq">Auto Groq</option><option value="auto:cerebras">Auto Cerebras</option><option value="auto:zai">Auto Z.AI</option>`;
+      const detailedModels = `
+        <optgroup label="🌐 ENRUTADO AUTOMÁTICO"><option value="">🚀 Auto Global (Garantizado)</option><option value="auto:openrouter">Auto OpenRouter</option><option value="auto:groq">Auto Groq</option><option value="auto:cerebras">Auto Cerebras</option><option value="auto:zai">Auto Z.AI</option></optgroup>
+        <optgroup label="🚀 MODELOS GROQ 2026"><option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option><option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option><option value="qwen/qwen3-32b">qwen/qwen3-32b</option></optgroup>
+        <optgroup label="📂 OPENROUTER FREE"><option value="google/gemini-2.0-flash:free">gemini-2.0-flash:free</option><option value="deepseek/deepseek-r1:free">deepseek-r1:free</option></optgroup>
+        <optgroup label="⚡ CEREBRAS ULTRA-FAST"><option value="llama3.1-8b">llama3.1-8b</option></optgroup>
+        <optgroup label="📂 Z.AI NATIVO"><option value="glm-4.7-flash">glm-4.7-flash</option></optgroup>
+      `;
+
+      const modelSelect = document.getElementById("model");
+      const toggleDetailed = document.getElementById("toggle-detailed-models");
+      function renderModels() { const isD = toggleDetailed.checked; localStorage.setItem("omnibrain-detailed-models", isD); modelSelect.innerHTML = isD ? detailedModels : shortModels; }
+      toggleDetailed.addEventListener("change", renderModels);
+      toggleDetailed.checked = localStorage.getItem("omnibrain-detailed-models") === "true";
+      renderModels();
+
+      /* --- 🧭 TABS LOGIC --- */
+      const tabs = document.querySelectorAll(".tab-btn");
+      const contents = document.querySelectorAll(".tab-content");
+      function switchTab(target) {
+        localStorage.setItem("omnibrain-tab", target);
+        tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === target));
+        contents.forEach(c => c.classList.toggle("active", c.id === "tab-" + target));
+        if (target === "crud-visual") loadVisualHistory();
+      }
+      tabs.forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
+      switchTab(localStorage.getItem("omnibrain-tab") || "chat-api");
+
+      /* --- 💬 CHAT STREAM --- */
+      const result = document.getElementById("result");
+      const meta = document.getElementById("meta");
+      const send = document.getElementById("send");
+      
+      document.getElementById("chat-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById("message").value.trim();
+        const mdl = document.getElementById("model").value;
+        const key = document.getElementById("local-api-key").value.trim();
+        if (!msg) return;
+        result.innerHTML = ""; meta.textContent = "Conectando stream..."; send.disabled = true; send.textContent = "Enviando..."; 
+        try {
+          const res = await fetch("/chat", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key }, body: JSON.stringify({ message: msg, ...(mdl ? { model: mdl } : {}) }) });
+          if (!res.ok) throw new Error(await res.text());
+          const reader = res.body.getReader(); const decoder = new TextDecoder(); let sseBuffer = "";
+          while(true) {
+            const { value, done } = await reader.read(); if (done) break;
+            sseBuffer += decoder.decode(value, { stream: true });
+            const blocks = sseBuffer.split("\n\n"); sseBuffer = blocks.pop() || "";
+            for (const block of blocks) {
+              const lines = block.split("\n"); let ev = "message"; let dataBody = "";
+              for (const l of lines) { if (l.startsWith("event:")) ev = l.slice(6).trim(); else if (l.startsWith("data:")) dataBody += l.slice(5).trim(); }
+              if (!dataBody) continue;
+              const data = JSON.parse(dataBody);
+              if (ev === "meta") meta.textContent = "requestId: " + (data.requestId || '-') + " | provider: " + (data.provider || '-') + " | model: " + (data.model || mdl || "(auto)");
+              if (ev === "delta" && data.reasoning) {
+                 let rbox = document.getElementById("reasoning-box");
+                 if(!rbox) {
+                   rbox = document.createElement("details"); rbox.id = "reasoning-box";
+                   rbox.style = "background:#0d1017; padding:14px; border-radius:12px; margin-bottom:14px; border:1px solid rgba(16,185,129,0.15); border-left:4px solid var(--accent);";
+                   rbox.innerHTML = '<summary style="cursor:pointer; color:var(--accent); font-weight:600; display:flex; align-items:center; gap:8px;"><div class="spinner-thinking"></div><span>🤔 Pensando...</span></summary><div id="r-inner" style="margin-top:10px; font-style:italic; font-size:0.88rem; color:var(--muted); white-space:pre-wrap; word-break:break-word;"></div>';
+                   result.appendChild(rbox);
+                 }
+                 document.getElementById("r-inner").textContent += data.reasoning;
+              }
+              if (ev === "delta" && data.content) {
+                 const rbox = document.getElementById("reasoning-box");
+                 if (rbox) { const spinner = rbox.querySelector(".spinner-thinking"); if (spinner) spinner.style.display = "none"; const span = rbox.querySelector("summary span"); if (span) span.textContent = "🧠 Razonamiento completado"; }
+                 let tbox = document.getElementById("txt-box"); if (!tbox) { tbox = document.createElement("div"); tbox.id = "txt-box"; tbox.style="white-space:pre-wrap; word-break:break-word;"; result.appendChild(tbox); }
+                 tbox.textContent += data.content;
+              }
+              if (ev === "usage" && data.reasoningTokens !== undefined) meta.textContent += " | reasoningTokens: " + data.reasoningTokens;
+              if (ev === "error") { let ebox = document.createElement("div"); ebox.style = "color:var(--danger); font-weight:600; margin-top:12px; padding:12px; background:rgba(239,68,68,0.05); border-radius:8px; border:1px solid rgba(239,68,68,0.15);"; ebox.textContent = "[error] " + (data.error || "Error de streaming"); result.appendChild(ebox); }
+              if (ev === "done") meta.textContent += " | chunks: " + (data.chunkCount ?? "-") + " | " + (data.elapsedMs ?? "-") + "ms";
+            }
+          }
+        } catch (err) { result.textContent = "Error: " + err.message; } finally { send.disabled = false; send.textContent = "Enviar al Proxy"; }
+      });
+
+      /* --- 📊 CRUD VISUAL --- */
+      const tableBody = document.querySelector("#history-table tbody");
+      async function loadVisualHistory(query = "") {
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cargando...</td></tr>';
+        const key = document.getElementById("local-api-key").value.trim();
+        const url = query ? "/history/search?q=" + encodeURIComponent(query) : "/history";
+        try {
+          const res = await fetch(url, { headers: { "Authorization": "Bearer " + key } });
+          const d = await res.json(); const list = d.messages || [];
+          if (list.length === 0) { tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Vacío.</td></tr>'; return; }
+          tableBody.innerHTML = list.map(m => `<tr><td><span class="badge ${m.role === 'user' ? 'user' : ''}">${m.role}</span></td><td style="max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${m.content.replace(/"/g, '&quot;')}">${m.content}</td><td>${m.provider || '-'}</td><td>${m.model || '-'}</td><td style="font-size:0.8rem; color:var(--muted);">${m.createdAt || '-'}</td></tr>`).join("");
+        } catch (err) { tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--danger);">Error: ' + err.message + '</td></tr>'; }
+      }
+      document.getElementById("btn-refresh").addEventListener("click", () => loadVisualHistory(document.getElementById("search-input").value.trim()));
+      document.getElementById("btn-search").addEventListener("click", () => loadVisualHistory(document.getElementById("search-input").value.trim()));
+      document.getElementById("btn-clear").addEventListener("click", async () => { if (!confirm("¿Borrar todo?")) return; const key = document.getElementById("local-api-key").value.trim(); await fetch("/history", { method: "DELETE", headers: { "Authorization": "Bearer " + key } }); loadVisualHistory(); });
+
+      /* --- 🛠️ REST QUICK --- */
+      const restSend = document.getElementById("rest-send");
+      function setRestLoading(isL) { restSend.disabled = isL; restSend.textContent = isL ? "Ejecutando..." : "Ejecutar request"; }
+      document.querySelectorAll(".quick-buttons button").forEach(b => b.addEventListener("click", () => { document.getElementById("rest-method").value = b.dataset.method; document.getElementById("rest-path").value = b.dataset.path; document.getElementById("rest-body").value = b.dataset.body || ""; }));
+      document.getElementById("rest-form").addEventListener("submit", async (e) => {
+        e.preventDefault(); const m = document.getElementById("rest-method").value; const p = document.getElementById("rest-path").value.trim(); const b = document.getElementById("rest-body").value.trim(); const key = document.getElementById("local-api-key").value.trim(); const rRes = document.getElementById("rest-result"); rRes.textContent = "Conectando request..."; setRestLoading(true); const started = Date.now();
+        try { const res = await fetch(p, { method: m, headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key }, body: b && m !== "GET" && m !== "DELETE" ? b : undefined }); const out = (res.headers.get("content-type") || "").includes("json") ? await res.json() : await res.text(); const elapsed = Date.now() - started; document.getElementById("rest-result").textContent = "REQUEST\n" + m + " " + p + "\n\nRESPONSE BODY\n" + JSON.stringify(out, null, 2); rRes.parentElement.querySelector("h2").textContent = "📋 Response (Status " + res.status + " | " + elapsed + "ms)"; } catch (err) { rRes.textContent = "Error: " + err.message; } finally { setRestLoading(false); }
+      });
+    </script>
+  </body>
+</html>

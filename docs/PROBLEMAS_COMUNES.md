@@ -114,6 +114,7 @@ Las operaciones de inserción `db.insert(schema.messages)` se ejecutaban en segu
 
 **✅ Solución:**
 Forzar el uso de `await` en ambos momentos del ciclo de vida del chat en `src/routes/chat.ts`:
+
 1. Esperar la inserción de la pregunta del usuario antes de llamar al router.
 2. Esperar la inserción de la respuesta del asistente dentro del bucle del stream antes de cerrar el controlador (`controller.close()`).
 
