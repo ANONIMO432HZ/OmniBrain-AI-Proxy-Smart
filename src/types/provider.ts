@@ -38,7 +38,9 @@ export interface ChatParams {
   stream?: boolean;
   tools?: ToolDefinition[]; // <-- Crítico para agentes
   tool_choice?: "none" | "auto" | { type: "function"; function: { name: string } };
+  requestId?: string; // Para trazabilidad de métricas
 }
+
 
 export interface StreamChunk {
   content?: string;

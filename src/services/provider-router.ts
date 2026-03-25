@@ -3,7 +3,9 @@ import { groqProvider } from "./groq";
 import { cerebrasProvider } from "./cerebras";
 import { zaiProvider } from "./zai";
 import { mockProvider } from "./mock";
+import { db, schema } from "../db/db";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
+
 
 interface ProviderState {
   provider: AIProvider;
@@ -106,7 +108,9 @@ export const providerRouter = {
 
     for (const state of sortedAvailable) {
       let chunkCount = 0;
+      const attemptStartedAt = Date.now();
       try {
+
         console.log(`[router] Intentando proveedor Real: ${state.provider.name} para modelo ${params.model}`);
         
         const currentParams = { ...params };
@@ -133,6 +137,21 @@ export const providerRouter = {
 
         console.log(`[router] ${state.provider.name} completó el stream exitosamente.`);
         state.failCount = 0; // ✅ Éxito total: resetear contador
+        
+        // 📊 Guardar métrica de éxito
+        try {
+          await (db as any).insert(schema.providerMetrics).values({
+            id: crypto.randomUUID(),
+            provider: state.provider.name,
+            model: params.model || "auto",
+            latencyMs: (Date.now() - attemptStartedAt).toString(),
+            status: "200",
+            requestId: params.requestId,
+          });
+        } catch (dbErr) {
+          console.error(`[db] Error guardando métrica éxito: ${dbErr}`);
+        }
+
         return; 
 
       } catch (err: any) {
@@ -157,6 +176,21 @@ export const providerRouter = {
         } else {
           console.log(`[router] ${state.provider.name} no soporta este modelo o falló silenciosamente. Saltando sin cooldown.`);
         }
+
+        // 📊 Guardar métrica de error por intento
+        try {
+          await (db as any).insert(schema.providerMetrics).values({
+            id: crypto.randomUUID(),
+            provider: state.provider.name,
+            model: params.model || "auto",
+            latencyMs: (Date.now() - attemptStartedAt).toString(),
+            status: "500", // Error interno del proveedor
+            requestId: params.requestId,
+          });
+        } catch (dbErr) {
+          console.error(`[db] Error guardando métrica fallo: ${dbErr}`);
+        }
+
 
         if (chunkCount > 0) {
           console.error(`[router] El proveedor falló mid-stream. No se puede re-enrutar de forma segura.`);

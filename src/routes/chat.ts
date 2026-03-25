@@ -69,7 +69,8 @@ export async function handleChatRoute(
   const conversationId = "00000000-0000-0000-0000-000000000000"; // Global Default
   const userMessageContent = typeof body.message === "string" && body.message.trim().length > 0 
     ? body.message 
-    : (messages && messages.length > 0 ? messages[messages.length - 1].content : "Mensaje vacío");
+    : (messages && messages.length > 0 ? (messages[messages.length - 1]?.content || "Mensaje vacío") : "Mensaje vacío");
+
 
   try {
     await (db as any).insert(schema.messages).values({
@@ -92,7 +93,9 @@ export async function handleChatRoute(
       temperature: body.temperature,
       tools: body.tools,
       tool_choice: body.tool_choice,
+      requestId, // Pasamos el ID para métricas delegadas
     });
+
 
     const encoder = new TextEncoder();
     const responseStream = new ReadableStream<Uint8Array>({
@@ -185,19 +188,8 @@ export async function handleChatRoute(
             ),
           );
 
-          // 📊 Guardar Métricas del Proveedor (Fase 3.2)
-          try {
-            await (db as any).insert(schema.providerMetrics).values({
-              id: crypto.randomUUID(),
-              provider: realProvider,
-              model: realModel,
-              latencyMs: (Date.now() - startedAt).toString(),
-              status: "200",
-              requestId,
-            });
-          } catch (mErr: any) {
-            console.error(`[db] Error guardando métricas: ${mErr.message}`);
-          }
+          // 📊 Las métricas de éxito ya son guardadas por el providerRouter
+
 
           controller.close();
         } catch (streamError) {
