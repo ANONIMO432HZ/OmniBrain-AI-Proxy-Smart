@@ -12,6 +12,8 @@ export const mockProvider: AIProvider = {
       throw new Error("Error simulado de proveedor (Rate Limit / 500)");
     }
 
+
+
     console.log(`[mock] Simulando respuesta para modelo: ${params.model || "mock-model"}`);
 
     if (params.tools && params.tools.length > 0) {

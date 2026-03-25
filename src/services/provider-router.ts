@@ -8,15 +8,20 @@ import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 interface ProviderState {
   provider: AIProvider;
   inactiveUntil: number; // Timestamp hasta el cual está en cooldown
+  failCount: number; // Conteo de fallos consecutivos
 }
+
 
 // Lista de proveedores REALES para el Circuit Breaker y Fallback
 const providers: ProviderState[] = [
-  { provider: openRouter, inactiveUntil: 0 },
-  { provider: groqProvider, inactiveUntil: 0 },
-  { provider: cerebrasProvider, inactiveUntil: 0 },
-  { provider: zaiProvider, inactiveUntil: 0 },
+  { provider: openRouter, inactiveUntil: 0, failCount: 0 },
+  { provider: groqProvider, inactiveUntil: 0, failCount: 0 },
+  { provider: cerebrasProvider, inactiveUntil: 0, failCount: 0 },
+  { provider: zaiProvider, inactiveUntil: 0, failCount: 0 },
 ];
+
+
+
 
 export const providerRouter = {
   async *chat(params: ChatParams): AsyncGenerator<StreamChunk> {
@@ -35,6 +40,8 @@ export const providerRouter = {
       if (forceProvider === "zai") params.model = "glm-4.7-flash";
     }
 
+
+
     const isAutoGlobal = !params.model;
     if (isAutoGlobal) {
       console.log(`[router] Sin modelo especificado. Asignando 'openrouter/free' por defecto.`);
@@ -50,6 +57,8 @@ export const providerRouter = {
       }
       return;
     }
+
+
 
     // Filtrar proveedores reales que estén disponibles y fuera de cooldown
     const available = providers.filter(
@@ -123,6 +132,7 @@ export const providerRouter = {
         }
 
         console.log(`[router] ${state.provider.name} completó el stream exitosamente.`);
+        state.failCount = 0; // ✅ Éxito total: resetear contador
         return; 
 
       } catch (err: any) {
@@ -137,8 +147,13 @@ export const providerRouter = {
         const isModelError = errMsg.includes("404") || errMsg.includes("model") || errMsg.includes("400") || errMsg.includes("not found") || errMsg.includes("sin arrojar contenido");
         
         if (!isModelError) {
-          state.inactiveUntil = Date.now() + 60000;
-          console.log(`[router] ${state.provider.name} puesto en cooldown por 60s debido a error de conexión/servidor.`);
+          state.failCount++;
+          if (state.failCount >= 3) {
+            state.inactiveUntil = Date.now() + 300000; // 5 minutos de cooldown
+            console.log(`[router] 💥 CRITICAL: ${state.provider.name} alcanzó 3 fallos. Enfriamiento por 5m.`);
+          } else {
+            console.log(`[router] ⚠️ Error en ${state.provider.name} (${state.failCount}/3).`);
+          }
         } else {
           console.log(`[router] ${state.provider.name} no soporta este modelo o falló silenciosamente. Saltando sin cooldown.`);
         }
@@ -151,6 +166,7 @@ export const providerRouter = {
         console.log(`[router] Intentando el siguiente proveedor disponible...`);
       }
     }
+
 
     throw new Error(`Todos los proveedores fallaron.\n\nDetalles:\n${failedProvidersDetails.join("\n")}`);
   }

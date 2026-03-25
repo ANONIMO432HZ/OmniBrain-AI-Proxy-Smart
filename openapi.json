@@ -1,0 +1,51 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OmniBrain API",
+    "version": "1.0.0",
+    "description": "API unificada para múltiples proveedores de IA (Groq, Cerebras, OpenRouter) con enrutamiento inteligente y resiliencia."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor Local"
+    }
+  ],
+  "paths": {
+    "/v1/chat/completions": {
+      "post": {
+        "summary": "Chat Completions (Estándar OpenAI)",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Respuesta Exitosa (Stream)" }
+        }
+      }
+    },
+    "/v1/history": {
+      "get": {
+        "summary": "Obtener Historial de Mensajes",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de mensajes almacenados en SQLite/Postgres" }
+        }
+      }
+    },
+    "/v1/status/providers": {
+      "get": {
+        "summary": "Métricas de Observabilidad",
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Estado y latencia de los proveedores configurados" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

@@ -34,7 +34,12 @@ router.post("/chat", (req) => handleChatRoute(req));
 
 // Rutas API v1 (Estandarización Fase 3.1)
 router.get("/v1/models", async () => Response.json({ object: "list", data: [] })); 
+router.get("/openapi.json", async () => {
+  const file = Bun.file("./openapi.json");
+  return new Response(file, { headers: { "Content-Type": "application/json" } });
+});
 router.get("/v1/history", getHistory);
+
 router.delete("/v1/history", deleteHistory);
 router.get("/v1/status/providers", getProviderStatus);
 router.post("/v1/chat/completions", (req) => handleChatRoute(req));
@@ -65,15 +70,17 @@ const server = Bun.serve({
       try {
         const response = await matched.handler(req, matched.params);
         
-        // Asegurar que la respuesta tenga los headers CORS
+        // Asegurar que la respuesta tenga los headers CORS y Trazabilidad
         const responseHeaders = new Headers(response.headers);
         for (const [key, value] of Object.entries(CORS_HEADERS)) {
           if (!responseHeaders.has(key)) {
             responseHeaders.set(key, value);
           }
         }
+        responseHeaders.set("X-Omnibrain-Request-Id", requestId);
 
         const finalResponse = new Response(response.body, {
+
           status: response.status,
           statusText: response.statusText,
           headers: responseHeaders,
