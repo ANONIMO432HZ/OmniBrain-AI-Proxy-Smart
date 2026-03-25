@@ -257,6 +257,7 @@ export const landingPageHtml = `<!doctype html>
 
         <div class="quick-buttons">
           <button type="button" data-method="GET" data-path="/history" data-body="">GET /history (Historial)</button>
+          <button type="button" data-method="DELETE" data-path="/history" data-body="">DELETE /history (Borrar Historial)</button>
           <button type="button" data-method="GET" data-path="/api/users" data-body="">GET /api/users</button>
           <button type="button" data-method="POST" data-path="/api/users" data-body='{"username":"demo","email":"demo@mail.com"}'>POST /api/users</button>
           <button type="button" data-method="GET" data-path="/api/conversations" data-body="">GET /api/conversations</button>

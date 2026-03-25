@@ -79,6 +79,36 @@ const server = Bun.serve({
       }
     }
 
+    if (req.method === "DELETE" && url.pathname === "/history") {
+      const authHeader = req.headers.get("Authorization");
+      const { env } = await import("./src/config/env");
+
+      if (!authHeader || authHeader !== `Bearer ${env.LOCAL_API_KEY}`) {
+        console.warn(`[http][${requestId}] /history DELETE acceso no autorizado`);
+        return Response.json(
+          { error: "No autorizado" },
+          { status: 401, headers: CORS_HEADERS }
+        );
+      }
+
+      const { db, schema } = await import("./src/db/db");
+      
+      try {
+        await (db as any).delete(schema.messages);
+        return Response.json(
+          { success: true, message: "Historial eliminado" }, 
+          { 
+            headers: { 
+              ...CORS_HEADERS, 
+              "Cache-Control": "no-cache, no-store, must-revalidate" 
+            } 
+          }
+        );
+      } catch (err: any) {
+        return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
+      }
+    }
+
     if (req.method === "POST" && url.pathname === "/chat") {
       const response = await handleChatRoute(req, requestId);
       console.log(
