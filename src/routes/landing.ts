@@ -486,10 +486,14 @@ export const landingPageHtml = `<!doctype html>
         restResult.textContent = "";
 
         const startedAt = Date.now();
+        const localApiKey = document.getElementById("local-api-key").value.trim();
         try {
           const response = await fetch(path, {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + localApiKey
+            },
             body: parsedBody ? JSON.stringify(parsedBody) : undefined,
           });
 
