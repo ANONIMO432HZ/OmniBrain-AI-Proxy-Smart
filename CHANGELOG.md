@@ -12,6 +12,9 @@ y este proyecto se adhiere a la convención [Semantic Versioning](https://semver
 - **Multi-Key Load Balancing (Rotación)**: Soporte para múltiples API Keys separadas por comas (`GROQ_API_KEY=key1,key2`) con alternancia dinámica ante errores 429 (Rate Limit) en todos los proveedores.
 - **Acordeón de Pensamiento unificado**: Extracción de `.reasoning_content` paralela al texto base, solventando carreras condicionales (`else if`).
 - **Problemas Comunes y Soluciones**: Documento `docs/PROBLEMAS_COMUNES.md` de soporte rápido para troubleshooting.
+- **Middleware de Autenticación (Fase 2.1)**: Protección del endpoint `/chat` mediante `Authorization: Bearer <TOKEN>` y panel de login de tokens en el Landing Page.
+- **Soporte de Base de Datos Dual (Drizzle ORM)**: Integración de un puente condicional automático de esquemas entre SQLite y PostgreSQL utilizando los drivers nativos de Bun.
+- **Autodetección Dokploy / Docker**: Constructor inteligente de tokens para tolerar inyecciones separadas de Postgres (`POSTGRES_HOST`, `POSTGRES_DB`) transparente para el usuario.
 
 ### Cambiado
 

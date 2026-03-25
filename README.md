@@ -24,6 +24,18 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 
 ---
 
+## 🗄️ Soporte Dual de Base de Datos (Drizzle ORM)
+
+El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu string de conexión `DATABASE_URL` sin tocar lógica de negocio:
+
+- **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
+  - Corre sobre el motor nativo de Bun. Ideal para desarrollo.
+- **⚡ PostgreSQL (Producción):** `DATABASE_URL=postgres://usuario:pass@host:5432/db`
+  - Escala a producción sobre el driver nativo de Bun para bases SQL.
+- **🐳 Dokploy / Docker (Autodetección):** Si inyectas `POSTGRES_HOST` y `POSTGRES_DB` por separado, el backend construirá la url automáticamente ahorrando scripts de entrada.
+
+---
+
 ## ⚙️ Instalación y Uso
 
 **1. Instalar Dependencias:**
