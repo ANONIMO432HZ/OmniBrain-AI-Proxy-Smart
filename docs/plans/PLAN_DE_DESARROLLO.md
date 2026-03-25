@@ -212,18 +212,17 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
    - ¿JWT para sesiones?
 
 ### Checklist Fase 3
-
-- [ ] Endpoint `/v1/chat/completions` funciona
-- [ ] Endpoint `/v1/models` lista todos los modelos
-- [ ] Endpoint `/v1/providers` muestra estado
-- [ ] Endpoint `/v1/health` responde correctamente
-- [ ] CRUD de conversaciones funciona
-- [ ] Tests de integración pasan
-- [ ] Documentación de API (OpenAPI/Swagger)
+- [x] Endpoint `/v1/chat/completions` funciona
+- [x] Endpoint `/v1/models` lista todos los modelos
+- [x] Endpoint `/v1/status/providers` muestra estado (Observabilidad activa)
+- [x] Endpoint `/v1/health` responde correctamente
+- [x] CRUD de conversaciones funciona (Controladores v1)
+- [x] Tests de integración pasan (Fase 3 validada)
+- [x] Documentación de API (OpenAPI/Swagger en /openapi.json)
 
 ---
 
-## FASE 4: Integración con Claude Code
+## FASE 4: Integración con Claude Code (EN PROGRESO)
 
 **Duración estimada:** 2-3 días
 **Objetivo:** Optimizar la API para uso específico con Claude Code
@@ -232,9 +231,10 @@ Crear una API unificada que centralice múltiples proveedores de IA (OpenRouter,
 
 1. **Mejoras para Claude Code**
    - [ ] Endpoint `/v1/claude/models` - Modelos recomendados para Claude
-   - [ ] Header `X-Claude-Request-Id` para trazabilidad
+   - [x] Header `X-Omnibrain-Request-Id` para trazabilidad (Implementado en v0.3.0)
    - [ ] Formato de errores que Claude pueda parsear
-   - [ ] Metadata de reasoning tokens (para modelos DeepSeek, o1, etc.)
+   - [x] Metadata de reasoning tokens (Implementado en v0.3.0)
+
 
 2. **Landing page interactiva**
    - [ ] UI para probar la API

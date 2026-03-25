@@ -5,7 +5,46 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/)
 y este proyecto se adhiere a la convención [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.3.0] - 2026-03-25
+
+### Añadido
+
+- **Dynamic v1 Router (Fase 3.1)**: Refactorización completa del servidor para usar un enrutador basado en clases, permitiendo una expansión modular y rutas versionadas.
+- **API Versioning**: Estandarización de endpoints bajo el prefijo `/v1/` para compatibilidad industrial.
+- **Observabilidad y Métricas (Fase 3.2)**: Integración de captura de latencia y estado por cada intento de proveedor, con dashboard en el endpoint `/v1/status/providers`.
+- **Resiliencia (Circuit Breaker Pro) (Fase 3.3)**: Lógica de protección contra fallos en cascada. Desactivación automática de proveedores tras 3 errores consecutivos por 5 minutos.
+- **Documentación OpenAPI (Fase 3.4)**: Generación y servidor de especificación OpenAPI 3.0 en `/openapi.json`.
+- **Trazabilidad (Request ID)**: Inyección de `X-Omnibrain-Request-Id` en todos los headers de respuesta para auditoría end-to-end.
+- **Tokens de Razonamiento**: Soporte extendido para `reasoning_tokens` en el stream de respuesta, optimizado para herramientas de desarrollo.
+
+### Cambiado
+
+- **Optimización de Métricas**: Delegación del guardado de métricas al nivel de enrutador para capturar fallos internos antes de emitir el primer chunk.
+- **Corrección de Lints**: Depuración de advertencias de tipado en el flujo principal de chat.
+
+---
+
+## [0.3.0] - 2026-03-25
+
+### Añadido
+- **Dynamic v1 Router (Fase 3.1)**: Refactorización completa del servidor para usar un enrutador basado en clases, permitiendo una expansión modular y rutas versionada bajo `/v1/`.
+- **Observabilidad Centrada en el Intento (Fase 3.2)**: Registro granular de métricas por cada intento de proveedor en la cadena de fallback. Nuevo endpoint `/v1/status/providers`.
+- **Resiliencia Pro (Circuit Breaker) (Fase 3.3)**: Implementación de umbral de 3 fallos consecutivos para desactivación automática de proveedores (cooldown de 5 minutos).
+- **Estandarización y Trazabilidad (Fase 3.4)**: Inyección de `X-Omnibrain-Request-Id` y servidor de especificación `openapi.json`.
+- **Soporte de Razonamiento Extendido**: Propagación de `reasoning_tokens` y metadatos de proveedor en el primer chunk del stream para herramientas como Claude Code.
+
+### Cambiado
+- **Refactorización de Controladores**: Estandarización del uso del constructor `Response` global en lugar de `Response.json` nativo para compatibilidad en sub-rutas.
+- **Optimización de Streaming**: Reubicación de la lógica de métricas al enrutador para evitar pérdida de datos en fallos tempranos.
+
+### Corregido
+- **Memory Leak Prevention**: Gestión mejorada de contextos de base de datos y cierre de streams.
+- **Linting & Types**: Eliminación de advertencias de tipado en `chat.ts` y `test scripts`.
+
+---
+
 ## [0.2.0] - 2026-03-24
+
 
 ### Añadido
 

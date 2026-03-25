@@ -119,8 +119,9 @@
       <div id="tab-chat-api" class="tab-content active">
         <section class="panel">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <h2 style="margin:0;">💬 POST /chat</h2>
+            <h2 style="margin:0;">💬 POST /v1/chat/completions</h2>
             <div style="display:flex; align-items:center; gap:8px;">
+
               <span style="font-size:0.75rem; color:var(--muted); font-weight:600;">VISTA DETALLADA</span>
               <label class="switch">
                 <input type="checkbox" id="toggle-detailed-models" />
@@ -170,20 +171,23 @@
             <label>Método</label>
             <select id="rest-method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select>
             <label>Ruta</label>
-            <input id="rest-path" value="/history" />
+            <input id="rest-path" value="/v1/history" />
+
             <label>Body (JSON)</label>
             <textarea id="rest-body" placeholder='{"prompt":"..."}' style="min-height:90px;"></textarea>
             <button id="rest-send" type="submit" style="margin-top:14px;">Ejecutar request</button>
           </form>
 
           <div class="snippet-group">
-            <div class="snippet-title">📂 Snippets SQLite (Drizzle Proxy)</div>
+            <div class="snippet-title">📂 Snippets v1 (Centralized)</div>
             <div class="quick-buttons">
-              <button data-method="GET" data-path="/history" data-body="">📌 All History</button>
-              <button data-method="GET" data-path="/history/search?q=hola" data-body="">🔍 Search "hola"</button>
-              <button data-method="DELETE" data-path="/history" data-body="">🗑️ Clear Audit</button>
+              <button data-method="GET" data-path="/v1/history" data-body="">📌 History</button>
+              <button data-method="GET" data-path="/v1/status/providers" data-body="">📈 Metrics</button>
+              <button data-method="DELETE" data-path="/v1/history" data-body="">🗑️ Clear Audit</button>
+              <button data-method="GET" data-path="/openapi.json" data-body="">📜 OpenAPI</button>
             </div>
           </div>
+
           <div class="snippet-group" style="border:none; padding:0; margin-top:12px;">
             <div class="snippet-title">📂 Snippets Postgres (Deprecated/Ref Manual)</div>
             <div class="quick-buttons">
@@ -243,7 +247,8 @@
         if (!msg) return;
         result.innerHTML = ""; meta.textContent = "Conectando stream..."; send.disabled = true; send.textContent = "Enviando..."; 
         try {
-          const res = await fetch("/chat", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key }, body: JSON.stringify({ message: msg, ...(mdl ? { model: mdl } : {}) }) });
+          const res = await fetch("/v1/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key }, body: JSON.stringify({ message: msg, ...(mdl ? { model: mdl } : {}) }) });
+
           if (!res.ok) throw new Error(await res.text());
           const reader = res.body.getReader(); const decoder = new TextDecoder(); let sseBuffer = "";
           while(true) {
@@ -285,9 +290,10 @@
       async function loadVisualHistory(query = "") {
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cargando...</td></tr>';
         const key = document.getElementById("local-api-key").value.trim();
-        const url = query ? "/history/search?q=" + encodeURIComponent(query) : "/history";
+        const url = query ? "/v1/history/search?q=" + encodeURIComponent(query) : "/v1/history";
         try {
           const res = await fetch(url, { headers: { "Authorization": "Bearer " + key } });
+
           const d = await res.json(); const list = d.messages || [];
           if (list.length === 0) { tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Vacío.</td></tr>'; return; }
           tableBody.innerHTML = list.map(m => `<tr><td><span class="badge ${m.role === 'user' ? 'user' : ''}">${m.role}</span></td><td style="max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${m.content.replace(/"/g, '&quot;')}">${m.content}</td><td>${m.provider || '-'}</td><td>${m.model || '-'}</td><td style="font-size:0.8rem; color:var(--muted);">${m.createdAt || '-'}</td></tr>`).join("");
@@ -295,7 +301,8 @@
       }
       document.getElementById("btn-refresh").addEventListener("click", () => loadVisualHistory(document.getElementById("search-input").value.trim()));
       document.getElementById("btn-search").addEventListener("click", () => loadVisualHistory(document.getElementById("search-input").value.trim()));
-      document.getElementById("btn-clear").addEventListener("click", async () => { if (!confirm("¿Borrar todo?")) return; const key = document.getElementById("local-api-key").value.trim(); await fetch("/history", { method: "DELETE", headers: { "Authorization": "Bearer " + key } }); loadVisualHistory(); });
+      document.getElementById("btn-clear").addEventListener("click", async () => { if (!confirm("¿Borrar todo?")) return; const key = document.getElementById("local-api-key").value.trim(); await fetch("/v1/history", { method: "DELETE", headers: { "Authorization": "Bearer " + key } }); loadVisualHistory(); });
+
 
       /* --- 🛠️ REST QUICK --- */
       const restSend = document.getElementById("rest-send");
