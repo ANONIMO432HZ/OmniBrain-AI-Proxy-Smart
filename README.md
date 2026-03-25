@@ -1,6 +1,6 @@
 # 🧠 OmniBrain-API
 
-Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia Artificial (AI), construido sobre **Bun** y **TypeScript**.
+Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia Artificial (IA), construido sobre **Bun** y **TypeScript**.
 
 ---
 
@@ -18,7 +18,7 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 ## 🛠️ Proveedores Soportados
 
 | Proveedor | Modelo Defecto (Fallback) | Soporta Thinking |
-| :| :| :|
+| :--- | :--- | :--- |
 | **OpenRouter** | `openrouter/free` | Sí (Detección SSE/Content) |
 | **Groq** | `llama-3.1-8b-instant` | Sí (`reasoning_content`) |
 | **Cerebras** | `llama3.1-8b` | Sí (`reasoning_content`) |
@@ -41,7 +41,7 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
 ## 🔌 Endpoints Disponibles (v1)
 
 | Endpoint | Método | Descripción | Autenticación |
-| :| :| :| :|
+| :--- | :--- | :--- | :--- |
 | `/` | `GET` | Panel de Control / Landing Page interactiva para pruebas de API. | No |
 | `/v1/chat/completions` | `POST` | Abre un Stream SSE (`text/event-stream`) estándar de chat. | Sí (`Bearer`) |
 | `/v1/history` | `GET` | Descarga el historial de auditoría de los prompts y respuestas. | Sí (`Bearer`) |
@@ -64,6 +64,7 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
    ```bash
    OPENROUTER_API_KEY=key1,key2
    GROQ_API_KEY=key4,key5
+   LOCAL_API_KEY=tu-token-seguro
    DATABASE_URL=./data/api.db
    ```
 
@@ -74,6 +75,38 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
    ```
 
 La API estará escuchando en `http://localhost:3000`.
+
+---
+
+## 🧪 Pruebas y Calidad
+
+El proyecto cuenta con una robusta suite de tests automatizados:
+
+```bash
+bun test
+```
+
+Cubre 14 escenarios críticos incluyendo:
+
+* **Resiliencia**: Validación de saltos de proveedores y lógica de Circuit Breaker. ✅
+* **E2E**: Flujo completo de chat con streaming SSE y validación de seguridad (Bearer Token). ✅
+* **Core**: Correctitud del enrutador dinámico y parámetros. ✅
+
+---
+
+## 🐳 Despliegue con Docker (Producción)
+
+El proyecto está listo para producción con una imagen optimizada basada en Alpine:
+
+1. **Levantar Stack:**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Salud del Sistema:** Docker monitorea automáticamente la API mediante un healthcheck nativo que verifica la disponibilidad del servicio cada 30 segundos.
+
+3. **Persistencia:** La base de datos SQLite se guarda automáticamente en el volumen `./data`.
 
 ---
 

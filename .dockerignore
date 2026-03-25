@@ -1,0 +1,14 @@
+node_modules
+.env
+.git
+.gitignore
+tests
+data/*.db
+data/*.sqlite
+*.log
+Dockerfile
+docker-compose.yml
+README.md
+docs
+.agent
+.gemini

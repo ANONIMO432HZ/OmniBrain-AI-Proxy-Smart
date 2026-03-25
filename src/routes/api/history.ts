@@ -47,11 +47,7 @@ export async function deleteHistory(req: Request) {
   }
 
   try {
-    if (typeof (db as any).delete(schema.messages).run === "function") {
-      (db as any).delete(schema.messages).run();
-    } else {
-      await (db as any).delete(schema.messages).execute();
-    }
+    await (db as any).delete(schema.messages).execute();
     return new Response(JSON.stringify({ success: true, message: "Historial eliminado" }), {
       status: 200,
       headers: { 

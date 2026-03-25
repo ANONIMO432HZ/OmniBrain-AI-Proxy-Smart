@@ -10,7 +10,7 @@ interface Route {
   handler: RouteHandler;
 }
 
-class Router {
+export class Router {
   private routes: Route[] = [];
 
   private add(method: string, path: string, handler: RouteHandler) {

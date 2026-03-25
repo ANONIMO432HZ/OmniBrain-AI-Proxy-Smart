@@ -15,7 +15,7 @@ interface ProviderState {
 
 
 // Lista de proveedores REALES para el Circuit Breaker y Fallback
-const providers: ProviderState[] = [
+export const providers: ProviderState[] = [
   { provider: openRouter, inactiveUntil: 0, failCount: 0 },
   { provider: groqProvider, inactiveUntil: 0, failCount: 0 },
   { provider: cerebrasProvider, inactiveUntil: 0, failCount: 0 },
