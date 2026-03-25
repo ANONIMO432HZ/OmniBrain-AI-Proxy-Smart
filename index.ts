@@ -2,11 +2,8 @@ import { handleChatRoute } from "./src/routes/chat";
 import { landingPageHtml } from "./src/routes/landing";
 import { router } from "./src/lib/router";
 import { ensureDatabaseReady } from "./src/db/init";
-
-// ⚠️ Comentados temporalmente para evitar que carguen sql de Postgres nativo (Fase 2.2)
-// import "./src/routes/api/users";
-// import "./src/routes/api/conversations";
-// import "./src/routes/api/messages";
+import { getHistory, deleteHistory } from "./src/routes/api/history";
+import { getProviderStatus } from "./src/routes/api/status";
 
 
 const CORS_HEADERS = {
@@ -18,135 +15,86 @@ const CORS_HEADERS = {
 // 🚀 Inicializar Base de Datos (Fase 2.2)
 await ensureDatabaseReady();
 
+// 🛣️ Registro de Rutas (Fase 3.1)
+router.get("/", async () => {
+  return new Response(landingPageHtml, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+    },
+  });
+});
+
+router.get("/health", async () => Response.json({ status: "ok" }));
+
+// Rutas Legacy (Compatibilidad)
+router.get("/history", getHistory);
+router.delete("/history", deleteHistory);
+router.post("/chat", (req) => handleChatRoute(req));
+
+// Rutas API v1 (Estandarización Fase 3.1)
+router.get("/v1/models", async () => Response.json({ object: "list", data: [] })); 
+router.get("/v1/history", getHistory);
+router.delete("/v1/history", deleteHistory);
+router.get("/v1/status/providers", getProviderStatus);
+router.post("/v1/chat/completions", (req) => handleChatRoute(req));
+
+
+// ⚠️ Comentados temporalmente para evitar carga de Postgres nativo (Fase 2.2)
+// import "./src/routes/api/users";
+// import "./src/routes/api/conversations";
+// import "./src/routes/api/messages";
+
 const server = Bun.serve({
   port: 3000,
-  idleTimeout: 60, // 60 segundos de inactividad para evitar cortes en streams lentos (ej. Thinking)
+  idleTimeout: 60,
   async fetch(req) {
     const url = new URL(req.url);
     const requestId = crypto.randomUUID();
     const startedAt = Date.now();
 
-    console.log(
-      `[http][${requestId}] -> ${req.method} ${url.pathname}${url.search}`,
-    );
+    console.log(`[http][${requestId}] -> ${req.method} ${url.pathname}${url.search}`);
 
     if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: CORS_HEADERS });
     }
 
-    if (req.method === "GET" && url.pathname === "/health") {
-      console.log(`[http][${requestId}] <- 200 /health`);
-      return Response.json({ status: "ok" });
-    }
-
-    if (req.method === "GET" && url.pathname === "/") {
-      console.log(`[http][${requestId}] <- 200 /`);
-      return new Response(landingPageHtml, {
-        status: 200,
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-        },
-      });
-    }
-
-    if (req.method === "GET" && url.pathname === "/history") {
-      const authHeader = req.headers.get("Authorization");
-      const { env } = await import("./src/config/env");
-
-      if (!authHeader || authHeader !== `Bearer ${env.LOCAL_API_KEY}`) {
-        console.warn(`[http][${requestId}] /history acceso no autorizado`);
-        return Response.json(
-          { error: "No autorizado" },
-          { status: 401, headers: CORS_HEADERS }
-        );
-      }
-
-      const { db, schema } = await import("./src/db/db");
-      
-      try {
-        const results = await (db as any).select().from(schema.messages);
-        return Response.json(
-          { messages: results }, 
-          { 
-            headers: { 
-              ...CORS_HEADERS, 
-              "Cache-Control": "no-cache, no-store, must-revalidate" 
-            } 
-          }
-        );
-      } catch (err: any) {
-        return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
-      }
-    }
-
-    if (req.method === "DELETE" && url.pathname === "/history") {
-      const authHeader = req.headers.get("Authorization");
-      const { env } = await import("./src/config/env");
-
-      if (!authHeader || authHeader !== `Bearer ${env.LOCAL_API_KEY}`) {
-        console.warn(`[http][${requestId}] /history DELETE acceso no autorizado`);
-        return Response.json(
-          { error: "No autorizado" },
-          { status: 401, headers: CORS_HEADERS }
-        );
-      }
-
-      const { db, schema } = await import("./src/db/db");
-      
-      try {
-        if (typeof (db as any).delete(schema.messages).run === "function") {
-          (db as any).delete(schema.messages).run();
-        } else {
-          await (db as any).delete(schema.messages).execute();
-        }
-        return Response.json(
-          { success: true, message: "Historial eliminado" }, 
-          { 
-            headers: { 
-              ...CORS_HEADERS, 
-              "Cache-Control": "no-cache, no-store, must-revalidate" 
-            } 
-          }
-        );
-      } catch (err: any) {
-        return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
-      }
-    }
-
-    if (req.method === "POST" && url.pathname === "/chat") {
-      const response = await handleChatRoute(req, requestId);
-      console.log(
-        `[http][${requestId}] <- ${response.status} /chat (${Date.now() - startedAt}ms)`,
-      );
-      return response;
-    }
-
-    const matched = router.match(req.method, url.pathname);
+    const matched = router.handle(req.method, url.pathname);
+    
     if (matched) {
       try {
         const response = await matched.handler(req, matched.params);
-        const corsResponse = new Response(response.body, {
+        
+        // Asegurar que la respuesta tenga los headers CORS
+        const responseHeaders = new Headers(response.headers);
+        for (const [key, value] of Object.entries(CORS_HEADERS)) {
+          if (!responseHeaders.has(key)) {
+            responseHeaders.set(key, value);
+          }
+        }
+
+        const finalResponse = new Response(response.body, {
           status: response.status,
-          headers: {
-            ...Object.fromEntries(response.headers.entries()),
-            ...CORS_HEADERS,
-          },
+          statusText: response.statusText,
+          headers: responseHeaders,
         });
-        console.log(
-          `[http][${requestId}] <- ${response.status} ${url.pathname} (${Date.now() - startedAt}ms)`,
-        );
-        return corsResponse;
-      } catch (err) {
-        console.error(`[http][${requestId}] Error:`, err);
+
+        console.log(`[http][${requestId}] <- ${response.status} ${url.pathname} (${Date.now() - startedAt}ms)`);
+        return finalResponse;
+      } catch (err: any) {
+        console.error(`[http][${requestId}] Error crítico en ruta ${url.pathname}:`, err);
         return Response.json(
-          { error: "Error interno del servidor" },
-          { status: 500, headers: CORS_HEADERS },
+          { error: "Internal Server Error", message: err.message, requestId },
+          { status: 500, headers: CORS_HEADERS }
         );
       }
     }
 
     console.log(`[http][${requestId}] <- 404 ${url.pathname}`);
-    return new Response("Not Found", { status: 404 });
+    return Response.json(
+      { error: "Not Found", path: url.pathname, requestId }, 
+      { status: 404, headers: CORS_HEADERS }
+    );
   },
 });
 

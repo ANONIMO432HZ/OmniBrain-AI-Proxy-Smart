@@ -101,22 +101,37 @@ export async function handleChatRoute(
         let responseChars = 0;
         let reasoningTokens: number | null = null;
 
-        // Se envía evento de meta inicial
+        // Eliminamos el envío de meta estático inicial para esperar al primer chunk del router
+        /*
         controller.enqueue(
           encoder.encode(
             sseEvent("meta", {
               requestId,
               model,
-              provider: "Router", // El router maneja varios internamente
+              provider: "Router", 
             }),
           ),
         );
+        */
 
         try {
           let fullResponse = ""; //  acumular respuesta
 
+          let realProvider = "Router";
+          let realModel = model || "auto";
+
           for await (const chunk of providerStream) {
+
             chunkCount += 1;
+
+            if (chunk.provider) {
+              realProvider = chunk.provider;
+              realModel = chunk.model || realModel;
+              // Enviar meta dinámico real
+              controller.enqueue(
+                encoder.encode(sseEvent("meta", { requestId, provider: realProvider, model: realModel }))
+              );
+            }
 
             if (chunk.content) {
               fullResponse += chunk.content;
@@ -146,15 +161,15 @@ export async function handleChatRoute(
             }
           }
 
-          // 🚀 Guardar Respuesta del Asistente en DB (Fase 2.2)
+          // 📊 Guardar Respuesta del Asistente en DB (Fase 2.2)
           try {
             await (db as any).insert(schema.messages).values({
                id: crypto.randomUUID(),
                conversationId,
                role: "assistant",
                content: fullResponse,
-               model: model || "auto",
-               provider: "Router"
+               model: realModel,
+               provider: realProvider
             });
           } catch (err: any) {
             console.error(`[db] Error guardando respuesta: ${err.message}`);
@@ -169,10 +184,40 @@ export async function handleChatRoute(
               }),
             ),
           );
+
+          // 📊 Guardar Métricas del Proveedor (Fase 3.2)
+          try {
+            await (db as any).insert(schema.providerMetrics).values({
+              id: crypto.randomUUID(),
+              provider: realProvider,
+              model: realModel,
+              latencyMs: (Date.now() - startedAt).toString(),
+              status: "200",
+              requestId,
+            });
+          } catch (mErr: any) {
+            console.error(`[db] Error guardando métricas: ${mErr.message}`);
+          }
+
           controller.close();
         } catch (streamError) {
           const streamErrorMessage = streamError instanceof Error ? streamError.message : "Error durante streaming";
           console.error(`[chat][${requestId}] Error durante streaming: ${streamErrorMessage}`);
+
+          // 📊 Guardar Métricas de Error (Fase 3.2)
+          try {
+            await (db as any).insert(schema.providerMetrics).values({
+              id: crypto.randomUUID(),
+              provider: "Router",
+              model: model || "auto",
+              latencyMs: (Date.now() - startedAt).toString(),
+              status: "500", // Error en stream
+              requestId,
+            });
+          } catch (mErr: any) {
+             console.error(`[db] Error guardando métricas de error: ${mErr.message}`);
+          }
+
           controller.enqueue(
             encoder.encode(sseEvent("error", { error: streamErrorMessage })),
           );

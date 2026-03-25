@@ -27,3 +27,17 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE INDEX IF NOT EXISTS idx_conversations_user_id ON conversations(user_id);
 CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
 CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at);
+
+CREATE TABLE IF NOT EXISTS provider_metrics (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider TEXT NOT NULL,
+  model TEXT,
+  latency_ms INTEGER,
+  status INTEGER,
+  request_id TEXT,
+  tokens INTEGER,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_metrics_provider ON provider_metrics(provider);
+CREATE INDEX idx_metrics_created_at ON provider_metrics(created_at);

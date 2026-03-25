@@ -26,3 +26,15 @@ export const messages = sqliteTable("messages", {
   provider: text("provider"),
   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
 });
+
+export const providerMetrics = sqliteTable("provider_metrics", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  provider: text("provider").notNull(),
+  model: text("model"),
+  latencyMs: text("latency_ms"),
+  status: text("status"),
+  requestId: text("request_id"),
+  tokens: text("tokens"),
+  createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+});
+

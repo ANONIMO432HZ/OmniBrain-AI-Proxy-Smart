@@ -106,7 +106,13 @@ export const providerRouter = {
         }
 
         const stream = state.provider.chat(currentParams);
+        let firstChunk = true;
         for await (const chunk of stream) {
+          if (firstChunk) {
+            chunk.provider = state.provider.name;
+            chunk.model = params.model || "auto";
+            firstChunk = false;
+          }
           chunkCount++;
           yield chunk;
         }

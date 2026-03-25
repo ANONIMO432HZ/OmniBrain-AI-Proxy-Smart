@@ -46,7 +46,10 @@ export interface StreamChunk {
   tool_calls?: ToolCall[]; // Para streaming de ejecuciones
   finishReason?: string;
   reasoningTokens?: number;
+  provider?: string;
+  model?: string;
 }
+
 
 export interface AIProvider {
   name: string;

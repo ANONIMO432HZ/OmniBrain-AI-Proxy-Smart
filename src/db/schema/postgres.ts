@@ -1,4 +1,5 @@
-import { pgTable, uuid, text, varchar, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, varchar, timestamp, integer } from "drizzle-orm/pg-core";
+
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -24,4 +25,15 @@ export const messages = pgTable("messages", {
   model: varchar("model", { length: 100 }),
   provider: varchar("provider", { length: 50 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const providerMetrics = pgTable("provider_metrics", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  provider: text("provider").notNull(),
+  model: text("model"),
+  latencyMs: integer("latency_ms"),
+  status: integer("status"),
+  requestId: text("request_id"),
+  tokens: integer("tokens"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });

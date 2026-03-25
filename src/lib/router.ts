@@ -42,13 +42,15 @@ class Router {
     this.add("DELETE", path, handler);
   }
 
-  match(
-    method: string,
-    pathname: string,
-  ): { handler: RouteHandler; params: Record<string, string> } | null {
+  handle(method: string, pathname: string): { handler: RouteHandler; params: Record<string, string> } | null {
+    // Normalizar pathname (quitar slash final si no es la raíz)
+    const normalizedPath = pathname.length > 1 && pathname.endsWith("/") 
+      ? pathname.slice(0, -1) 
+      : pathname;
+
     for (const route of this.routes) {
       if (route.method !== method) continue;
-      const match = pathname.match(route.pattern);
+      const match = normalizedPath.match(route.pattern);
       if (match) {
         const params: Record<string, string> = {};
         route.paramNames.forEach((name, i) => {
