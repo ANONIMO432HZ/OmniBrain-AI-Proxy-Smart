@@ -14,6 +14,9 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+// 🚀 Inicializar Base de Datos (Fase 2.2)
+await ensureDatabaseReady();
+
 const server = Bun.serve({
   port: 3000,
   idleTimeout: 60, // 60 segundos de inactividad para evitar cortes en streams lentos (ej. Thinking)
@@ -43,6 +46,40 @@ const server = Bun.serve({
           "Content-Type": "text/html; charset=utf-8",
         },
       });
+    }
+
+    if (req.method === "GET" && url.pathname === "/history") {
+      const authHeader = req.headers.get("Authorization");
+      const { env } = await import("./src/config/env");
+
+      if (!authHeader || authHeader !== `Bearer ${env.LOCAL_API_KEY}`) {
+        console.warn(`[http][${requestId}] /history acceso no autorizado`);
+        return Response.json(
+          { error: "No autorizado" },
+          { status: 401, headers: CORS_HEADERS }
+        );
+      }
+
+      const { db, schema, isPostgres } = await import("./src/db/db");
+      
+      try {
+        const query = isPostgres 
+          ? "SELECT role, content, created_at FROM messages ORDER BY created_at ASC;"
+          : "SELECT role, content, created_at FROM messages ORDER BY created_at ASC;";
+          
+        const messages = await (db as any).execute(isPostgres 
+          ? { sql: query } // Para bun-sql Postgres 
+          : { sql: query } // Para bun-sqlite
+        );
+        
+        // bun-sqlite devuelve los objetos directos en un array, bun-sql puede divergir ligeramente
+        // Para simplificar, Drizzle Select es más compatible:
+        const results = await (db as any).select().from(schema.messages);
+
+        return Response.json({ messages: results }, { headers: CORS_HEADERS });
+      } catch (err: any) {
+        return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
+      }
     }
 
     if (req.method === "POST" && url.pathname === "/chat") {

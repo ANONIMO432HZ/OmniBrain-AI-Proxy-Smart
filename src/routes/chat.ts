@@ -1,6 +1,7 @@
 import { providerRouter } from "../services/provider-router";
 import type { ChatMessage, ToolDefinition } from "../types/provider";
 import { env } from "../config/env";
+import { db, schema } from "../db/db";
 
 type ChatRequestBody = {
   message?: string;
@@ -64,6 +65,19 @@ export async function handleChatRoute(
     );
   }
 
+  // 🚀 Guardar Mensaje del Usuario en DB (Fase 2.2)
+  const conversationId = "00000000-0000-0000-0000-000000000000"; // Global Default
+  const userMessageContent = typeof body.message === "string" && body.message.trim().length > 0 
+    ? body.message 
+    : (messages && messages.length > 0 ? messages[messages.length - 1].content : "Mensaje vacío");
+
+  (db as any).insert(schema.messages).values({
+    id: crypto.randomUUID(),
+    conversationId,
+    role: "user",
+    content: userMessageContent,
+  }).catch((err: any) => console.error(`[db] Error guardando prompt: ${err.message}`));
+
   const model = body.model;
   console.log(`[chat][${requestId}] Solicitando chat al router dinámico...`);
 
@@ -95,10 +109,13 @@ export async function handleChatRoute(
         );
 
         try {
+          let fullResponse = ""; //  acumular respuesta
+
           for await (const chunk of providerStream) {
             chunkCount += 1;
 
             if (chunk.content) {
+              fullResponse += chunk.content;
               responseChars += chunk.content.length;
               controller.enqueue(
                 encoder.encode(sseEvent("delta", { content: chunk.content })),
@@ -124,6 +141,16 @@ export async function handleChatRoute(
               );
             }
           }
+
+          // 🚀 Guardar Respuesta del Asistente en DB (Fase 2.2)
+          (db as any).insert(schema.messages).values({
+             id: crypto.randomUUID(),
+             conversationId,
+             role: "assistant",
+             content: fullResponse,
+             model: model || "auto",
+             provider: "Router"
+          }).catch((err: any) => console.error(`[db] Error guardando respuesta: ${err.message}`));
 
           controller.enqueue(
             encoder.encode(

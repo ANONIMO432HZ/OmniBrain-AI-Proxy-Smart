@@ -125,7 +125,12 @@ Capacidades lógicas que el proxy ejecutará de forma autónoma para mejorar la 
 ---
 
 ## 📦 Plan de Ejecución Inmediato
+- [x] Crear el archivo `.env` con las Keys Globales (Cerebras, Groq, OpenRouter, Z.AI).
+- [x] Implementar la interfaz `AIProvider` incluyendo el parámetro `tools`.
+- [x] Levantar el servidor Bun en un puerto local y testear una llamada `curl` con soporte para Thinking y streaming robusto.
+- [x] Implementar Middleware de Autenticación de Acceso (`Fase 2.1`).
+- [x] Configurar Soporte Dual de Base de Datos SQLite/PostgreSQL con Drizzle ORM (`Fase 2.2`).
+- [x] Persistencia dinámica de mensajes y respuestas del asistente en tablas de auditoría.
 
-- [ ] Crear el archivo `.env` con las Keys Globales (Cerebras, Groq, OpenRouter).
-- [ ] Implementar la interfaz `AIProvider` incluyendo el parámetro `tools`.
-- [ ] Levantar el servidor Bun en un puerto local y testear una llamada `curl` con una definición de función ficticia para certificar el retorno de `tool_calls`.
+---
+_Última actualización: 2026-03-24 por Antigravity AI_

@@ -15,6 +15,7 @@ y este proyecto se adhiere a la convención [Semantic Versioning](https://semver
 - **Middleware de Autenticación (Fase 2.1)**: Protección del endpoint `/chat` mediante `Authorization: Bearer <TOKEN>` y panel de login de tokens en el Landing Page.
 - **Soporte de Base de Datos Dual (Drizzle ORM)**: Integración de un puente condicional automático de esquemas entre SQLite y PostgreSQL utilizando los drivers nativos de Bun.
 - **Autodetección Dokploy / Docker**: Constructor inteligente de tokens para tolerar inyecciones separadas de Postgres (`POSTGRES_HOST`, `POSTGRES_DB`) transparente para el usuario.
+- **Persistencia de Mensajes Automática (Fase 2.2)**: Capacidad de insertar en segundo plano (asíncrono) el prompt de usuario y la respuesta del asistente en tablas SQLite/Postgres al finalizar el stream del chat.
 
 ### Cambiado
 
