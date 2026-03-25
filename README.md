@@ -36,6 +36,16 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
 
 ---
 
+## 🔌 Endpoints Disponibles
+
+| Endpoint        | Método | Descripción | Autenticación |
+| :-------------- | :----- | :---------- | :------------ |
+| `/`             | `GET`  | Panel de Control / Landing Page interactiva para pruebas de API. | No |
+| `/chat`         | `POST` | Abre un Stream SSE (`text/event-stream`) de chat con los proveedores. | Sí (`Bearer`) |
+| `/history`      | `GET`  | Descarga el historial de auditoría de los prompts y respuestas en la DB. | Sí (`Bearer`) |
+
+---
+
 ## ⚙️ Instalación y Uso
 
 **1. Instalar Dependencias:**

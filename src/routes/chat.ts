@@ -71,12 +71,16 @@ export async function handleChatRoute(
     ? body.message 
     : (messages && messages.length > 0 ? messages[messages.length - 1].content : "Mensaje vacío");
 
-  (db as any).insert(schema.messages).values({
-    id: crypto.randomUUID(),
-    conversationId,
-    role: "user",
-    content: userMessageContent,
-  }).catch((err: any) => console.error(`[db] Error guardando prompt: ${err.message}`));
+  try {
+    await (db as any).insert(schema.messages).values({
+      id: crypto.randomUUID(),
+      conversationId,
+      role: "user",
+      content: userMessageContent,
+    });
+  } catch (err: any) {
+    console.error(`[db] Error guardando prompt: ${err.message}`);
+  }
 
   const model = body.model;
   console.log(`[chat][${requestId}] Solicitando chat al router dinámico...`);
@@ -143,14 +147,18 @@ export async function handleChatRoute(
           }
 
           // 🚀 Guardar Respuesta del Asistente en DB (Fase 2.2)
-          (db as any).insert(schema.messages).values({
-             id: crypto.randomUUID(),
-             conversationId,
-             role: "assistant",
-             content: fullResponse,
-             model: model || "auto",
-             provider: "Router"
-          }).catch((err: any) => console.error(`[db] Error guardando respuesta: ${err.message}`));
+          try {
+            await (db as any).insert(schema.messages).values({
+               id: crypto.randomUUID(),
+               conversationId,
+               role: "assistant",
+               content: fullResponse,
+               model: model || "auto",
+               provider: "Router"
+            });
+          } catch (err: any) {
+            console.error(`[db] Error guardando respuesta: ${err.message}`);
+          }
 
           controller.enqueue(
             encoder.encode(

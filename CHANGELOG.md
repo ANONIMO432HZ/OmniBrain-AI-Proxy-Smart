@@ -15,13 +15,15 @@ y este proyecto se adhiere a la convención [Semantic Versioning](https://semver
 - **Middleware de Autenticación (Fase 2.1)**: Protección del endpoint `/chat` mediante `Authorization: Bearer <TOKEN>` y panel de login de tokens en el Landing Page.
 - **Soporte de Base de Datos Dual (Drizzle ORM)**: Integración de un puente condicional automático de esquemas entre SQLite y PostgreSQL utilizando los drivers nativos de Bun.
 - **Autodetección Dokploy / Docker**: Constructor inteligente de tokens para tolerar inyecciones separadas de Postgres (`POSTGRES_HOST`, `POSTGRES_DB`) transparente para el usuario.
-- **Persistencia de Mensajes Automática (Fase 2.2)**: Capacidad de insertar en segundo plano (asíncrono) el prompt de usuario y la respuesta del asistente en tablas SQLite/Postgres al finalizar el stream del chat.
+- **Persistencia de Mensajes Automática (Fase 2.2)**: Capacidad de insertar con `await` el prompt de usuario y la respuesta del asistente en tablas SQLite/Postgres para asegurar el guardado antes de cerrar el Stream.
+- **Endpoint `/history` Anticaché**: Integración de ruta `GET /history` con bloqueo estricto de caché para auditoría de base de datos directa desde la Landing.
 
 ### Cambiado
 
 - **Ajuste de idleTimeout (60s)**: Elevación del margen de desconexión por inactividad de Bun en `index.ts` de 10s a 60s para soportar bloqueos de Deep Thinking streams.
 - **Fallback en Auto Global**: Reparación del desvío de modelos obsoletos entre enrutadores que gatillaban fallas 404 en cascadas.
 - **Nativo de Groq**: Modelización por defecto refinada a `"llama-3.1-8b-instant"`.
+- **Puertos de Endpoints Antiguos**: Comentados endpoints antiguos (`/api/*`) que gatillaban errores `PostgresError: Connection closed` al correr en bases SQLite locales.
 
 ---
 

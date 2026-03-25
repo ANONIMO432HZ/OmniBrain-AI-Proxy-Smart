@@ -97,6 +97,8 @@ export const landingPageHtml = `<!doctype html>
         border: 1px solid var(--border);
         border-radius: 10px;
         min-height: 160px;
+        max-height: 500px;
+        overflow-y: auto;
         padding: 12px;
         background: #0b0f14;
       }

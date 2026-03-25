@@ -104,4 +104,44 @@ const GROQ_DEFAULT_MODEL = "llama-3.1-8b-instant";
 
 ---
 
-_Actualizado: 2026-03-24_
+## 💾 6. Pérdida o Cortes de Mensajes en Streaming (Condición de Carrera)
+
+**🚨 Síntoma:**
+Al consultar el historial (`/history`), se listan los primeros mensajes del sistema pero las preguntas nuevas no se guardan en la base de datos a pesar de que el stream termina con éxito.
+
+**🔍 Causa:**
+Las operaciones de inserción `db.insert(schema.messages)` se ejecutaban en segundo plano sin `await` para dar velocidad. Cuando el `ReadableStream` emitía su token final y ejecutaba `controller.close()`, el recolector de basura de JS en Bun a veces abortaba la promesa de fondo antes de consolidar la escritura en disco (SQLite).
+
+**✅ Solución:**
+Forzar el uso de `await` en ambos momentos del ciclo de vida del chat en `src/routes/chat.ts`:
+1. Esperar la inserción de la pregunta del usuario antes de llamar al router.
+2. Esperar la inserción de la respuesta del asistente dentro del bucle del stream antes de cerrar el controlador (`controller.close()`).
+
+---
+
+## 🌐 7. `/history` Congelado o No Actualizado (Caché del Navegador)
+
+**🚨 Síntoma:**
+Incluso con las inserciones funcionando, al dar clic en `GET /history` la respuesta se queda estática y la cabecera `date:` devuelve una hora atrasada.
+
+**🔍 Causa:**
+Navegadores (Chrome/Brave/Firefox) habilitan una caché agresiva para peticiones `GET` repetitivas a la misma URL si el servidor no especifica lo contrario. El navegador responde de su memoria local.
+
+**✅ Solución:**
+Añadir cabeceras restrictivas anticaché en la respuesta del endpoint en `index.ts`:
+
+```typescript
+return Response.json(
+  { messages: results }, 
+  { 
+    headers: { 
+      ...CORS_HEADERS, 
+      "Cache-Control": "no-cache, no-store, must-revalidate" 
+    } 
+  }
+);
+```
+
+---
+
+_Última actualización: 2026-03-24 por Antigravity AI_

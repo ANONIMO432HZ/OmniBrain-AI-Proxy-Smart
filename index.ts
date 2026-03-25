@@ -3,9 +3,10 @@ import { landingPageHtml } from "./src/routes/landing";
 import { router } from "./src/lib/router";
 import { ensureDatabaseReady } from "./src/db/init";
 
-import "./src/routes/api/users";
-import "./src/routes/api/conversations";
-import "./src/routes/api/messages";
+// ⚠️ Comentados temporalmente para evitar que carguen sql de Postgres nativo (Fase 2.2)
+// import "./src/routes/api/users";
+// import "./src/routes/api/conversations";
+// import "./src/routes/api/messages";
 
 
 const CORS_HEADERS = {
@@ -60,23 +61,19 @@ const server = Bun.serve({
         );
       }
 
-      const { db, schema, isPostgres } = await import("./src/db/db");
+      const { db, schema } = await import("./src/db/db");
       
       try {
-        const query = isPostgres 
-          ? "SELECT role, content, created_at FROM messages ORDER BY created_at ASC;"
-          : "SELECT role, content, created_at FROM messages ORDER BY created_at ASC;";
-          
-        const messages = await (db as any).execute(isPostgres 
-          ? { sql: query } // Para bun-sql Postgres 
-          : { sql: query } // Para bun-sqlite
-        );
-        
-        // bun-sqlite devuelve los objetos directos en un array, bun-sql puede divergir ligeramente
-        // Para simplificar, Drizzle Select es más compatible:
         const results = await (db as any).select().from(schema.messages);
-
-        return Response.json({ messages: results }, { headers: CORS_HEADERS });
+        return Response.json(
+          { messages: results }, 
+          { 
+            headers: { 
+              ...CORS_HEADERS, 
+              "Cache-Control": "no-cache, no-store, must-revalidate" 
+            } 
+          }
+        );
       } catch (err: any) {
         return Response.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
       }
