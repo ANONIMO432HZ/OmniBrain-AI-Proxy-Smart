@@ -1,5 +1,6 @@
 import { providerRouter } from "../services/provider-router";
 import type { ChatMessage, ToolDefinition } from "../types/provider";
+import { env } from "../config/env";
 
 type ChatRequestBody = {
   message?: string;
@@ -32,6 +33,13 @@ export async function handleChatRoute(
 ): Promise<Response> {
   const startedAt = Date.now();
   console.log(`[chat][${requestId}] Entrando en handleChatRoute`);
+
+  // 🔐 Validar Autenticación (Fase 2.1)
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader || authHeader !== `Bearer ${env.LOCAL_API_KEY}`) {
+    console.warn(`[chat][${requestId}] Acceso no autorizado`);
+    return Response.json({ error: "No autorizado. API Key local de OmniBrain no válida." }, { status: 401 });
+  }
 
   let body: ChatRequestBody;
 

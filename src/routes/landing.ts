@@ -154,6 +154,13 @@ export const landingPageHtml = `<!doctype html>
         <p>Prueba el endpoint <code>POST /chat</code> desde esta página.</p>
 
         <form id="chat-form">
+          <!-- 🔐 Autenticación Fase 2.1 -->
+          <label for="local-api-key" style="display:flex; align-items:center; gap:6px;">
+             <span>🔑 OmniBrain API Key Local</span>
+             <span style="font-size:0.75rem; color:#94a3b8;">(Default: omnibrain-dev-token)</span>
+          </label>
+          <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" value="omnibrain-dev-token" style="margin-bottom: 12px; background:#0e1218;" />
+
           <label for="model">Modelo (opcional)</label>
           <select id="model" name="model" style="background:#0e1218;">
             <optgroup label="🌐 ENRUTADO AUTOMÁTICO">
@@ -326,6 +333,7 @@ export const landingPageHtml = `<!doctype html>
 
         const model = document.getElementById("model").value.trim();
         const message = document.getElementById("message").value.trim();
+        const localApiKey = document.getElementById("local-api-key").value.trim();
 
         if (!message) {
           result.textContent = "Escribe un mensaje para probar la API.";
@@ -342,7 +350,10 @@ export const landingPageHtml = `<!doctype html>
         try {
           const response = await fetch("/chat", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + localApiKey
+            },
             body: JSON.stringify(payload),
           });
 
