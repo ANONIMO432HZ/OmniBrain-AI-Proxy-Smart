@@ -94,7 +94,11 @@ const server = Bun.serve({
       const { db, schema } = await import("./src/db/db");
       
       try {
-        await (db as any).delete(schema.messages);
+        if (typeof (db as any).delete(schema.messages).run === "function") {
+          (db as any).delete(schema.messages).run();
+        } else {
+          await (db as any).delete(schema.messages).execute();
+        }
         return Response.json(
           { success: true, message: "Historial eliminado" }, 
           { 
