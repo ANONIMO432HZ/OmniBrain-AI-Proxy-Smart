@@ -352,11 +352,12 @@ export const landingPageHtml = `<!doctype html>
         if (model) payload.model = model;
 
         try {
-          const response = await fetch("/chat", {
+          const response = await fetch("/v1/chat/completions", {
             method: "POST",
             headers: { 
               "Content-Type": "application/json",
-              "Authorization": "Bearer " + localApiKey
+              "Authorization": "Bearer " + localApiKey,
+              "X-Omnibrain-Format": "native"
             },
             body: JSON.stringify(payload),
           });
@@ -495,7 +496,8 @@ export const landingPageHtml = `<!doctype html>
             method,
             headers: { 
               "Content-Type": "application/json",
-              "Authorization": "Bearer " + localApiKey
+              "Authorization": "Bearer " + localApiKey,
+              "X-Omnibrain-Format": "native"
             },
             body: parsedBody ? JSON.stringify(parsedBody) : undefined,
           });

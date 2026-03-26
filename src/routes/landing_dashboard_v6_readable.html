@@ -247,7 +247,7 @@
         if (!msg) return;
         result.innerHTML = ""; meta.textContent = "Conectando stream..."; send.disabled = true; send.textContent = "Enviando..."; 
         try {
-          const res = await fetch("/v1/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key }, body: JSON.stringify({ message: msg, ...(mdl ? { model: mdl } : {}) }) });
+          const res = await fetch("/v1/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key, "X-Omnibrain-Format": "native" }, body: JSON.stringify({ message: msg, ...(mdl ? { model: mdl } : {}) }) });
 
           if (!res.ok) throw new Error(await res.text());
           const reader = res.body.getReader(); const decoder = new TextDecoder(); let sseBuffer = "";

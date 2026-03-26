@@ -5,16 +5,32 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/)
 y este proyecto se adhiere a la convención [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.5.0] - 2026-03-25
+
+### Añadido (Compatibilidad Universal)
+
+- **Universal Proxy Mode**: OmniBrain ahora es 100% compatible con herramientas externas como **Claude Code**, **OpenClaw** y **Continue**.
+- **Formatted OpenAI SSE**: Re-implementación del flujo de streaming para emitir fragmentos JSON estándar de OpenAI (`data: { choices: [...] }`) por defecto.
+- **Catálogo de Modelos Pro**: Implementación completa del endpoint `GET /v1/models` que expone más de 30 modelos reales de todos los proveedores soportados (Groq, Cerebras, OpenRouter, Z.AI).
+- **Control de Formato Dual**: Soporte para el header `X-Omnibrain-Format: native` para permitir que el Dashboard interno siga usando el formato enriquecido de eventos sin romper herramientas externas.
+- **Guía de Integración**: Nuevo documento `docs/INTEGRACIONES.md` con instrucciones paso a paso para configurar agentes.
+
+### Corregido (Audit Real-Time)
+
+- **CORS Headers**: Normalización de las cabeceras CORS en todas las respuestas dinámicas para evitar bloqueos en clientes web externos.
+
+---
+
 ## [0.4.0] - 2026-03-25
 
-### Añadido
+### Añadido (Testing & Producción)
 
 - **Fase 5 (Testing & Calidad)**: Suite completa de 14 tests automatizados (`bun test`) cubriendo Unit (Router), Integración (Resiliencia) y E2E (v1 API).
 - **Fase 6 (Despliegue & Producción)**: Dockerización completa con imagen multi-etapa optimizada (Alpine) y orquestación con `docker-compose.yml`.
 - **Healthcheck Nativo**: Implementación de verificación de salud en el contenedor usando `bun --eval fetch` para evitar dependencias externas como `curl`.
 - **Persistencia Automatizada**: Configuración de volúmenes Docker para asegurar la integridad de la base de datos SQLite en `/data`.
 
-### Corregido
+### Corregido (Bugs de Auditoría y Docker)
 
 - **Audit Bugfix (History)**: Reparación del endpoint `DELETE /v1/history` que fallaba al intentar usar métodos no soportados por Drizzle ORM.
 - **Audit Bugfix (Testing)**: Aislamiento total de los tests de resiliencia para evitar interferencias por caché de módulos de Bun.
@@ -37,7 +53,7 @@ y este proyecto se adhiere a la convención [Semantic Versioning](https://semver
 - **Refactorización de Controladores**: Estandarización del uso del constructor `Response` global en lugar de `Response.json` nativo para compatibilidad en sub-rutas.
 - **Optimización de Streaming**: Reubicación de la lógica de métricas al enrutador para evitar pérdida de datos en fallos tempranos.
 
-### Corregido (Estabilidad)
+### Corregido (Fugas de Memoria y Tipos)
 
 - **Memory Leak Prevention**: Gestión mejorada de contextos de base de datos y cierre de streams.
 - **Linting & Types**: Eliminación de advertencias de tipado en `chat.ts` y scripts de prueba.
@@ -51,15 +67,15 @@ y este proyecto se adhiere a la convención [Semantic Versioning](https://semver
 - **Multi-Key Load Balancing (Rotación)**: Soporte para múltiples API Keys separadas por comas (`GROQ_API_KEY=key1,key2`) con alternancia dinámica ante errores 429 (Rate Limit) en todos los proveedores.
 - **Acordeón de Pensamiento unificado**: Extracción de `.reasoning_content` paralela al texto base, solventando carreras condicionales (`else if`).
 - **Problemas Comunes y Soluciones**: Documento `docs/PROBLEMAS_COMUNES.md` de soporte rápido para troubleshooting.
-- **Middleware de Autenticación (Fase 2.1)**: Protección del endpoint `/chat` mediante `Authorization: Bearer <TOKEN>` y panel de login de tokens en el Landing Page.
+- **Middleware de Autenticación (Fase 2.1)**: Protección del endpoint `/chat` mediante `Authorization: Bearer <TOKEN>` y panel de login de tokens en el Login Page.
 - **Soporte de Base de Datos Dual (Drizzle ORM)**: Integración de un puente condicional automático de esquemas entre SQLite y PostgreSQL utilizando los drivers nativos de Bun.
 - **Autodetección Dokploy / Docker**: Constructor inteligente de tokens para tolerar inyecciones separadas de Postgres (`POSTGRES_HOST`, `POSTGRES_DB`) transparente para el usuario.
-- **Persistencia de Mensajes Automática (Fase 2.2)**: Capacidad de insertar con `await` el prompt de usuario y la respuesta del asistente en tablas SQLite/Postgres para asegurar el guardado antes de cerrar el Stream.
+- **Persistencia de Mensajes Automatizada (Fase 2.2)**: Capacidad de insertar con `await` el prompt de usuario y la respuesta del asistente en tablas SQLite/Postgres para asegurar el guardado antes de cerrar el Stream.
 - **Endpoint `/history` Anticaché**: Integración de ruta `GET /history` con bloqueo estricto de caché para auditoría de base de datos directa desde la Landing.
 
 ### Cambiado (Configuración)
 
-- **Ajuste de idleTimeout (60s)**: Elevación del margen de desconexión por inactividad de Bun en `index.ts` de 10s a 60s para soportar bloqueos de Deep Thinking streams.
+- **Ajuste de idleTimeout (60s)**: Elevación del margen de desconexión por inactividad de Bun in `index.ts` de 10s a 60s para soportar bloqueos de Deep Thinking streams.
 - **Fallback en Auto Global**: Reparación del desvío de modelos obsoletos entre enrutadores que gatillaban fallas 404 en cascadas.
 - **Nativo de Groq**: Modelización por defecto refinada a `"llama-3.1-8b-instant"`.
 - **Puertos de Endpoints Antiguos**: Comentados endpoints antiguos (`/api/*`) que gatillaban errores `PostgresError: Connection closed` al correr en bases SQLite locales.

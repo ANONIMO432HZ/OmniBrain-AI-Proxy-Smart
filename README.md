@@ -112,6 +112,7 @@ El proyecto está listo para producción con una imagen optimizada basada en Alp
 
 ## 📜 Documentación Adicional
 
+* [Guía de Integración (Claude Code, OpenClaw, Continue)](file:///docs/INTEGRACIONES.md): Paso a paso para usar OmniBrain como proxy universal.
 * [Problemas Comunes (Troubleshooting)](file:///docs/PROBLEMAS_COMUNES.md): Soluciones a cortes de stream, colisiones y cascadas 404.
 * [Análisis de Proveedores](file:///docs/providers/analisis_documentacion.md): Métricas, límites y configuraciones.
 * [Dashboard Premium (V6)](file:///src/routes/DASHBOARD_V6_README.md): Instrucciones para activar el panel visual avanzado.
