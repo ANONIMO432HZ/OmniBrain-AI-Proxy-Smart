@@ -1,7 +1,9 @@
-import { db, schema } from "./src/db/db";
+import { db, schema, saveIfSqlJs } from "./src/db/db";
+import { ensureDatabaseReady } from "./src/db/init";
 
 async function main() {
   try {
+    await ensureDatabaseReady();
     const id = crypto.randomUUID();
     console.log("Generando insert para ID:", id);
     await (db as any).insert(schema.messages).values({
@@ -10,6 +12,7 @@ async function main() {
       role: "user",
       content: "Mensaje de prueba manual " + Date.now(),
     });
+    saveIfSqlJs();
     console.log("✅ [TEST] Insert Exitoso!");
 
     const rows = await (db as any).select().from(schema.messages);

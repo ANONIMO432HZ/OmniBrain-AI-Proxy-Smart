@@ -3,7 +3,7 @@ import { groqProvider } from "./groq";
 import { cerebrasProvider } from "./cerebras";
 import { zaiProvider } from "./zai";
 import { mockProvider } from "./mock";
-import { db, schema } from "../db/db";
+import { db, schema, saveIfSqlJs } from "../db/db";
 import type { AIProvider, ChatParams, StreamChunk } from "../types/provider";
 
 
@@ -44,10 +44,10 @@ export const providerRouter = {
 
 
 
-    const isAutoGlobal = !params.model;
+    // Identificar si estamos en enrutamiento global inteligente
+    const isAutoGlobal = !params.model || params.model === "auto";
     if (isAutoGlobal) {
-      console.log(`[router] Sin modelo especificado. Asignando 'openrouter/free' por defecto.`);
-      params.model = "openrouter/free"; 
+      console.log(`[router] Iniciando Smart Routing en modo Global.`);
     }
 
     // ACCESO DIRECTO PARA PRUEBAS (Mock Agent)
@@ -59,8 +59,6 @@ export const providerRouter = {
       }
       return;
     }
-
-
 
     // Filtrar proveedores reales que estén disponibles y fuera de cooldown
     const available = providers.filter(
@@ -76,46 +74,52 @@ export const providerRouter = {
     }
 
     // ORDENAR PROVEEDORES SEGÚN EL MODELO (Smart Routing)
+    // PRIORIDAD PARA AUTO: Groq -> Cerebras -> Z.AI -> OpenRouter
     const sortedAvailable = [...available].sort((a, b) => {
-      const nameA = a.provider.name.toLowerCase();
-      const nameB = b.provider.name.toLowerCase();
+      const idA = a.provider.id.toLowerCase();
+      const idB = b.provider.id.toLowerCase();
+
+      if (isAutoGlobal) {
+        const priority = { "groq": 1, "cerebras": 2, "zai": 3, "openrouter": 4 };
+        const pA = priority[idA as keyof typeof priority] || 99;
+        const pB = priority[idB as keyof typeof priority] || 99;
+        return pA - pB;
+      }
+
       const m = params.model!.toLowerCase();
 
       // Priorizar OpenRouter para modelos free o google/
       const isOpenRouterModel = m.includes(":free") || m.includes("/free") || m.includes("google/");
-      
-      if (isOpenRouterModel && nameA === "openrouter") return -1;
-      if (isOpenRouterModel && nameB === "openrouter") return 1;
+      if (isOpenRouterModel && idA === "openrouter") return -1;
+      if (isOpenRouterModel && idB === "openrouter") return 1;
 
       // Priorizar Groq para Llama 4 y Llama 3.3 versatile
-      if ((m.includes("versatile") || m.includes("llama-4-scout")) && nameA === "groq") return -1;
-      if ((m.includes("versatile") || m.includes("llama-4-scout")) && nameB === "groq") return 1;
+      if ((m.includes("versatile") || m.includes("llama-4-scout")) && idA === "groq") return -1;
+      if ((m.includes("versatile") || m.includes("llama-4-scout")) && idB === "groq") return 1;
 
       // Priorizar Cerebras para sus modelos específicos
-      if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && nameA === "cerebras") return -1;
-      if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && nameB === "cerebras") return 1;
+      if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && idA === "cerebras") return -1;
+      if ((m.startsWith("llama3.1-") || m.includes("qwen-3-235b")) && idB === "cerebras") return 1;
 
       // Priorizar Z.AI para modelos GLM
-      if (m.startsWith("glm-") && nameA === "z.ai") return -1;
-      if (m.startsWith("glm-") && nameB === "z.ai") return 1;
+      if (m.startsWith("glm-") && idA === "zai") return -1;
+      if (m.startsWith("glm-") && idB === "zai") return 1;
 
       return 0; // Mantener orden por defecto
     });
 
     let lastError: Error | null = null;
-    let firstError: Error | null = null; // Guardar el error del proveedor priorizado
     const failedProvidersDetails: string[] = [];
 
     for (const state of sortedAvailable) {
       let chunkCount = 0;
       const attemptStartedAt = Date.now();
       try {
-
-        console.log(`[router] Intentando proveedor Real: ${state.provider.name} para modelo ${params.model}`);
+        console.log(`[router] Intentando: ${state.provider.name} | Modelo: ${params.model || "auto"}`);
         
         const currentParams = { ...params };
-        if (isAutoGlobal && state.provider.id !== "openrouter") {
-          delete currentParams.model; // Permitir que el proveedor use su modelo por defecto nativo
+        if (isAutoGlobal) {
+          delete currentParams.model; // Permitir que cada proveedor use su mejor modelo por defecto
         }
 
         const stream = state.provider.chat(currentParams);
@@ -136,7 +140,7 @@ export const providerRouter = {
         }
 
         console.log(`[router] ${state.provider.name} completó el stream exitosamente.`);
-        state.failCount = 0; // ✅ Éxito total: resetear contador
+        state.failCount = 0;
         
         // 📊 Guardar métrica de éxito
         try {
@@ -148,6 +152,7 @@ export const providerRouter = {
             status: "200",
             requestId: params.requestId,
           });
+          saveIfSqlJs();
         } catch (dbErr) {
           console.error(`[db] Error guardando métrica éxito: ${dbErr}`);
         }
@@ -158,7 +163,6 @@ export const providerRouter = {
         const errMsg = err.message ? err.message : String(err);
         console.error(`[router] Error en ${state.provider.name}: ${errMsg}`);
         lastError = err;
-        if (!firstError) firstError = err; // Guardamos el primer error para feedback
         
         failedProvidersDetails.push(`🔴 [${state.provider.name}] -> ${errMsg}`);
 
@@ -187,6 +191,7 @@ export const providerRouter = {
             status: "500", // Error interno del proveedor
             requestId: params.requestId,
           });
+          saveIfSqlJs();
         } catch (dbErr) {
           console.error(`[db] Error guardando métrica fallo: ${dbErr}`);
         }

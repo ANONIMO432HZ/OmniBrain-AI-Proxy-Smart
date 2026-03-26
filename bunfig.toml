@@ -1,0 +1,6 @@
+# bunfig.toml — Configuración de Bun para OmniBrain-API
+[install]
+# No ejecutar postinstall scripts de paquetes nativos en PC con Bun.
+# better-sqlite3 es sólo necesario en Node.js (Termux).
+# En Bun se usa la SQLite nativa (bun:sqlite).
+ignore-scripts = true

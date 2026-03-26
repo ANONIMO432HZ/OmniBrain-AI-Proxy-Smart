@@ -4,17 +4,18 @@ globs: "*.ts, *.tsx, *.html, *.css, *.js, *.jsx, package.json"
 alwaysApply: false
 ---
 
-Default to using Bun instead of Node.js.
+Default to using Bun instead of Node.js (except for Termux/ARMv7 deployment).
 
-- Use `bun <file>` instead of `node <file>` or `ts-node <file>`
-- Use `bun test` instead of `jest` or `vitest`
-- Use `bun build <file.html|file.ts|file.css>` instead of `webpack` or `esbuild`
-- Use `bun install` instead of `npm install` or `yarn install` or `pnpm install`
-- Use `bun run <script>` instead of `npm run <script>` or `yarn run <script>` or `pnpm run <script>`
-- Use `bunx <package> <command>` instead of `npx <package> <command>`
-- Bun automatically loads .env, so don't use dotenv.
+- Use `bun <file>` instead of `node <file>` (Use `node --import tsx/esm index.ts` on Termux)
+- Use `bun test` for testing
+- Use `bun install` or `npm install` (Termux)
+- Bun automatically loads .env, but `dotenv` is included for Node.js compatibility.
 
-## APIs
+## APIs & Dual-Runtime Support
+
+- `Bun.serve()` on PC, `http.createServer` on Node.js.
+- `bun:sqlite` on Bun, `sql.js` (WASM) on Node.js.
+- Database persistence in Node/sql.js requires calling `saveIfSqlJs()`.
 
 - `Bun.serve()` supports WebSockets, HTTPS, and routes. Don't use `express`.
 - `bun:sqlite` for SQLite. Don't use `better-sqlite3`.

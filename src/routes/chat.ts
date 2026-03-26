@@ -1,7 +1,7 @@
 import { providerRouter } from "../services/provider-router";
 import type { ChatMessage, ToolDefinition } from "../types/provider";
 import { env } from "../config/env";
-import { db, schema } from "../db/db";
+import { db, schema, saveIfSqlJs } from "../db/db";
 
 type ChatRequestBody = {
   message?: string;
@@ -82,6 +82,7 @@ export async function handleChatRoute(
       role: "user",
       content: userMessageContent,
     });
+    saveIfSqlJs();
   } catch (err: any) {
     console.error(`[db] Error guardando prompt: ${err.message}`);
   }
@@ -210,6 +211,7 @@ export async function handleChatRoute(
                model: realModel,
                provider: realProvider
             });
+            saveIfSqlJs();
           } catch (err: any) {
             console.error(`[db] Error guardando respuesta: ${err.message}`);
           }
@@ -256,6 +258,7 @@ export async function handleChatRoute(
               status: "500", // Error en stream
               requestId,
             });
+            saveIfSqlJs();
           } catch (mErr: any) {
              console.error(`[db] Error guardando métricas de error: ${mErr.message}`);
           }

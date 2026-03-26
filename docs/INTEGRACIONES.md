@@ -33,18 +33,38 @@ claude config set model auto
 
 ---
 
-## 🛡️ Integración con OpenClaw
+## 🛡️ Integración con OpenClaw (Termux / Android)
 
-OpenClaw se beneficia del **Circuit Breaker** de OmniBrain para evitar interrupciones cuando un proveedor como Groq alcanza el Rate Limit.
+OpenClaw se beneficia del **Circuit Breaker** de OmniBrain para evitar interrupciones cuando un proveedor como Groq alcanza el Rate Limit. Está optimizado para correr junto a OmniBrain en el mismo dispositivo Android.
 
-### Configuración en OpenClaw
+### Configuración con `openclaw onboard`
 
-Configuración en `config.toml` o Dashboard de OpenClaw:
+Si usas el asistente interactivo de OpenClaw:
 
-* **Provider Type**: OpenAI Compatible
-* **Base URL**: `http://localhost:3000/v1`
-* **API Key**: `tu-LOCAL_API_KEY-de-omnibrain`
-* **Model**: `auto` o `llama-3.3-70b-versatile`
+1.  **Model/auth provider**: Selecciona `Custom Provider`.
+2.  **API Base URL**: Ingresa `http://localhost:3000/v1`.
+3.  **API Key**: Selecciona `Paste API key now` e ingresa tu `LOCAL_API_KEY`.
+4.  **Endpoint compatibility**: Selecciona `OpenAI-compatible (/chat/completions)`.
+5.  **Model ID**: Ingresa `auto` (para usar el Smart Routing global).
+6.  **Endpoint ID**: Asigna un nombre (ej: `omnibrain-api`).
+
+### Configuración Manual (`~/.openclaw/openclaw.json`)
+
+Si prefieres editar el archivo directamente:
+
+```json
+{
+  "gateway": {
+    "url": "http://localhost:3000/v1",
+    "auth": {
+      "apiKey": "SU_CLAVE_AQUI"
+    }
+  },
+  "model": {
+    "id": "auto"
+  }
+}
+```
 
 ---
 

@@ -1,4 +1,4 @@
-import { db, schema } from "../../db/db";
+import { db, schema, saveIfSqlJs } from "../../db/db";
 import { env } from "../../config/env";
 
 const CORS_HEADERS = {
@@ -48,6 +48,7 @@ export async function deleteHistory(req: Request) {
 
   try {
     await (db as any).delete(schema.messages).execute();
+    saveIfSqlJs();
     return new Response(JSON.stringify({ success: true, message: "Historial eliminado" }), {
       status: 200,
       headers: { 

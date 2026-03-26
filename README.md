@@ -12,6 +12,7 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 * 🔑 **Multi-Key Load Balancing (Rotación)**: Capacidad de añadir múltiples API Keys separadas por comas (`key1,key2,key3`) por proveedor para sortear el agotamiento de cuotas diarias.
 * 🧠 **Thinking & Reasoning Support**: Soporte nativo para extraer razonamiento (CoT) y tokens de razonamiento (`reasoning_tokens`) para compatibilidad con Claude Code y otros agentes avanzados.
 * ⚡ **Extremadamente Rápido**: Respaldado por el runtime de Bun con soporte de Streams (`ReadableStream`) y baja latencia.
+*   📱 **Compatibilidad Termux (Node.js)**: Optimizado para correr en dispositivos móviles (Android/Termux ARMv7) utilizando una capa de base de datos Dual-Runtime (WASM) para máxima portabilidad.
 
 ---
 
@@ -31,7 +32,8 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu string de conexión `DATABASE_URL` sin tocar lógica de negocio:
 
 * **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
-  * Corre sobre el motor nativo de Bun. Ideal para desarrollo.
+  *   **Dual-Runtime:** Utiliza `bun:sqlite` en Bun (PC) y `sql.js` (WASM) en Node.js (Android/Termux).
+  *   **Persistencia Manual:** En modo Node.js, implementa sincronización automática a disco tras cada escritura para evitar pérdida de datos en el driver WASM.
 * **⚡ PostgreSQL (Producción):** `DATABASE_URL=postgres://usuario:pass@host:5432/db`
   * Escala a producción sobre el driver nativo de Bun para bases SQL.
 * **🐳 Dokploy / Docker (Autodetección):** Si inyectas `POSTGRES_HOST` y `POSTGRES_DB` por separado, el backend construirá la url automáticamente ahorrando scripts de entrada.

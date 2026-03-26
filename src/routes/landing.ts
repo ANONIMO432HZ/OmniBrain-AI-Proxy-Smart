@@ -161,7 +161,7 @@ export const landingPageHtml = `<!doctype html>
              <span>🔑 OmniBrain API Key Local</span>
              <span style="font-size:0.75rem; color:#94a3b8;">(Default: omnibrain-dev-token)</span>
           </label>
-          <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" value="omnibrain-dev-token" style="margin-bottom: 12px; background:#0e1218;" />
+          <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" value="{{DEFAULT_KEY}}" style="margin-bottom: 12px; background:#0e1218;" />
 
           <label for="model">Modelo (opcional)</label>
           <select id="model" name="model" style="background:#0e1218;">

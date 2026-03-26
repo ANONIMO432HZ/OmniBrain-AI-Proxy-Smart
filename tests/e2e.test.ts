@@ -52,7 +52,7 @@ describe("E2E API v1", () => {
     expect(res.status).toBe(400);
   });
 
-  test("POST /v1/chat/completions debe iniciar stream exitoso", async () => {
+  test("POST /v1/chat/completions debe iniciar stream exitoso (formato native)", async () => {
     // Setup mock stream
     async function* fakeStream() {
       yield { provider: "Mock", content: "Hola", model: "test" };
@@ -62,9 +62,10 @@ describe("E2E API v1", () => {
 
     const res = await handleHttpRequest(new Request("http://localhost/v1/chat/completions", {
       method: "POST",
-      headers: { 
+      headers: {
         "Authorization": "Bearer test-key",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-Omnibrain-Format": "native",  // 👈 Forzar formato native SSE
       },
       body: JSON.stringify({ message: "hola" })
     }));
@@ -75,7 +76,7 @@ describe("E2E API v1", () => {
     const reader = res.body?.getReader();
     const decoder = new TextDecoder();
     let result = "";
-    
+
     if (reader) {
       while (true) {
         const { done, value } = await reader.read();
@@ -89,5 +90,43 @@ describe("E2E API v1", () => {
     expect(result).toContain('"content":"Hola"');
     expect(result).toContain('"content":" mundo"');
     expect(result).toContain("event: done");
+  });
+
+  test("POST /v1/chat/completions debe iniciar stream exitoso (formato openai)", async () => {
+    async function* fakeStream() {
+      yield { provider: "Mock", content: "Hola", model: "test" };
+      yield { content: " mundo" };
+    }
+    mockChat.mockImplementation(() => fakeStream());
+
+    const res = await handleHttpRequest(new Request("http://localhost/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer test-key",
+        "Content-Type": "application/json",
+        // Sin X-Omnibrain-Format → formato OpenAI por defecto
+      },
+      body: JSON.stringify({ message: "hola" })
+    }));
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toContain("text/event-stream");
+
+    const reader = res.body?.getReader();
+    const decoder = new TextDecoder();
+    let result = "";
+
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        result += decoder.decode(value);
+      }
+    }
+
+    expect(result).toContain("chat.completion.chunk");
+    expect(result).toContain('"content":"Hola"');
+    expect(result).toContain('"content":" mundo"');
+    expect(result).toContain("[DONE]");
   });
 });

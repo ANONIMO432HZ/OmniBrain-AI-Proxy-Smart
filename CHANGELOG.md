@@ -5,6 +5,23 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/)
 y este proyecto se adhiere a la convención [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.6.0] - 2026-03-26
+
+### Añadido (Dual-Runtime & Termux Support)
+
+- **Dual-Runtime Engine**: OmniBrain-API ahora es compatible tanto con **Bun** (PC/Servidores) como con **Node.js** (Termux/Mobile).
+- **Capas de DB Agósticas**: Implementación de un driver dinámico que conmuta entre `bun:sqlite` y **`sql.js` (WebAssembly)** para garantizar persistencia sin dependencias nativas en Android ARMv7.
+- **Persistencia de Escritura (Write-Sync)**: Nuevo sistema de persistencia manual para drivers `sql.js` que sincroniza el estado de la memoria a disco tras cada operación de Chat o Métricas.
+- **Identidad Visual**: Adición de un Favicon personalizado (`favicon.png`) y ruta dedicada `/favicon.ico` servida dinámicamente.
+- **CORS Extendido**: Soporte explícito para el encabezado `X-Omnibrain-Format` en las preflights de navegadores móviles.
+
+### Cambiado (Arquitectura)
+
+- **Inicialización con Re-Orden**: `ensureDatabaseReady` ahora sincroniza los esquemas SQL antes de construir el Singleton de Drizzle para evitar colisiones de estado.
+- **Compatibilidad de Entrada**: Refactorización del chequeo `import.meta.main` para soportar la ejecución vía `tsx/esm` en Node.js.
+
+---
+
 ## [0.5.0] - 2026-03-25
 
 ### Añadido (Compatibilidad Universal)
