@@ -61,29 +61,41 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
 
 ## ⚙️ Instalación y Uso
 
-1. **Instalar Dependencias:**
+El proyecto es compatible con arquitecturas x86 y ARM (32/64 bits).
 
-   ```bash
-   bun install
-   ```
+### ⚡ Modo Bun (Recomendado para PC / Servidores)
+Ideal para máximo rendimiento y baja latencia.
+1.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
+2.  **Instalar:** `bun install`
+3.  **Configurar:** Copia el archivo `.env.example` a `.env` y añade tus API Keys.
+4.  **Ejecutar:** 
+    ```bash
+    bun start:bun
+    ```
 
-2. **Configurar Entorno:**
-   Modifica o crea tu archivo `.env` basado en [.env.example](file:///.env.example):
+### 📱 Modo Node.js (Optimizado para Termux / Android)
+Compatible con dispositivos ARM legacy (Android 7+).
+1.  **Preparar Termux:** `pkg update && pkg install nodejs-lts git`
+2.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
+3.  **Instalar:** `npm install`
+4.  **Ejecutar:** 
+    ```bash
+    npm run start:node
+    ```
 
-   ```bash
-   OPENROUTER_API_KEY=key1,key2
-   GROQ_API_KEY=key4,key5
-   LOCAL_API_KEY=tu-token-seguro
-   DATABASE_URL=./data/api.db
-   ```
+### 🛠️ Entornos Soportados
+*   **Android**: 7.0 hasta 14.0+ (ARMv7/ARMv8) vía Termux.
+*   **Servidores**: Ubuntu, Debian, Alpine (Docker).
+*   **PC**: Windows (WSL2), macOS, Linux.
 
-3. **Correr Servidor:**
+### 🔄 Reactivación (Post-Reinicio)
+Si tu dispositivo se apaga o reinicias Termux, ejecuta esto para volver a activar el proxy:
+```bash
+cd ~/OmniBrain-AI-Proxy-Smart && npm run start:node
+```
+*(En PC con Bun: `bun start:bun`)*
 
-   ```bash
-   bun run index.ts
-   ```
-
-La API estará escuchando en `http://localhost:3000`.
+---
 
 ---
 
