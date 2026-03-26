@@ -1,4 +1,4 @@
-# 🧠 OmniBrain-API
+# 🧠 OmniBrain-AI-Proxy-Smart
 
 Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia Artificial (IA), construido sobre **Bun** y **TypeScript**.
 

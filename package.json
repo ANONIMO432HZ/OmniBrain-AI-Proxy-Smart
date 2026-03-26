@@ -1,5 +1,5 @@
 {
-  "name": "omnibrain-api",
+  "name": "omnibrain-ai-proxy-smart",
   "module": "index.ts",
   "type": "module",
   "private": true,
