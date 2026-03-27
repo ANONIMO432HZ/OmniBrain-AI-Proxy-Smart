@@ -106,7 +106,7 @@ cmd_start() {
     nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
     
     echo -e "  Waiting for server to initialize (approx. 10s)..."
-    sleep 2
+    sleep 10
     
     if pgrep -f "index.ts" >/dev/null; then
         echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
@@ -182,11 +182,11 @@ cmd_status() {
 }
 
 cmd_update() {
-    echo -e "${CYAN}Checking for updates...${NC}"
-    # Robust network check
-    git fetch --tags --force >/dev/null 2>&1 || { 
-        echo -e "${RED}[FAIL]${NC} Network error or GitHub unreachable."
-        echo -e "       Check your internet connection and try again."
+    # Fetch changes without silencing EVERYTHING to allow debugging if it fails
+    git fetch --tags --force 2>/tmp/omni_git_err.log || { 
+        echo -e "${RED}[FAIL]${NC} Network/Git error."
+        cat /tmp/omni_git_err.log
+        echo -e "       Check your internet/DNS connection and try again."
         exit 1 
     }
     
