@@ -73,7 +73,7 @@ Compatible con dispositivos ARM legacy (Android 7+).
 
 **Instalación rápida (Copiar y pegar):**
 ```bash
-pkg update && pkg install nodejs-lts git -y && \
+pkg install git -y && \
 git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && \
 cd OmniBrain-AI-Proxy-Smart && chmod +x omni.sh && ./omni.sh install
 ```
@@ -94,22 +94,21 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 
 | Comando | Acción |
 |---------|--------|
-| `./omni.sh install`       | Instalador "One-Click" (Integra CLI + Deps)      |
-| `./omni.sh setup-service` | Configura el proxy como servicio (arranque automático) |
-| `omni start`            | Inicia el proxy (Fondo via sv / Manual auto-detección) |
-| `omni stop`             | Detiene el servidor y limpia procesos huérfanos |
-| `omni restart`          | Reinicia el sistema |
-| `omni logs`             | Visualiza los logs en tiempo real |
-| `omni update`           | Actualizar desde GitHub y reinstalar dependencias |
-| `omni status`           | Muestra el estado del servicio y la versión actual |
-| `omni env`              | Editar claves API (.env) rápidamente |
-| `omni uninstall`        | Eliminación total del CLI y servicios |
+| `./omni.sh install` | Instalador "One-Click" (Integra CLI + Deps) |
+| `omni start` | Inicia el proxy en primer plano (Foreground) |
+| `omni stop` | Detiene el servidor y limpia procesos huérfanos |
+| `omni restart` | Reinicia el sistema |
+| `omni logs` | Visualiza los logs en tiempo real |
+| `omni update` | Actualizar desde GitHub y reinstalar dependencias |
+| `omni status` | Muestra el estado del servicio y la versión actual |
+| `omni env` | Editar claves API (.env) rápidamente |
+| `omni uninstall` | Eliminación total del CLI y servicios |
 
 > [!IMPORTANT]
 > **Backups Automáticos**: Cada vez que ejecutas un comando crítico (como `update`), el sistema genera un respaldo de seguridad en `~/omnibrain-backups/` para proteger tus llaves API y base de datos.
 
 > [!TIP]
-> Si reinicias tu móvil, simplemente abre Termux y el servicio arrancará solo si previamente ejecutaste `setup-service`. De lo contrario, usa `./omni.sh start`.
+> Para mantener el proxy ejecutándose en segundo plano en Termux, se recomienda usar herramientas como `tmux` o `screen`.
 *(En PC con Bun: `bun start:bun`)*
 
 ---

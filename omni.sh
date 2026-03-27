@@ -32,7 +32,6 @@ show_help() {
     echo "  status       Show comprehensive status & version"
     echo "  logs         View real-time proxy activity logs"
     echo "  update       Update from GitHub & reinstall deps"
-    echo "  setup-service   Configure as a persistent Termux service"
     echo "  env          Edit .env configuration file"
     echo "  uninstall    Completely remove CLI and/or Proxy"
     echo "  version|-version|version|-v   Show version info"
@@ -44,7 +43,15 @@ show_help() {
 cmd_install() {
     show_banner "OmniBrain — One-Click Installer" "$CYAN"
     
-    echo -e "1. Integrating CLI into system..."
+    echo -e "1. Checking and installing system dependencies..."
+    if is_termux; then
+        echo "Detected Termux. Ensuring nodejs-lts and nano are present..."
+        pkg update && pkg install -y nodejs-lts nano 2>/dev/null || {
+            echo -e "${RED}[WARN]${NC} System update failed. Attempting to proceed..."
+        }
+    fi
+
+    echo -e "\n2. Integrating CLI into system..."
     
     # Self-clean CRLF line endings (Windows to Linux fix)
     find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
@@ -58,7 +65,7 @@ cmd_install() {
         echo -e "${RED}[FAIL]${NC} No write permission in $PREFIX/bin."
     fi
 
-    echo -e "\n2. Installing dependencies..."
+    echo -e "\n3. Installing project dependencies (NPM)..."
     if command -v bun &>/dev/null; then
         echo "Using Bun for installation (Priority)..."
         bun install
@@ -113,28 +120,15 @@ case "${1:-}" in
         cmd_install
         ;;
     --start|-start|start)
-        if command -v sv &>/dev/null; then
-            echo -e "${CYAN}Starting OmniBrain Proxy as background service...${NC}"
-            sv start omnibrain-proxy || { 
-                echo -e "${RED}[FAIL]${NC} Background service not found."
-                echo -e "Run: ${CYAN}omni setup-service${NC} once."
-                exit 1
-            }
+        echo -e "${CYAN}Starting OmniBrain Proxy in foreground...${NC}"
+        if command -v bun &>/dev/null; then
+            bun run start:bun
         else
-            echo -e "${YELLOW}[INFO]${NC} Manual start (no termux-services detected)...${NC}"
-            if command -v bun &>/dev/null; then
-                bun run start:bun
-            else
-                npm run start:node
-            fi
+            npm run start:node
         fi
         ;;
     --stop|-stop|stop)
-        if command -v sv &>/dev/null; then
-            echo -e "${YELLOW}Stopping OmniBrain-AI-Proxy-Smart...${NC}"
-            sv stop omnibrain-proxy || true
-            sleep 1
-        fi
+        echo -e "${YELLOW}Stopping OmniBrain Proxy processes...${NC}"
         
         # Infallible Search: Catch any process running within the project directory
         # Excludes self PID ($$) to avoid accidental closure of the CLI itself
@@ -148,10 +142,8 @@ case "${1:-}" in
         echo -e "${GREEN}[OK]${NC} Stopped."
         ;;
     --restart|-restart|restart)
-        if command -v sv &>/dev/null; then
-            echo -e "${CYAN}Restarting OmniBrain-AI-Proxy-Smart...${NC}"
-            sv restart omnibrain-proxy
-        fi
+        $0 stop
+        $0 start
         ;;
     --logs|-logs|logs)
         local LOGFILE="$HOME/.termux/services/omnibrain-proxy/log/current"
@@ -168,9 +160,6 @@ case "${1:-}" in
         ;;
     --status|-status|status)
         show_banner "OmniBrain-AI-Proxy — Status" "$CYAN"
-        if command -v sv &>/dev/null; then
-            sv status omnibrain-proxy || echo -e "  Service info: Not configured."
-        fi
         echo -e "Version: v$OMNI_VERSION"
         echo -e "Project: $PROJECT_DIR"
         ;;
@@ -185,9 +174,6 @@ case "${1:-}" in
             npm install
         fi
         echo -e "${GREEN}[OK]${NC}   Updated successfully. Restart the server for changes."
-        ;;
-    --setup-service|-setup-service|setup-service)
-        bash "$PROJECT_DIR/scripts/setup-service.sh"
         ;;
     --uninstall|-uninstall|uninstall)
         cmd_uninstall
