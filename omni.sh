@@ -155,9 +155,11 @@ case "${1:-}" in
             sleep 1
         fi
         
-        # Identify process and force kill if still alive (Catches manual starts too)
+        # Infallible Search: Catch any process running within the project directory
+        # Excludes self PID ($$) to avoid accidental closure of the CLI itself
         local PIDS
-        PIDS=$(pgrep -f "node.*omnibrain-proxy" || echo "")
+        PIDS=$(pgrep -f "$PROJECT_DIR" | grep -v "$$" || echo "")
+        
         if [ -n "$PIDS" ]; then
             echo -e "Cleaning up lingering processes ($PIDS)..."
             kill -9 $PIDS 2>/dev/null || true
