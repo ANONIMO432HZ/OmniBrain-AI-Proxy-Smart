@@ -35,12 +35,13 @@ show_help() {
     echo "  update       Update repo, sync CLI & reinstall deps"
     echo "  env          Edit .env configuration file"
     echo "  uninstall    Completely remove CLI and/or Proxy"
-    echo "  v|version|-v Show version info"
-    echo "  help|-help|-h      Show this help message"
+    echo "  v|version    Show version info"
+    echo "  help|-h      Show this help message"
     echo ""
 }
 
 # ── Command Implementations ──
+
 cmd_install() {
     show_banner "OmniBrain — One-Click Installer" "$CYAN"
     
@@ -88,16 +89,164 @@ cmd_install() {
     echo -e "You can now run ${BOLD}omni start${NC} from anywhere."
 }
 
+cmd_start() {
+    echo -e "${CYAN}Starting OmniBrain Proxy in background...${NC}"
+    # Prevent double starting
+    cmd_stop >/dev/null 2>&1 || true
+    
+    local START_CMD=""
+    if command -v bun &>/dev/null; then
+        START_CMD="bun run start:bun"
+    else
+        START_CMD="npm run start:node"
+    fi
+    
+    # Launch using nohup to survive session close
+    mkdir -p "$PROJECT_DIR/logs"
+    nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
+    
+    sleep 2
+    if pgrep -f "index.ts" >/dev/null; then
+        echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
+        echo -e "     Logs: ${BOLD}omni logs${NC}"
+    else
+        echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"
+    fi
+}
+
+cmd_start_fg() {
+    echo -e "${CYAN}Starting OmniBrain Proxy in foreground...${NC}"
+    if command -v bun &>/dev/null; then
+        bun run start:bun
+    else
+        npm run start:node
+    fi
+}
+
+cmd_stop() {
+    echo -e "${YELLOW}Stopping OmniBrain Proxy processes...${NC}"
+    
+    # Atomic Multi-Session Search: 
+    # Identify processes running 'index.ts' whose CWD is this project
+    local PIDS=""
+    local ALL_CANDIDATES
+    ALL_CANDIDATES=$(pgrep -f "index.ts" || echo "")
+    
+    for pid in $ALL_CANDIDATES; do
+        if [ -d "/proc/$pid" ]; then
+            local PROC_CWD
+            PROC_CWD=$(readlink -f "/proc/$pid/cwd" 2>/dev/null || echo "")
+            if [ "$PROC_CWD" = "$PROJECT_DIR" ] && [ "$pid" != "$$" ]; then
+                PIDS="$PIDS $pid"
+            fi
+        fi
+    done
+    
+    if [ -n "$PIDS" ]; then
+        echo -e "Cleaning up lingering processes ($PIDS)..."
+        kill -9 $PIDS 2>/dev/null || true
+    else
+        echo -e "No active proxy processes found."
+    fi
+    echo -e "${GREEN}[OK]${NC} Stopped."
+}
+
+cmd_logs() {
+    local LOGFILE="$PROJECT_DIR/server.log"
+    # Fallback to old path if present
+    if [ ! -f "$LOGFILE" ]; then
+         LOGFILE="$HOME/.termux/services/omnibrain-proxy/log/current"
+    fi
+    
+    if [ -f "$LOGFILE" ]; then
+         tail -f "$LOGFILE"
+    else
+         echo -e "${RED}[FAIL]${NC} No logs found at $LOGFILE"
+         exit 1
+    fi
+}
+
+cmd_status() {
+    show_banner "OmniBrain-AI-Proxy — Status" "$CYAN"
+    echo -e "Version: v$OMNI_VERSION"
+    echo -e "Project: $PROJECT_DIR"
+    
+    if pgrep -f "index.ts" >/dev/null; then
+        echo -e "Status: ${GREEN}Running${NC}"
+    else
+        echo -e "Status: ${RED}Stopped${NC}"
+    fi
+}
+
+cmd_update() {
+    echo -e "${CYAN}Checking for updates...${NC}"
+    # Robust network check
+    git fetch --tags --force >/dev/null 2>&1 || { 
+        echo -e "${RED}[FAIL]${NC} Network error or GitHub unreachable."
+        echo -e "       Check your internet connection and try again."
+        exit 1 
+    }
+    
+    local LOCAL REMOTE
+    LOCAL=$(git rev-parse HEAD)
+    REMOTE=$(git rev-parse @{u})
+
+    if [ "$LOCAL" = "$REMOTE" ]; then
+        echo -e "${GREEN}[OK]${NC} Already up-to-date (v$OMNI_VERSION)."
+    else
+        echo -e "${YELLOW}[UPDATE]${NC} New version found. Syncing repository..."
+        
+        # Auto-stash local changes (like CRLF cleanups) to allow pull
+        git stash push -m "omni-auto-stash" >/dev/null 2>&1 || true
+        
+        if git pull; then
+            git stash pop >/dev/null 2>&1 || true
+            
+            # Refresh CLI and clean endings
+            find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+            if [ -w "$PREFIX/bin" ]; then
+                ln -sf "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
+                chmod +x "$PROJECT_DIR/omni.sh"
+            fi
+
+            if command -v bun &>/dev/null; then
+                bun install
+            else
+                npm install
+            fi
+            
+            local NEW_VERSION
+            NEW_VERSION=$(grep OMNI_VERSION "$PROJECT_DIR/scripts/lib.sh" | cut -d'"' -f2 || echo "Updated")
+            echo -e "${GREEN}[OK]${NC} Successfully updated to v$NEW_VERSION. Restart for changes."
+        else
+            echo -e "${RED}[FAIL]${NC} Pull failed. Try: git reset --hard origin/main"
+            git stash pop >/dev/null 2>&1 || true
+            exit 1
+        fi
+    fi
+}
+
+cmd_env() {
+    if command -v nano &>/dev/null; then
+        nano "$PROJECT_DIR/.env"
+    elif command -v vi &>/dev/null; then
+        vi "$PROJECT_DIR/.env"
+    else
+        echo -e "${YELLOW}Editing file: $PROJECT_DIR/.env${NC}"
+        cat "$PROJECT_DIR/.env"
+    fi
+}
+
 cmd_uninstall() {
     show_banner "OmniBrain — Uninstaller" "$RED"
-    echo -e "${YELLOW}[WARNING]${NC} This will remove the 'omni' CLI command and background services."
+    echo -e "${YELLOW}[WARNING]${NC} This will remove the 'omni' CLI command and source code if requested."
     read -p "Also delete the source code directory? (y/n): " -n 1 -r
     echo ""
     local DELETE_SRC=$REPLY
 
     # 1. Stop and cleaning up processes
     echo -e "  Stopping and cleaning up processes..."
-    $0 stop >/dev/null 2>&1 || true
+    cmd_stop >/dev/null 2>&1 || true
 
     # 2. Remove symlink
     echo -e "  Removing CLI link from system..."
@@ -113,147 +262,18 @@ cmd_uninstall() {
 
 # ── Main Entry Point ──
 case "${1:-}" in
-    --install|-install|install)
-        cmd_install
-        ;;
-    --start|-start|start)
-        echo -e "${CYAN}Starting OmniBrain Proxy in background...${NC}"
-        # Prevent double starting
-        $0 stop >/dev/null 2>&1 || true
-        
-        local START_CMD=""
-        if command -v bun &>/dev/null; then
-            START_CMD="bun run start:bun"
-        else
-            START_CMD="npm run start:node"
-        fi
-        
-        # Launch using nohup to survive session close
-        mkdir -p "$PROJECT_DIR/logs"
-        nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
-        
-        sleep 2
-        if pgrep -f "index.ts" >/dev/null; then
-            echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
-            echo -e "     Logs: ${BOLD}omni logs${NC}"
-        else
-            echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"
-        fi
-        ;;
-    --start:fg|start:fg)
-        echo -e "${CYAN}Starting OmniBrain Proxy in foreground...${NC}"
-        if command -v bun &>/dev/null; then
-            bun run start:bun
-        else
-            npm run start:node
-        fi
-        ;;
-    --stop|-stop|stop)
-        echo -e "${YELLOW}Stopping OmniBrain Proxy processes...${NC}"
-        
-        # Atomic Multi-Session Search: 
-        # Identify processes running 'index.ts' whose CWD is this project
-        local PIDS=""
-        local ALL_CANDIDATES
-        ALL_CANDIDATES=$(pgrep -f "index.ts" || echo "")
-        
-        for pid in $ALL_CANDIDATES; do
-            if [ -d "/proc/$pid" ]; then
-                local PROC_CWD
-                PROC_CWD=$(readlink -f "/proc/$pid/cwd" 2>/dev/null || echo "")
-                if [ "$PROC_CWD" = "$PROJECT_DIR" ] && [ "$pid" != "$$" ]; then
-                    PIDS="$PIDS $pid"
-                fi
-            fi
-        done
-        
-        if [ -n "$PIDS" ]; then
-            echo -e "Cleaning up lingering processes ($PIDS)..."
-            kill -9 $PIDS 2>/dev/null || true
-        else
-            echo -e "No active proxy processes found for this directory."
-        fi
-        echo -e "${GREEN}[OK]${NC} Stopped."
-        ;;
-    --restart|-restart|restart)
-        $0 stop
-        $0 start
-        ;;
-    --logs|-logs|logs)
-        local LOGFILE="$HOME/.termux/services/omnibrain-proxy/log/current"
-        if [ ! -f "$LOGFILE" ]; then
-             LOGFILE="$PROJECT_DIR/server.log"
-        fi
-        
-        if [ -f "$LOGFILE" ]; then
-             tail -f "$LOGFILE"
-        else
-             echo -e "${RED}[FAIL]${NC} No logs found."
-             exit 1
-        fi
-        ;;
-    --status|-status|status)
-        show_banner "OmniBrain-AI-Proxy — Status" "$CYAN"
-        echo -e "Version: v$OMNI_VERSION"
-        echo -e "Project: $PROJECT_DIR"
-        ;;
-    --update|-update|update)
-        echo -e "${CYAN}Checking for updates...${NC}"
-        git fetch >/dev/null 2>&1 || { echo -e "${RED}[FAIL]${NC} Network error."; exit 1; }
-        
-        LOCAL=$(git rev-parse HEAD)
-        REMOTE=$(git rev-parse @{u})
-
-        if [ "$LOCAL" = "$REMOTE" ]; then
-            echo -e "${GREEN}[OK]${NC} Already up-to-date (v$OMNI_VERSION)."
-        else
-            echo -e "${YELLOW}[UPDATE]${NC} New version found. Syncing repository..."
-            
-            # Auto-stash local changes (like CRLF cleanups) to allow pull
-            git stash push -m "omni-auto-stash" >/dev/null 2>&1 || true
-            
-            if git pull; then
-                git stash pop >/dev/null 2>&1 || true
-                
-                # Refresh CLI and clean endings
-                find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
-                if [ -w "$PREFIX/bin" ]; then
-                    ln -sf "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
-                    chmod +x "$PROJECT_DIR/omni.sh"
-                fi
-
-                if command -v bun &>/dev/null; then
-                    bun install
-                else
-                    npm install
-                fi
-                echo -e "${GREEN}[OK]${NC} Successfully updated to v$(grep OMNI_VERSION "$PROJECT_DIR/scripts/lib.sh" | cut -d'"' -f2). Restart for changes."
-            else
-                echo -e "${RED}[FAIL]${NC} Pull failed. Try: git reset --hard origin/main"
-                git stash pop >/dev/null 2>&1 || true
-                exit 1
-            fi
-        fi
-        ;;
-    --uninstall|-uninstall|uninstall)
-        cmd_uninstall
-        ;;
-    --env|-env|env)
-        if command -v nano &>/dev/null; then
-            nano "$PROJECT_DIR/.env"
-        elif command -v vi &>/dev/null; then
-            vi "$PROJECT_DIR/.env"
-        else
-            echo -e "${YELLOW}Editing file: $PROJECT_DIR/.env${NC}"
-            cat "$PROJECT_DIR/.env"
-        fi
-        ;;
-    v|--version|-version|version|-v)
-        echo "omni CLI v$OMNI_VERSION"
-        ;;
-    --help|-help|help|-h|"")
-        show_help
-        ;;
+    install)    cmd_install ;;
+    start)      cmd_start   ;;
+    start:fg)   cmd_start_fg ;;
+    stop)       cmd_stop    ;;
+    restart)    cmd_stop && cmd_start ;;
+    logs)       cmd_logs    ;;
+    status)     cmd_status  ;;
+    update)     cmd_update  ;;
+    env)        cmd_env     ;;
+    uninstall)  cmd_uninstall ;;
+    v|version|-v|--version) echo "omni CLI v$OMNI_VERSION" ;;
+    help|-h|--help|"")      show_help ;;
     *)
         echo -e "${RED}Unknown command: $1${NC}"
         show_help
