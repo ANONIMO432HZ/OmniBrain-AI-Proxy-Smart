@@ -3,6 +3,7 @@
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+cd "$PROJECT_DIR"
 
 # Load shared library (Single Source of Truth)
 if [ -f "$PROJECT_DIR/scripts/lib.sh" ]; then
@@ -10,7 +11,7 @@ if [ -f "$PROJECT_DIR/scripts/lib.sh" ]; then
 fi
 
 # Fallback values (Single Source of Truth is in lib.sh)
-OMNI_VERSION="${OMNI_VERSION:-1.2.1}"
+OMNI_VERSION="${OMNI_VERSION:-1.2.2}"
 RED="${RED:-\033[0;31m}"
 GREEN="${GREEN:-\033[0;32m}"
 YELLOW="${YELLOW:-\033[1;33m}"
@@ -182,6 +183,7 @@ cmd_status() {
 }
 
 cmd_update() {
+    cd "$PROJECT_DIR"
     local GIT_ERR_LOG="/tmp/omni_git_err.log"
     [ -d "$PREFIX/tmp" ] && GIT_ERR_LOG="$PREFIX/tmp/omni_git_err.log"
 
