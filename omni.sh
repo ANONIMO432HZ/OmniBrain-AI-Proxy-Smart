@@ -105,8 +105,8 @@ cmd_start() {
     mkdir -p "$PROJECT_DIR/logs"
     nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
     
-    echo -e "  Waiting for server to initialize (approx. 15s)..."
-    sleep 15
+    echo -e "  Waiting for server to initialize (approx. 30s)..."
+    sleep 30
     
     if pgrep -f "index.ts" >/dev/null; then
         echo -e "${GREEN}[OK]${NC} Proxy is running in the background."

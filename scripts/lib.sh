@@ -21,7 +21,7 @@ show_banner() {
 }
 
 # ── Project Info ──
-OMNI_VERSION="1.2.1"
+OMNI_VERSION="1.2.2"
 PROJECT_NAME="OmniBrain-AI-Proxy-Smart"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO_URL="https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart"
