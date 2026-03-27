@@ -71,17 +71,13 @@ Ideal para máximo rendimiento y baja latencia.
 ### 📱 Modo Node.js (Optimizado para Termux / Android)
 Compatible con dispositivos ARM legacy (Android 7+).
 1.  **Preparar Termux:** `pkg update && pkg install nodejs-lts git`
-2.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
-3.  **Instalar:** `npm install`
-4.  **Ejecutar (Modo Automático):**
-
+3.  **Instalar (Un solo Click):**
     ```bash
-    chmod +x omni.sh && ./omni.sh setup-service
+    chmod +x omni.sh && ./omni.sh install
     ```
-5.  **Ejecutar (Modo Manual):**
-
+4.  **Iniciar:**
     ```bash
-    ./omni.sh start
+    omni start
     ```
 
 ### 🛠️ Entornos Soportados
@@ -94,17 +90,17 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 
 | Comando | Acción |
 |---------|--------|
+| `./omni.sh install`       | Instalador "One-Click" (Integra CLI + Deps)      |
 | `./omni.sh setup-service` | Configura el proxy como servicio (arranque automático) |
-| `./omni.sh start` | Inicia el centro de opciones de arranque (Fondo/Manual) |
-| `./omni.sh start:manual` | Fuerza la ejecución en primer plano (ideal para logs) |
-| `./omni.sh stop` | Detiene el servidor y limpia procesos huérfanos |
-| `./omni.sh restart` | Reinicia el sistema |
-| `./omni.sh logs` | Visualiza los logs en tiempo real |
-| `./omni.sh update` | Actualizar desde GitHub y reinstalar dependencias |
-| `./omni.sh status` | Muestra el estado del servicio y la versión actual |
-| `./omni.sh env` | Editar claves API (.env) rápidamente |
-| `./omni.sh --version` | Mostrar versión instalada (`-v`) |
-| `./omni.sh --help` | Mostrar menú de ayuda completo (`-h`) |
+| `omni start`            | Inicia el centro de opciones de arranque (Fondo/Manual) |
+| `omni start:manual`     | Fuerza la ejecución en primer plano (ideal para logs) |
+| `omni stop`             | Detiene el servidor y limpia procesos huérfanos |
+| `omni restart`          | Reinicia el sistema |
+| `omni logs`             | Visualiza los logs en tiempo real |
+| `omni update`           | Actualizar desde GitHub y reinstalar dependencias |
+| `omni status`           | Muestra el estado del servicio y la versión actual |
+| `omni env`              | Editar claves API (.env) rápidamente |
+| `omni uninstall`        | Eliminación total del CLI y servicios |
 
 > [!IMPORTANT]
 > **Backups Automáticos**: Cada vez que ejecutas un comando crítico (como `update`), el sistema genera un respaldo de seguridad en `~/omnibrain-backups/` para proteger tus llaves API y base de datos.

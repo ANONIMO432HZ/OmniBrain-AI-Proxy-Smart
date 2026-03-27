@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# omni.sh — OmniBrain-AI-Proxy-Smart Management CLI
+# omni.sh — OmniBrain-AI-Proxy-Smart Management CLI (Professional Version)
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
@@ -25,21 +25,94 @@ show_help() {
     echo "Usage: omni [command]"
     echo ""
     echo "Commands:"
-    echo "  --start|-start|start          Start proxy in background (Termux service)"
-    echo "  --start:manual|start:manual     Start proxy in foreground for debugging"
-    echo "  --stop|-stop|stop           Stop the background proxy"
-    echo "  --restart|-restart|restart      Restart the proxy"
-    echo "  --status|-status|status         Show proxy service status"
-    echo "  --logs|-logs|logs           View live proxy logs"
-    echo "  --update|-update|update         Update the API (git pull + npm install)"
-    echo "  --setup-service|setup-service   Configure as a Termux background service"
+    echo "  --install|-install|install      All-in-one installation & integration"
+    echo "  --start|-start|start          Start proxy (Background/Manual options)"
+    echo "  --start:manual|start:manual     Force foreground execution (Debug)"
+    echo "  --stop|-stop|stop           Stop the background proxy and clean-up"
+    echo "  --restart|-restart|restart      Restart the proxy service"
+    echo "  --status|-status|status         Show comprehensive status & version"
+    echo "  --logs|-logs|logs           View real-time proxy activity logs"
+    echo "  --update|-update|update         Update from GitHub & reinstall deps"
+    echo "  --setup-service|setup-service   Configure as a persistent Termux service"
     echo "  --env|-env|env            Edit .env configuration file"
-    echo "  --version|-version|version|-v   Show version information"
+    echo "  --uninstall|uninstall           Completely remove CLI and/or Proxy"
+    echo "  --version|-version|version|-v   Show version info"
     echo "  --help|-help|help|-h        Show this help message"
     echo ""
 }
 
+# ── Command Implementations ──
+cmd_install() {
+    show_banner "OmniBrain — One-Click Installer" "$CYAN"
+    
+    echo -e "1. Integrating CLI into system..."
+    
+    # Self-clean CRLF line endings (Windows to Linux fix)
+    find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+    
+    if [ -w "$PREFIX/bin" ]; then
+        rm -f "$PREFIX/bin/omni"
+        ln -s "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
+        chmod +x "$PROJECT_DIR/omni.sh"
+        echo -e "${GREEN}[OK]${NC} Command 'omni' created in $PREFIX/bin."
+    else
+        echo -e "${RED}[FAIL]${NC} No write permission in $PREFIX/bin."
+    fi
+
+    echo -e "\n2. Installing dependencies..."
+    if command -v bun &>/dev/null; then
+        echo "Using Bun for installation (Priority)..."
+        bun install
+    else
+        echo "Using NPM for installation..."
+        npm install
+    fi
+    echo -e "${GREEN}[OK]${NC} Dependencies ready."
+
+    echo -e "\n3. Configuring environment..."
+    if [ ! -f "$PROJECT_DIR/.env" ]; then
+        if [ -f "$PROJECT_DIR/.env.example" ]; then
+            cp "$PROJECT_DIR/.env.example" "$PROJECT_DIR/.env"
+            echo -e "${YELLOW}[INFO]${NC} Created .env from example. Don't forget to edit it!"
+        fi
+    fi
+
+    echo -e "\n${BOLD}${GREEN}Installation Complete!${NC}"
+    echo -e "You can now run ${BOLD}omni start${NC} from anywhere."
+}
+
+cmd_uninstall() {
+    show_banner "OmniBrain — Uninstaller" "$RED"
+    echo -e "${YELLOW}[WARNING]${NC} This will remove the 'omni' CLI command and background services."
+    read -p "Also delete the source code directory? (y/n): " -n 1 -r
+    echo ""
+    local DELETE_SRC=$REPLY
+
+    # 1. Stop and disable service using our optimized stop logic
+    echo -e "  Stopping and cleaning up processes..."
+    $0 stop >/dev/null 2>&1 || true
+    
+    if command -v sv &>/dev/null; then
+        sv-disable omnibrain-proxy 2>/dev/null || true
+    fi
+
+    # 2. Remove symlink
+    echo -e "  Removing CLI link from system..."
+    rm -f "$PREFIX/bin/omni"
+
+    if [[ $DELETE_SRC =~ ^[Yy]$ ]]; then
+        echo "Deleting source directory $PROJECT_DIR..."
+        rm -rf "$PROJECT_DIR"
+    fi
+
+    echo -e "${GREEN}[OK]${NC} Uninstallation completed."
+}
+
+# ── Main Entry Point ──
 case "${1:-}" in
+    --install|-install|install)
+        cmd_install
+        ;;
     --start|-start|start)
         show_banner "OmniBrain Proxy - Start Options" "$CYAN"
         
@@ -60,11 +133,10 @@ case "${1:-}" in
             sv start omnibrain-proxy || { 
                 echo -e "${RED}[FAIL]${NC} Background service not found."
                 echo -e "Run: ${CYAN}omni setup-service${NC} to enable persistent background mode."
-                echo -e "Or run: ${YELLOW}omni start:manual${NC} for manual mode."
-                exit 1; 
+                exit 1
             }
         else
-            echo -e "${YELLOW}[INFO]${NC} termux-services not installed. Falling back to [Option 2]...${NC}"
+            echo -e "${YELLOW}[INFO]${NC} termux-services not installed. Falling back to [Option 2]..."
             $0 start:manual
         fi
         ;;
@@ -80,8 +152,10 @@ case "${1:-}" in
         if command -v sv &>/dev/null; then
             echo -e "${YELLOW}Stopping OmniBrain-AI-Proxy-Smart...${NC}"
             sv stop omnibrain-proxy || true
+            sleep 1
         fi
-        # Fallback cleanup
+        
+        # Identify process and force kill if still alive (Catches manual starts too)
         local PIDS
         PIDS=$(pgrep -f "node.*omnibrain-proxy" || echo "")
         if [ -n "$PIDS" ]; then
@@ -99,7 +173,6 @@ case "${1:-}" in
     --logs|-logs|logs)
         local LOGFILE="$HOME/.termux/services/omnibrain-proxy/log/current"
         if [ ! -f "$LOGFILE" ]; then
-             # Standard location if sv-log is not used
              LOGFILE="$PROJECT_DIR/server.log"
         fi
         
@@ -111,7 +184,7 @@ case "${1:-}" in
         fi
         ;;
     --status|-status|status)
-        show_banner "OmniBrain-AI-Proxy — Status" "$PURPLE"
+        show_banner "OmniBrain-AI-Proxy — Status" "$CYAN"
         if command -v sv &>/dev/null; then
             sv status omnibrain-proxy || echo -e "  Service info: Not configured."
         fi
@@ -121,6 +194,8 @@ case "${1:-}" in
     --update|-update|update)
         echo -e "${CYAN}Updating OmniBrain-AI-Proxy-Smart...${NC}"
         git pull
+        find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+        
         if command -v bun &>/dev/null; then
             bun install
         else
@@ -130,6 +205,9 @@ case "${1:-}" in
         ;;
     --setup-service|-setup-service|setup-service)
         bash "$PROJECT_DIR/scripts/setup-service.sh"
+        ;;
+    --uninstall|-uninstall|uninstall)
+        cmd_uninstall
         ;;
     --env|-env|env)
         if command -v nano &>/dev/null; then
