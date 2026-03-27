@@ -112,9 +112,9 @@ cmd_start() {
     
     if pgrep -f "index.ts" >/dev/null; then
         echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
-        # Use OSC 8 hyperlink escape sequence for clickable URL if terminal supports it
         local LINK_URL="http://localhost:3000"
-        echo -e "     URL:  \033]8;;$LINK_URL\033\\${BOLD}${CYAN}$LINK_URL${NC}\033]8;;\033\\"
+        # Print a professional clickable link if supported, using printf for better portability
+        printf "     URL:  \e]8;;%s\e\\\\%b%b%s%b\e]8;;\e\\\\\n" "$LINK_URL" "$BOLD" "$CYAN" "$LINK_URL" "$NC"
         echo -e "     Logs: ${BOLD}omni logs${NC}"
     else
         echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"

@@ -156,10 +156,8 @@ export const landingPageHtml = `<!doctype html>
         <p>Prueba el endpoint <code>POST /chat</code> desde esta página.</p>
 
         <form id="chat-form">
-          <!-- 🔐 Autenticación Fase 2.1 -->
           <label for="local-api-key" style="display:flex; align-items:center; gap:6px;">
              <span>🔑 OmniBrain API Key Local</span>
-             <span style="font-size:0.75rem; color:#94a3b8;">(Default: omnibrain-dev-token)</span>
           </label>
           <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" value="{{DEFAULT_KEY}}" style="margin-bottom: 12px; background:#0e1218;" />
 

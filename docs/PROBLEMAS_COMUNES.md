@@ -200,4 +200,18 @@ Esto garantiza que todos los comandos posteriores (`git fetch`, `npm install`, `
 
 ---
 
+## 🔐 11. Seguridad: Key Local no se auto-rellena en el Tester
+
+**🚨 Síntoma:**
+Al abrir el Dashboard (`http://localhost:3000`), el campo de la API Key aparece vacío y el botón de enviar falla si no se ingresa manualmente.
+
+**🔍 Causa:**
+Por razones estrictas de seguridad, el servidor **no inyecta automáticamente** tu `LOCAL_API_KEY` en el código fuente HTML de la página. Si se hiciera, cualquiera que viera el "Código fuente de la página" o tomara una captura de pantalla del Tester podría ver tu secreto en texto plano.
+
+**✅ Solución:**
+1. Copia tu clave directamente de tu archivo `.env`. (Puedes usar el comando `omni env` para verla rápido).
+2. Pégala en el campo "🔑 OmniBrain API Key Local" al iniciar tu sesión de pruebas.
+
+---
+
 _Última actualización: 2026-03-27 por Antigravity AI (Omni v1.2.2)_

@@ -18,8 +18,7 @@ await ensureDatabaseReady();
 
 // 🛣️ Registro de Rutas
 router.get("/", async () => {
-  const html = landingPageHtml.replace("{{DEFAULT_KEY}}", process.env.LOCAL_API_KEY ?? "omnibrain-dev-token");
-  return new Response(html, {
+  return new Response(landingPageHtml, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
