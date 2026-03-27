@@ -95,12 +95,13 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 | Comando | Acción |
 |---------|--------|
 | `./omni.sh setup-service` | Configura el proxy como servicio (arranque automático) |
-| `./omni.sh start` | Inicia el servidor en segundo plano |
-| `./omni.sh stop` | Detiene el servidor |
+| `./omni.sh start` | Inicia el centro de opciones de arranque (Fondo/Manual) |
+| `./omni.sh start:manual` | Fuerza la ejecución en primer plano (ideal para logs) |
+| `./omni.sh stop` | Detiene el servidor y limpia procesos huérfanos |
 | `./omni.sh restart` | Reinicia el sistema |
-| `./omni.sh logs` | Ver registros de actividad en vivo |
+| `./omni.sh logs` | Visualiza los logs en tiempo real |
 | `./omni.sh update` | Actualizar desde GitHub y reinstalar dependencias |
-| `./omni.sh status` | Verificar el estado del proxy |
+| `./omni.sh status` | Muestra el estado del servicio y la versión actual |
 | `./omni.sh env` | Editar claves API (.env) rápidamente |
 | `./omni.sh --version` | Mostrar versión instalada (`-v`) |
 | `./omni.sh --help` | Mostrar menú de ayuda completo (`-h`) |
