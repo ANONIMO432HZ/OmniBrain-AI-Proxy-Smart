@@ -87,6 +87,8 @@ if (delta?.content) { ... }
 if (delta?.reasoning_content) { ... }
 ```
 
+---
+
 ## 🛑 5. Errores 404 en Cascada por Modelos Obsoletos (Groq)
 
 **🚨 Síntoma:**
@@ -177,4 +179,25 @@ Se implementó una lógica de **Auto-Stash** en el comando `update`:
 
 ---
 
-_Última actualización: 2026-03-27 por Antigravity AI_
+## 📂 10. Error: `fatal: not a git repository` al actualizar
+
+**🚨 Síntoma:**
+Al ejecutar `omni update` desde fuera de la carpeta del proyecto (e.g., desde el home `~`), el proceso falla con:
+`fatal: not a git repository (or any parent up to mount point /)`
+
+**🔍 Causa:**
+Git requiere ejecutarse dentro de un repositorio o sus carpetas hijas. Aunque el script reside en la carpeta correcta, si el usuario lo invoca desde otra ubicación (gracias al enlace simbólico en `/bin`), el shell mantiene el directorio actual del usuario, donde no existe una configuración de Git.
+
+**✅ Solución:**
+Se añadió una instrucción de cambio de directorio forzado al inicio de `omni.sh`:
+
+```bash
+PROJECT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+cd "$PROJECT_DIR"
+```
+
+Esto garantiza que todos los comandos posteriores (`git fetch`, `npm install`, `nohup`) siempre se ejecuten en la raíz del proyecto, sin importar desde dónde se invoque el comando `omni`.
+
+---
+
+_Última actualización: 2026-03-27 por Antigravity AI (Omni v1.2.2)_
