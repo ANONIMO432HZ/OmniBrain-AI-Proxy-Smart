@@ -10,6 +10,7 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
 ---
+## Refactorizado a partir del demo [midudev](https://github.com/midudev/cubepath-bun-api).
 
 ## 🚀 Características Principales
 
