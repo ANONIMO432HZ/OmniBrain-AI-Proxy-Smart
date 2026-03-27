@@ -114,10 +114,10 @@ case "${1:-}" in
             cat "$PROJECT_DIR/.env"
         fi
         ;;
-    version|-v)
+    version|--version|-version|-v)
         echo "omni CLI v$OMNI_VERSION"
         ;;
-    help|-h|"")
+    help|--help|-help|-h|"")
         show_help
         ;;
     *)
