@@ -13,13 +13,7 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 
 ## 🚀 Características Principales
 
-* 🔀 **Smart Routing (Auto Global)**: Algoritmo de cascada que salta de un proveedor a otro en caso de caídas (`429`, `5xx`, `404`) de forma transparente para el cliente.
-* 🛡️ **Resiliencia (Circuit Breaker)**: Protección avanzada que desactiva automáticamente proveedores inestables tras 3 fallos consecutivos con 5 minutos de "enfriamiento".
-* 📈 **Observabilidad en Tiempo Real**: Métricas detalladas por proveedor (latencia, tasa de éxito, errores) almacenadas en DB y consultables vía API.
-* 🔑 **Multi-Key Load Balancing (Rotación)**: Capacidad de añadir múltiples API Keys separadas por comas (`key1,key2,key3`) por proveedor para sortear el agotamiento de cuotas diarias.
-* 🧠 **Thinking & Reasoning Support**: Soporte nativo para extraer razonamiento (CoT) y tokens de razonamiento (`reasoning_tokens`) para compatibilidad con Claude Code y otros agentes avanzados.
-* ⚡ **Extremadamente Rápido**: Respaldado por el runtime de Bun con soporte de Streams (`ReadableStream`) y baja latencia.
-*   📱 **Compatibilidad Termux (Node.js)**: Optimizado para correr en dispositivos móviles (Android/Termux ARMv7) utilizando una capa de base de datos Dual-Runtime (WASM) para máxima portabilidad.
+*   **Smart Routing (Auto Global)**: Algoritmo de cascada que salta de un proveedor a otro en caso de caídas (`429`, `5xx`, `404`) de forma transparente para el cliente.
 
 ---
 
@@ -38,9 +32,9 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 
 El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu string de conexión `DATABASE_URL` sin tocar lógica de negocio:
 
-* **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
-  *   **Dual-Runtime:** Utiliza `bun:sqlite` en Bun (PC) y `sql.js` (WASM) en Node.js (Android/Termux).
-  *   **Persistencia Manual:** En modo Node.js, implementa sincronización automática a disco tras cada escritura para evitar pérdida de datos en el driver WASM.
+*   **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
+    *   **Dual-Runtime:** Utiliza `bun:sqlite` en Bun (PC) y `sql.js` (WASM) en Node.js (Android/Termux).
+    *   **Persistencia Manual:** En modo Node.js, implementa sincronización automática a disco tras cada escritura para evitar pérdida de datos en el driver WASM.
 * **⚡ PostgreSQL (Producción):** `DATABASE_URL=postgres://usuario:pass@host:5432/db`
   * Escala a producción sobre el driver nativo de Bun para bases SQL.
 * **🐳 Dokploy / Docker (Autodetección):** Si inyectas `POSTGRES_HOST` y `POSTGRES_DB` por separado, el backend construirá la url automáticamente ahorrando scripts de entrada.
@@ -68,7 +62,8 @@ Ideal para máximo rendimiento y baja latencia.
 1.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
 2.  **Instalar:** `bun install`
 3.  **Configurar:** Copia el archivo `.env.example` a `.env` y añade tus API Keys.
-4.  **Ejecutar:** 
+4.  **Ejecutar:**
+
     ```bash
     bun start:bun
     ```
@@ -79,10 +74,12 @@ Compatible con dispositivos ARM legacy (Android 7+).
 2.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
 3.  **Instalar:** `npm install`
 4.  **Ejecutar (Modo Automático):**
+
     ```bash
     chmod +x omni.sh && ./omni.sh setup-service
     ```
 5.  **Ejecutar (Modo Manual):**
+
     ```bash
     ./omni.sh start
     ```
@@ -105,6 +102,11 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 | `./omni.sh update` | Actualizar desde GitHub y reinstalar dependencias |
 | `./omni.sh status` | Verificar el estado del proxy |
 | `./omni.sh env` | Editar claves API (.env) rápidamente |
+| `./omni.sh --version` | Mostrar versión instalada (`-v`) |
+| `./omni.sh --help` | Mostrar menú de ayuda completo (`-h`) |
+
+> [!IMPORTANT]
+> **Backups Automáticos**: Cada vez que ejecutas un comando crítico (como `update`), el sistema genera un respaldo de seguridad en `~/omnibrain-backups/` para proteger tus llaves API y base de datos.
 
 > [!TIP]
 > Si reinicias tu móvil, simplemente abre Termux y el servicio arrancará solo si previamente ejecutaste `setup-service`. De lo contrario, usa `./omni.sh start`.
