@@ -182,11 +182,13 @@ cmd_status() {
 }
 
 cmd_update() {
+    local GIT_ERR_LOG="/tmp/omni_git_err.log"
+    [ -d "$PREFIX/tmp" ] && GIT_ERR_LOG="$PREFIX/tmp/omni_git_err.log"
+
     # Fetch changes without silencing EVERYTHING to allow debugging if it fails
-    git fetch --tags --force 2>/tmp/omni_git_err.log || { 
+    git fetch --tags --force 2>"$GIT_ERR_LOG" || { 
         echo -e "${RED}[FAIL]${NC} Network/Git error."
-        cat /tmp/omni_git_err.log
-        echo -e "       Check your internet/DNS connection and try again."
+        cat "$GIT_ERR_LOG" 2>/dev/null || echo "Check your internet/DNS connection."
         exit 1 
     }
     
