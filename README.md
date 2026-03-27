@@ -92,25 +92,25 @@ omni start   # Inicia el Proxy
 ### 🔄 Gestión del Proxy (omni CLI)
 Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux:
 
-| Comando | Acción |
-|---------|--------|
-| `./omni.sh install` | Instalador "One-Click" (Integra CLI + Deps) |
-| `omni start` | Inicia el proxy en Segun Plano (Safe Background) |
-| `omni start:fg` | Inicia el proxy en Primer Plano (Debug Mode) |
-| `omni stop` | Detiene el servidor y limpia procesos huérfanos |
-| `omni restart` | Reinicia el sistema |
-| `omni logs` | Visualiza los logs en tiempo real |
-| `omni update` | Actualizar repo, refrescar CLI y dependencias |
-| `omni status` | Muestra el estado del servicio y la versión actual |
-| `omni env` | Editar claves API (.env) rápidamente |
-| `omni v` | Mostrar versión instalada |
-| `omni uninstall` | Eliminación total del CLI y servicios |
+| Comando | Alias | Acción |
+|---------|-------|--------|
+| `./omni.sh install` | `inst` | Instalador "One-Click" (CLI + Deps) |
+| `omni start` | `strt` | Inicia el proxy (Segundo Plano - 30s wait) |
+| `omni start:fg` | `strt:fg` | Inicia el proxy (Primer Plano - Debug) |
+| `omni stop` | `stp` | Detiene el servidor y limpia procesos |
+| `omni ui` | `open` | Abre el Dashboard en el navegador (**Clickable**) |
+| `omni logs` | `log` | Visualiza los logs en tiempo real |
+| `omni update` | `up` | Actualizar repo, CLI y dependencias |
+| `omni status` | `st` | Muestra estado y versión v1.2.2 |
+| `omni env` | `en` | Editar claves API (.env) rápidamente |
+| `omni v` | `version` | Mostrar versión instalada |
+| `omni uninstall` | `uninst` | Eliminación total del CLI |
 
 > [!IMPORTANT]
 > **Backups Automáticos**: Cada vez que ejecutas un comando crítico (como `update`), el sistema genera un respaldo de seguridad en `~/omnibrain-backups/` para proteger tus llaves API y base de datos.
 
 > [!TIP]
-> Por defecto, `omni start` lanza el proxy en segundo plano de forma segura. Si necesitas depurar o ver errores al instante, usa `omni start:fg`.
+> **Uso del Proxy**: Por defecto, `omni start` lanza el proxy en segundo plano de forma segura. Al finalizar, verás una **URL azul sobre la que puedes hacer clic** para abrirla. También puedes usar `omni ui` en cualquier momento.
 *(En PC con Bun: `bun start:bun`)*
 
 ---

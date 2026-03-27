@@ -33,6 +33,7 @@ show_help() {
     echo "  restart      Restart the proxy service"
     echo "  status       Show comprehensive status & version"
     echo "  logs         View real-time proxy activity logs"
+    echo "  ui           Open Dashboard in the browser"
     echo "  update       Update repo, sync CLI & reinstall deps"
     echo "  env          Edit .env configuration file"
     echo "  uninstall    Completely remove CLI and/or Proxy"
@@ -111,7 +112,9 @@ cmd_start() {
     
     if pgrep -f "index.ts" >/dev/null; then
         echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
-        echo -e "     URL:  ${BOLD}${CYAN}http://localhost:3000${NC}"
+        # Use OSC 8 hyperlink escape sequence for clickable URL if terminal supports it
+        local LINK_URL="http://localhost:3000"
+        echo -e "     URL:  \033]8;;$LINK_URL\033\\${BOLD}${CYAN}$LINK_URL${NC}\033]8;;\033\\"
         echo -e "     Logs: ${BOLD}omni logs${NC}"
     else
         echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"
@@ -267,6 +270,22 @@ cmd_uninstall() {
     echo -e "${GREEN}[OK]${NC} Uninstallation completed."
 }
 
+cmd_browse() {
+    local URL="http://localhost:3000"
+    echo -e "${CYAN}Opening Dashboard...${NC} ($URL)"
+    if is_termux; then
+        termux-open-url "$URL" 2>/dev/null || echo -e "${YELLOW}[TIP]${NC} Install 'termux-api' for better integration."
+    elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
+        start "$URL"
+    elif command -v xdg-open &>/dev/null; then
+        xdg-open "$URL"
+    elif command -v open &>/dev/null; then
+        open "$URL"
+    else
+        echo -e "${RED}[FAIL]${NC} Could not detect browser opener. Access manually at: $URL"
+    fi
+}
+
 # ── Main Entry Point ──
 case "${1:-}" in
     install|--install|inst)    cmd_install ;;
@@ -275,6 +294,7 @@ case "${1:-}" in
     stop|--stop|stp)       cmd_stop    ;;
     restart|--restart|rst)    cmd_stop && cmd_start ;;
     logs|--logs|log)       cmd_logs    ;;
+    ui|--ui|open|browse)   cmd_browse  ;;
     status|--status|st)     cmd_status  ;;
     update|--update|up)     cmd_update  ;;
     env|--env|en)        cmd_env     ;;
