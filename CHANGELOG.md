@@ -5,7 +5,23 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/)
 y este proyecto se adhiere a la convención [Semantic Versioning](https://semver.org/lang/es/).
 
-## [0.6.0] - 2026-03-26
+## [1.2.0] - 2026-03-27
+
+### Añadido (Profesionalización del CLI)
+
+- **Unificación de Comandos**: Simplificación de la sintaxis eliminando prefijos redundantres (`--install` -> `install`).
+- **Modo Foreground Nativo**: Eliminación del sistema de gestión vía `termux-services/sv` por inestabilidad en algunos entornos Android; ahora `omni start` corre en primer plano de forma predecible.
+- **Actualización Inteligente**: El comando `omni update` ahora detecta automáticamente si el repositorio está al día antes de proceder, ahorrando ancho de banda y tiempo.
+- **Auto-Instalación de Dependencias**: El instalador ahora configura automáticamente el entorno (Node.js, Git, Nano) en Termux sin intervención manual previa.
+- **Alias de Accesibilidad**: Nuevo comando ultra-corto `omni v` para consulta rápida de versión.
+- **Logging Svlogd**: Implementada infraestructura para logs profesionales compatibles con `svlogd`.
+
+### Cambiado (CLI & Scripts)
+
+- **Desinstalador Limpio**: Refactorización del comando `uninstall` para limpiar procesos huérfanos y binarios de forma atómica.
+- **Gestión de Versión SSOT**: Centralización de la versión en `lib.sh` como fuente única de verdad.
+
+### [0.6.0] - 2026-03-26
 
 ### Añadido (Dual-Runtime & Termux Support)
 

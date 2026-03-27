@@ -10,7 +10,7 @@ if [ -f "$PROJECT_DIR/scripts/lib.sh" ]; then
 fi
 
 # Fallback values (Single Source of Truth is in lib.sh)
-OMNI_VERSION="${OMNI_VERSION:-1.0.1}"
+OMNI_VERSION="${OMNI_VERSION:-1.2.0}"
 RED="${RED:-\033[0;31m}"
 GREEN="${GREEN:-\033[0;32m}"
 YELLOW="${YELLOW:-\033[1;33m}"
@@ -31,11 +31,11 @@ show_help() {
     echo "  restart      Restart the proxy service"
     echo "  status       Show comprehensive status & version"
     echo "  logs         View real-time proxy activity logs"
-    echo "  update       Update from GitHub & reinstall deps"
+    echo "  update       Update repo, sync CLI & reinstall deps"
     echo "  env          Edit .env configuration file"
     echo "  uninstall    Completely remove CLI and/or Proxy"
-    echo "  version|-version|version|-v   Show version info"
-    echo "  help|-help|help|-h        Show this help message"
+    echo "  v|version|-v Show version info"
+    echo "  help|-help|-h      Show this help message"
     echo ""
 }
 
@@ -94,13 +94,9 @@ cmd_uninstall() {
     echo ""
     local DELETE_SRC=$REPLY
 
-    # 1. Stop and disable service using our optimized stop logic
+    # 1. Stop and cleaning up processes
     echo -e "  Stopping and cleaning up processes..."
     $0 stop >/dev/null 2>&1 || true
-    
-    if command -v sv &>/dev/null; then
-        sv-disable omnibrain-proxy 2>/dev/null || true
-    fi
 
     # 2. Remove symlink
     echo -e "  Removing CLI link from system..."
@@ -164,16 +160,32 @@ case "${1:-}" in
         echo -e "Project: $PROJECT_DIR"
         ;;
     --update|-update|update)
-        echo -e "${CYAN}Updating OmniBrain-AI-Proxy-Smart...${NC}"
-        git pull
-        find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+        echo -e "${CYAN}Checking for updates...${NC}"
+        git fetch >/dev/null 2>&1 || { echo -e "${RED}[FAIL]${NC} Network error."; exit 1; }
         
-        if command -v bun &>/dev/null; then
-            bun install
+        LOCAL=$(git rev-parse HEAD)
+        REMOTE=$(git rev-parse @{u})
+
+        if [ "$LOCAL" = "$REMOTE" ]; then
+            echo -e "${GREEN}[OK]${NC} Already up-to-date (v$OMNI_VERSION)."
         else
-            npm install
+            echo -e "${YELLOW}[UPDATE]${NC} New version found. Downloading..."
+            git pull
+            
+            # Refresh CLI and clean endings
+            find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+            if [ -w "$PREFIX/bin" ]; then
+                ln -sf "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
+                chmod +x "$PROJECT_DIR/omni.sh"
+            fi
+
+            if command -v bun &>/dev/null; then
+                bun install
+            else
+                npm install
+            fi
+            echo -e "${GREEN}[OK]${NC} Successfully updated. Restart the server for changes."
         fi
-        echo -e "${GREEN}[OK]${NC}   Updated successfully. Restart the server for changes."
         ;;
     --uninstall|-uninstall|uninstall)
         cmd_uninstall
@@ -188,7 +200,7 @@ case "${1:-}" in
             cat "$PROJECT_DIR/.env"
         fi
         ;;
-    --version|-version|version|-v)
+    v|--version|-version|version|-v)
         echo "omni CLI v$OMNI_VERSION"
         ;;
     --help|-help|help|-h|"")

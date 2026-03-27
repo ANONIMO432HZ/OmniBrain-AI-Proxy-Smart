@@ -99,9 +99,10 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 | `omni stop` | Detiene el servidor y limpia procesos huérfanos |
 | `omni restart` | Reinicia el sistema |
 | `omni logs` | Visualiza los logs en tiempo real |
-| `omni update` | Actualizar desde GitHub y reinstalar dependencias |
+| `omni update` | Actualizar repo, refrescar CLI y dependencias |
 | `omni status` | Muestra el estado del servicio y la versión actual |
 | `omni env` | Editar claves API (.env) rápidamente |
+| `omni v` | Mostrar versión instalada |
 | `omni uninstall` | Eliminación total del CLI y servicios |
 
 > [!IMPORTANT]
