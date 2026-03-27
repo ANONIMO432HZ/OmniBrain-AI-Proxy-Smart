@@ -280,7 +280,12 @@ export const landingPageHtml = `<!doctype html>
       const restBody = document.getElementById("rest-body");
       const restMeta = document.getElementById("rest-meta");
       const restResult = document.getElementById("rest-result");
+      const apiKeyInput = document.getElementById("local-api-key");
       const quickButtons = document.querySelectorAll(".quick-buttons button");
+
+      // 💾 Carga la clave desde el almacenamiento local del navegador
+      const savedKey = localStorage.getItem("omnibrain_local_key");
+      if (savedKey) apiKeyInput.value = savedKey;
 
       function setLoading(isLoading) {
         send.disabled = isLoading;
@@ -335,7 +340,10 @@ export const landingPageHtml = `<!doctype html>
 
         const model = document.getElementById("model").value.trim();
         const message = document.getElementById("message").value.trim();
-        const localApiKey = document.getElementById("local-api-key").value.trim();
+        const localApiKey = apiKeyInput.value.trim();
+
+        // 💾 Guarda la clave para la próxima vez
+        if (localApiKey) localStorage.setItem("omnibrain_local_key", localApiKey);
 
         if (!message) {
           result.textContent = "Escribe un mensaje para probar la API.";
@@ -488,7 +496,9 @@ export const landingPageHtml = `<!doctype html>
         restResult.textContent = "";
 
         const startedAt = Date.now();
-        const localApiKey = document.getElementById("local-api-key").value.trim();
+        const localApiKey = apiKeyInput.value.trim();
+        // 💾 Guarda la clave para la próxima vez
+        if (localApiKey) localStorage.setItem("omnibrain_local_key", localApiKey);
         try {
           const response = await fetch(path, {
             method,
