@@ -93,7 +93,9 @@ case "${1:-}" in
         ;;
     update)
         echo -e "${CYAN}Updating OmniBrain from GitHub...${NC}"
-        git pull origin experimental
+        # Detect current branch or default to main
+        CURRENT_BRANCH=$(git branch --show-current || echo "main")
+        git pull origin "$CURRENT_BRANCH"
         if command -v bun &>/dev/null; then
             bun install
         else
