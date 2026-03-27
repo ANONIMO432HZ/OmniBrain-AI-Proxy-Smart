@@ -173,6 +173,7 @@ El sistema de actualización intenta realizar un `git pull` para obtener el cód
 
 **✅ Solución:**
 Se implementó una lógica de **Auto-Stash** en el comando `update`:
+
 1. El script ejecuta `git stash` para guardar temporalmente los cambios locales.
 2. Realiza el `git pull` con éxito.
 3. Ejecuta `git stash pop` para volver a aplicar los cambios locales sobre la nueva versión descargada.
@@ -209,7 +210,8 @@ Al abrir el Dashboard (`http://localhost:3000`), el campo de la API Key aparece 
 Esta es una **decisión de diseño consciente** por seguridad. El campo `OmniBrain API Key Local` actúa como una "puerta de seguridad" (_Security Gate_). Si el servidor rellenara la clave automáticamente, cualquier persona con acceso a tu red local o dispositivo podría usar tu saldo de APIs simplemente abriendo la URL.
 
 **✅ Solución:**
-1. Debes ingresar manualmente el valor de tu `LOCAL_API_KEY` definido en el archivo `.env`. 
+
+1. Debes ingresar manualmente el valor de tu `LOCAL_API_KEY` definido en el archivo `.env`.
 2. Puedes encontrar este valor rápidamente ejecutando el comando `omni env` o abriendo el archivo `.env` en la raíz del proyecto.
 3. El campo es de tipo contraseña (`•••••`), por lo que tu clave no será visible para personas que miren tu pantalla durante las pruebas.
 

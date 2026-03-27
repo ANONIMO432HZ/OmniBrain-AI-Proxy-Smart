@@ -13,7 +13,7 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 
 ## 🚀 Características Principales
 
-*   **Smart Routing (Auto Global)**: Algoritmo de cascada que salta de un proveedor a otro en caso de caídas (`429`, `5xx`, `404`) de forma transparente para el cliente.
+* **Smart Routing (Auto Global)**: Algoritmo de cascada que salta de un proveedor a otro en caso de caídas (`429`, `5xx`, `404`) de forma transparente para el cliente.
 
 ---
 
@@ -32,9 +32,9 @@ Un enrutador inteligente y proxy de alto rendimiento para APIs de Inteligencia A
 
 El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu string de conexión `DATABASE_URL` sin tocar lógica de negocio:
 
-*   **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
-    *   **Dual-Runtime:** Utiliza `bun:sqlite` en Bun (PC) y `sql.js` (WASM) en Node.js (Android/Termux).
-    *   **Persistencia Manual:** En modo Node.js, implementa sincronización automática a disco tras cada escritura para evitar pérdida de datos en el driver WASM.
+* **🔌 SQLite (Local / Dev):** `DATABASE_URL=./data/api.db` (Por defecto)
+  * **Dual-Runtime:** Utiliza `bun:sqlite` en Bun (PC) y `sql.js` (WASM) en Node.js (Android/Termux).
+  * **Persistencia Manual:** En modo Node.js, implementa sincronización automática a disco tras cada escritura para evitar pérdida de datos en el driver WASM.
 * **⚡ PostgreSQL (Producción):** `DATABASE_URL=postgres://usuario:pass@host:5432/db`
   * Escala a producción sobre el driver nativo de Bun para bases SQL.
 * **🐳 Dokploy / Docker (Autodetección):** Si inyectas `POSTGRES_HOST` y `POSTGRES_DB` por separado, el backend construirá la url automáticamente ahorrando scripts de entrada.
@@ -58,20 +58,35 @@ El sistema conmuta dinámicamente entre **SQLite** y **PostgreSQL** según tu st
 El proyecto es compatible con arquitecturas x86 y ARM (32/64 bits).
 
 ### ⚡ Modo Bun (Recomendado para PC / Servidores)
+
 Ideal para máximo rendimiento y baja latencia.
-1.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
-2.  **Instalar:** `bun install`
-3.  **Configurar:** Copia el archivo `.env.example` a `.env` y añade tus API Keys.
-4.  **Ejecutar:**
+
+1. **Clonar:**
+
+    ```bash
+    git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart
+    ```
+
+2. **Instalar:**
+
+    ```bash
+    bun install
+    ```
+
+3. **Configurar:** Copia el archivo `.env.example` a `.env` y añade tus API Keys.
+
+4. **Ejecutar:**
 
     ```bash
     bun start:bun
     ```
 
 ### 📱 Modo Node.js (Termux / Android)
+
 Compatible con dispositivos ARM legacy (Android 7+).
 
-**Instalación rápida (Copiar y pegar):**
+**Instalación rápida (Copiar y pegar en Termux):**
+
 ```bash
 pkg install git -y && \
 git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && \
@@ -79,17 +94,20 @@ cd OmniBrain-AI-Proxy-Smart && chmod +x omni.sh && ./omni.sh install
 ```
 
 **Configuración e Inicio:**
+
 ```bash
 omni env     # Configura tus API Keys
 omni start   # Inicia el Proxy
 ```
 
 ### 🛠️ Entornos Soportados
-*   **Android**: 7.0 hasta 14.0+ (ARMv7/ARMv8) vía Termux.
-*   **Servidores**: Ubuntu, Debian, Alpine (Docker).
-*   **PC**: Windows (WSL2), macOS, Linux.
+
+* **Android**: 7.0 hasta 14.0+ (ARMv7/ARMv8) vía Termux.
+* **Servidores**: Ubuntu, Debian, Alpine (Docker).
+* **PC**: Windows (WSL2), macOS, Linux.
 
 ### 🔄 Gestión del Proxy (omni CLI)
+
 Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux:
 
 | Comando | Alias | Acción |
@@ -159,4 +177,4 @@ El proyecto está listo para producción con una imagen optimizada basada en Alp
 
 ---
 
-_Desarrollado con ❤️ sobre Bun v1.3.11_
+*Desarrollado con ❤️ sobre Bun v1.3.11*

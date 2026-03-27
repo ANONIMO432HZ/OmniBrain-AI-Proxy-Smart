@@ -41,12 +41,12 @@ OpenClaw se beneficia del **Circuit Breaker** de OmniBrain para evitar interrupc
 
 Si usas el asistente interactivo de OpenClaw:
 
-1.  **Model/auth provider**: Selecciona `Custom Provider`.
-2.  **API Base URL**: Ingresa `http://localhost:3000/v1`.
-3.  **API Key**: Selecciona `Paste API key now` e ingresa tu `LOCAL_API_KEY`.
-4.  **Endpoint compatibility**: Selecciona `OpenAI-compatible (/chat/completions)`.
-5.  **Model ID**: Ingresa `auto` (para usar el Smart Routing global).
-6.  **Endpoint ID**: Asigna un nombre (ej: `omnibrain-api`).
+1. **Model/auth provider**: Selecciona `Custom Provider`.
+2. **API Base URL**: Ingresa `http://localhost:3000/v1`.
+3. **API Key**: Selecciona `Paste API key now` e ingresa tu `LOCAL_API_KEY`.
+4. **Endpoint compatibility**: Selecciona `OpenAI-compatible (/chat/completions)`.
+5. **Model ID**: Ingresa `auto` (para usar el Smart Routing global).
+6. **Endpoint ID**: Asigna un nombre (ej: `omnibrain-api`).
 
 ### Configuración Manual (`~/.openclaw/openclaw.json`)
 

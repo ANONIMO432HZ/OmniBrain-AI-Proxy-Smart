@@ -38,7 +38,7 @@ Hacer correr **OmniBrain-API** en Node.js sobre Moto G6 (armv7l / Android 9 / Te
 
 ## 📋 Pasos Pendientes para el Siguiente Agente
 
-6. **Probar servidor en Termux:**
+1. **Probar servidor en Termux:**
 
    ```bash
    ssh -i C:\Users\UNKNOWN\.ssh\id_antigravity -p 8022 u0_a143@192.168.0.193
@@ -46,19 +46,19 @@ Hacer correr **OmniBrain-API** en Node.js sobre Moto G6 (armv7l / Android 9 / Te
    node --import tsx/esm index.ts
    ```
 
-7. **Probar API desde otra sesión o PC:**
+2. **Probar API desde otra sesión o PC:**
 
    ```bash
    curl http://192.168.0.193:3000/health
    # Debería responder {"status":"ok"}
    ```
 
-8. **Confirmar que OpenClaw y OmniBrain no colisionen en puertos:**
+3. **Confirmar que OpenClaw y OmniBrain no colisionen en puertos:**
    - OpenClaw gateway: `18789`
    - OpenClaw ttyd: `7681`
    - OmniBrain-API: `3000` ← libre, sin conflicto.
 
-9. **Configurar `.env` en Termux** con las API Keys necesarias (GROQ, OPENROUTER, etc.):
+4. **Configurar `.env` en Termux** con las API Keys necesarias (GROQ, OPENROUTER, etc.):
 
    ```bash
    cp ~/omnibrain-api-src/.env.example ~/omnibrain-api-src/.env

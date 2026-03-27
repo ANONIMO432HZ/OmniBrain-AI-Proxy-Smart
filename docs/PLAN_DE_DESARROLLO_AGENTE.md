@@ -125,6 +125,7 @@ Capacidades lógicas que el proxy ejecutará de forma autónoma para mejorar la 
 ---
 
 ## 📦 Plan de Ejecución Inmediato
+
 - [x] Crear el archivo `.env` con las Keys Globales (Cerebras, Groq, OpenRouter, Z.AI).
 - [x] Implementar la interfaz `AIProvider` incluyendo el parámetro `tools`.
 - [x] Levantar el servidor Bun en un puerto local y testear una llamada `curl` con soporte para Thinking y streaming robusto.

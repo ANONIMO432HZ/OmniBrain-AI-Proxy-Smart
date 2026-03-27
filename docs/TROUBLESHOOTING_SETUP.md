@@ -17,19 +17,26 @@ Esta guía documenta los desafíos técnicos encontrados durante la configuraci�
 ## 🦾 Soluciones en Detalle
 
 ### 1. Sincronización de Claves API (Proxy)
+
 Al cambiar la clave en el archivo `.env` del servidor, el cliente (OpenClaw o el Tester del navegador) queda "huérfano".
-*   **Solución**: Se modificó `index.ts` para que la **Landing Page** detecte la clave del entorno y la ponga por defecto en el campo de texto. Esto evita errores humanos de "copy-paste".
-*   **Aprendizaje**: Siempre que se cambie la seguridad del proxy, hay que propagar el cambio al archivo `~/.openclaw/openclaw.json`.
+
+* **Solución**: Se modificó `index.ts` para que la **Landing Page** detecte la clave del entorno y la ponga por defecto en el campo de texto. Esto evita errores humanos de "copy-paste".
+* **Aprendizaje**: Siempre que se cambie la seguridad del proxy, hay que propagar el cambio al archivo `~/.openclaw/openclaw.json`.
 
 ### 2. Gestión de Túneles SSH (PC a Móvil)
+
 El uso de `-L 18789:127.0.0.1:18789` es sensible. Si se interrumpe la conexión pero el proceso `ssh.exe` sigue vivo en Windows, el puerto queda bloqueado.
-*   **Solución**: Antes de relanzar el túnel, es recomendable limpiar procesos locales con `taskkill /F /IM ssh.exe`.
-*   **Importante**: El comando del túnel **SOLO debe ejecutarse en la PC**, nunca dentro de Termux para conectar "hacia fuera".
+
+* **Solución**: Antes de relanzar el túnel, es recomendable limpiar procesos locales con `taskkill /F /IM ssh.exe`.
+* **Importante**: El comando del túnel **SOLO debe ejecutarse en la PC**, nunca dentro de Termux para conectar "hacia fuera".
 
 ### 3. Configuración de OpenClaw en Android
+
 OpenClaw espera ser ejecutado en PC. En Android:
-*   **Gateway**: El comando `openclaw gateway start` no está soportado (servicios systemd). Se debe usar `openclaw gateway run` manualmente o con `nohup`.
-*   **CORS**: Si accedes al Dashboard por IP (`http://192.168.x.x:18789`), debes configurar los orígenes en la sección `gateway.controlUi`:
+
+* **Gateway**: El comando `openclaw gateway start` no está soportado (servicios systemd). Se debe usar `openclaw gateway run` manualmente o con `nohup`.
+* **CORS**: Si accedes al Dashboard por IP (`http://192.168.x.x:18789`), debes configurar los orígenes en la sección `gateway.controlUi`:
+
     ```json
     "allowedOrigins": [
       "http://localhost:18789",
@@ -42,10 +49,11 @@ OpenClaw espera ser ejecutado en PC. En Android:
 ## 🚀 Recomendaciones de Setup del Proxy
 
 Para un despliegue exitoso desde cero:
-1.  **Levantar el Proxy**: Asegurar que `LOCAL_API_KEY` sea sólida y esté en el `.env`.
-2.  **Verificar el Health Check**: Llamar a `http://localhost:3000/health` antes de configurar clientes.
-3.  **Onboarding de Clientes**: Usar `openclaw onboard` y elegir el proveedor `Custom`. Poner la URL base con el `/v1` al final: `http://localhost:3000/v1`.
-4.  **Uso de Modelo `auto`**: OmniBrain está optimizado para recibir `auto` y decidir en milisegundos qué proveedor tiene el menor tiempo de respuesta en ese momento.
+
+1. **Levantar el Proxy**: Asegurar que `LOCAL_API_KEY` sea sólida y esté en el `.env`.
+2. **Verificar el Health Check**: Llamar a `http://localhost:3000/health` antes de configurar clientes.
+3. **Onboarding de Clientes**: Usar `openclaw onboard` y elegir el proveedor `Custom`. Poner la URL base con el `/v1` al final: `http://localhost:3000/v1`.
+4. **Uso de Modelo `auto`**: OmniBrain está optimizado para recibir `auto` y decidir en milisegundos qué proveedor tiene el menor tiempo de respuesta en ese momento.
 
 ---
 > [!IMPORTANT]
