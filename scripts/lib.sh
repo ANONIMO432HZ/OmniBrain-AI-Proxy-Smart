@@ -12,6 +12,14 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 NC='\033[0m'
 
+show_banner() {
+    local TITLE="$1"
+    local COLOR="${2:-$PURPLE}"
+    echo -e "${BOLD}========================================${NC}"
+    echo -e "${COLOR}  ${BOLD}$TITLE${NC}"
+    echo -e "${BOLD}========================================${NC}"
+}
+
 # ── Project Info ──
 PROJECT_NAME="OmniBrain-AI-Proxy-Smart"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
