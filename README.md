@@ -78,9 +78,13 @@ Compatible con dispositivos ARM legacy (Android 7+).
 1.  **Preparar Termux:** `pkg update && pkg install nodejs-lts git`
 2.  **Clonar:** `git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && cd OmniBrain-AI-Proxy-Smart`
 3.  **Instalar:** `npm install`
-4.  **Ejecutar:** 
+4.  **Ejecutar (Modo Automático):**
     ```bash
-    npm run start:node
+    chmod +x omni.sh && ./omni.sh setup-service
+    ```
+5.  **Ejecutar (Modo Manual):**
+    ```bash
+    ./omni.sh start
     ```
 
 ### 🛠️ Entornos Soportados
@@ -88,11 +92,22 @@ Compatible con dispositivos ARM legacy (Android 7+).
 *   **Servidores**: Ubuntu, Debian, Alpine (Docker).
 *   **PC**: Windows (WSL2), macOS, Linux.
 
-### 🔄 Reactivación (Post-Reinicio)
-Si tu dispositivo se apaga o reinicias Termux, ejecuta esto para volver a activar el proxy:
-```bash
-cd ~/OmniBrain-AI-Proxy-Smart && npm run start:node
-```
+### 🔄 Gestión del Proxy (omni CLI)
+Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux:
+
+| Comando | Acción |
+|---------|--------|
+| `./omni.sh setup-service` | Configura el proxy como servicio (arranque automático) |
+| `./omni.sh start` | Inicia el servidor en segundo plano |
+| `./omni.sh stop` | Detiene el servidor |
+| `./omni.sh restart` | Reinicia el sistema |
+| `./omni.sh logs` | Ver registros de actividad en vivo |
+| `./omni.sh update` | Actualizar desde GitHub y reinstalar dependencias |
+| `./omni.sh status` | Verificar el estado del proxy |
+| `./omni.sh env` | Editar claves API (.env) rápidamente |
+
+> [!TIP]
+> Si reinicias tu móvil, simplemente abre Termux y el servicio arrancará solo si previamente ejecutaste `setup-service`. De lo contrario, usa `./omni.sh start`.
 *(En PC con Bun: `bun start:bun`)*
 
 ---
