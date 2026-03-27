@@ -145,4 +145,36 @@ return Response.json(
 
 ---
 
-_Última actualización: 2026-03-24 por Antigravity AI_
+## 🐚 8. Error de CLI: `local: can only be used in a function`
+
+**🚨 Síntoma:**
+Al intentar ejecutar `omni start` u otros comandos, la terminal de Termux devuelve:
+`/data/data/com.termux/files/usr/bin/omni: line 124: local: can only be used in a function`
+
+**🔍 Causa:**
+En Bash, la palabra clave `local` se utiliza para declarar variables con ámbito restringido, pero **solo es válida dentro de una función**. El CLI original tenía lógica directamente en bloques `case` fuera de funciones, lo que causaba un error de sintaxis fatal en algunas versiones de Bash/Dash.
+
+**✅ Solución:**
+Refactorizar el script `omni.sh` para encapsular toda la lógica de comandos en funciones dedicadas (`cmd_start`, `cmd_stop`, etc.) y llamarlas desde el punto de entrada principal. Esto permite el uso correcto de `local` y mejora la legibilidad.
+
+---
+
+## 🐙 9. Bloqueo de `omni update` (Git Merge Conflict)
+
+**🚨 Síntoma:**
+Al ejecutar `omni update`, el proceso se detiene con el error:
+`error: Your local changes to the following files would be overwritten by merge: omni.sh`
+`Please commit your changes or stash them before you merge. Aborting`
+
+**🔍 Causa:**
+El sistema de actualización intenta realizar un `git pull` para obtener el código más reciente. Si el script `omni.sh` ha sido modificado localmente (por ejemplo, automáticamente por el conversor de finales de línea CRLF), Git bloquea la descarga para evitar perder los cambios locales.
+
+**✅ Solución:**
+Se implementó una lógica de **Auto-Stash** en el comando `update`:
+1. El script ejecuta `git stash` para guardar temporalmente los cambios locales.
+2. Realiza el `git pull` con éxito.
+3. Ejecuta `git stash pop` para volver a aplicar los cambios locales sobre la nueva versión descargada.
+
+---
+
+_Última actualización: 2026-03-27 por Antigravity AI_

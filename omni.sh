@@ -105,9 +105,12 @@ cmd_start() {
     mkdir -p "$PROJECT_DIR/logs"
     nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
     
+    echo -e "  Waiting for server to initialize (approx. 10s)..."
     sleep 2
+    
     if pgrep -f "index.ts" >/dev/null; then
         echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
+        echo -e "     URL:  ${BOLD}${CYAN}http://localhost:3000${NC}"
         echo -e "     Logs: ${BOLD}omni logs${NC}"
     else
         echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"
