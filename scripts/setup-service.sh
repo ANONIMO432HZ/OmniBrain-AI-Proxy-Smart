@@ -50,9 +50,10 @@ else
 fi
 EOF
     
-    if diff "$RUN_SCRIPT" "$TMP_RUN" &>/dev/null; then
+    if diff "$RUN_SCRIPT" "$TMP_RUN" >/dev/null 2>&1; then
         rm -f "$TMP_RUN"
-        if sv status "$SERVICE_NAME" &>/dev/null || [ -L "$PREFIX/var/service/$SERVICE_NAME" ]; then
+        # Check if service is active without showing errors
+        if sv status "$SERVICE_NAME" >/dev/null 2>&1 || [ -L "$PREFIX/var/service/$SERVICE_NAME" ]; then
              echo -e "${GREEN}[OK]${NC}   Service is already active and up-to-date. Skipping."
              exit 0
         fi
@@ -62,8 +63,9 @@ fi
 
 # 3. Create/Update Service structure
 echo -e "  Configuring background service for $PROJECT_NAME..."
-mkdir -p "$TERMUX_SV_DIR"
+mkdir -p "$TERMUX_SV_DIR/log"
 
+# Main run script
 cat > "$RUN_SCRIPT" <<EOF
 #!/usr/bin/env bash
 # Termux service definition for OmniBrain Proxy
@@ -85,16 +87,22 @@ else
 fi
 EOF
 
-chmod +x "$RUN_SCRIPT"
+# Log run script (Professional Logging)
+cat > "$TERMUX_SV_DIR/log/run" <<EOF
+#!/usr/bin/env bash
+exec svlogd -tt ./
+EOF
+
+chmod +x "$RUN_SCRIPT" "$TERMUX_SV_DIR/log/run"
 
 # 4. Enable Service (Conditional)
 echo -e "  Activating service..."
 if [ ! -L "$PREFIX/var/service/$SERVICE_NAME" ]; then
-    sv-enable "$SERVICE_NAME" 2>/dev/null || true
+    sv-enable "$SERVICE_NAME" >/dev/null 2>&1 || true
 fi
 
-# Try to start it if it's not starting
-sv start "$SERVICE_NAME" 2>/dev/null || true
+# Try to start it quietly if it's not starting
+sv start "$SERVICE_NAME" >/dev/null 2>&1 || true
 
 echo -e "${GREEN}[OK]${NC}   Service configured and activated."
 echo -e "       Use 'omni stop' to stop it."

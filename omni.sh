@@ -25,19 +25,18 @@ show_help() {
     echo "Usage: omni [command]"
     echo ""
     echo "Commands:"
-    echo "  --install|-install|install      All-in-one installation & integration"
-    echo "  --start|-start|start          Start proxy (Background/Manual options)"
-    echo "  --start:manual|start:manual     Force foreground execution (Debug)"
-    echo "  --stop|-stop|stop           Stop the background proxy and clean-up"
-    echo "  --restart|-restart|restart      Restart the proxy service"
-    echo "  --status|-status|status         Show comprehensive status & version"
-    echo "  --logs|-logs|logs           View real-time proxy activity logs"
-    echo "  --update|-update|update         Update from GitHub & reinstall deps"
-    echo "  --setup-service|setup-service   Configure as a persistent Termux service"
-    echo "  --env|-env|env            Edit .env configuration file"
-    echo "  --uninstall|uninstall           Completely remove CLI and/or Proxy"
-    echo "  --version|-version|version|-v   Show version info"
-    echo "  --help|-help|help|-h        Show this help message"
+    echo "  install      All-in-one installation & integration"
+    echo "  start        Start proxy (Standard & Auto-Daemon)"
+    echo "  stop         Stop the background proxy and clean-up"
+    echo "  restart      Restart the proxy service"
+    echo "  status       Show comprehensive status & version"
+    echo "  logs         View real-time proxy activity logs"
+    echo "  update       Update from GitHub & reinstall deps"
+    echo "  setup-service   Configure as a persistent Termux service"
+    echo "  env          Edit .env configuration file"
+    echo "  uninstall    Completely remove CLI and/or Proxy"
+    echo "  version|-version|version|-v   Show version info"
+    echo "  help|-help|help|-h        Show this help message"
     echo ""
 }
 
@@ -114,38 +113,20 @@ case "${1:-}" in
         cmd_install
         ;;
     --start|-start|start)
-        show_banner "OmniBrain Proxy - Start Options" "$CYAN"
-        
-        echo -e "${CYAN}[Option 1: Background Service (Recommended)]${NC}"
-        echo -e "  - Description: Runs as a persistent daemon via termux-services."
-        echo -e "  - Benefits: Auto-restart on crash, survives SSH disconnect, auto-start on boot."
-        echo -e "  - Usage: ${BOLD}omni start${NC}"
-        echo -e ""
-        echo -e "${YELLOW}[Option 2: Foreground Manual (Fast Debug)]${NC}"
-        echo -e "  - Description: Runs directly in your current terminal session."
-        echo -e "  - Benefits: Instant log output, close with Ctrl+C, best for quick debugging."
-        echo -e "  - Usage: ${BOLD}omni start:manual${NC}"
-        echo -e ""
-        echo -e "${BOLD}-----------------------------------------${NC}"
-        
         if command -v sv &>/dev/null; then
-            echo -e "${GREEN}Executing [Option 1] now...${NC}"
+            echo -e "${CYAN}Starting OmniBrain Proxy as background service...${NC}"
             sv start omnibrain-proxy || { 
                 echo -e "${RED}[FAIL]${NC} Background service not found."
-                echo -e "Run: ${CYAN}omni setup-service${NC} to enable persistent background mode."
+                echo -e "Run: ${CYAN}omni setup-service${NC} once."
                 exit 1
             }
         else
-            echo -e "${YELLOW}[INFO]${NC} termux-services not installed. Falling back to [Option 2]..."
-            $0 start:manual
-        fi
-        ;;
-    --start:manual|start:manual)
-        echo -e "${YELLOW}Running OmniBrain Proxy directly (Foreground)...${NC}"
-        if command -v bun &>/dev/null; then
-            bun run start:bun
-        else
-            npm run start:node
+            echo -e "${YELLOW}[INFO]${NC} Manual start (no termux-services detected)...${NC}"
+            if command -v bun &>/dev/null; then
+                bun run start:bun
+            else
+                npm run start:node
+            fi
         fi
         ;;
     --stop|-stop|stop)

@@ -68,17 +68,21 @@ Ideal para máximo rendimiento y baja latencia.
     bun start:bun
     ```
 
-### 📱 Modo Node.js (Optimizado para Termux / Android)
+### 📱 Modo Node.js (Termux / Android)
 Compatible con dispositivos ARM legacy (Android 7+).
-1.  **Preparar Termux:** `pkg update && pkg install nodejs-lts git`
-3.  **Instalar (Un solo Click):**
-    ```bash
-    chmod +x omni.sh && ./omni.sh install
-    ```
-4.  **Iniciar:**
-    ```bash
-    omni start
-    ```
+
+**Instalación rápida (Copiar y pegar):**
+```bash
+pkg update && pkg install nodejs-lts git -y && \
+git clone https://github.com/ANONIMO432HZ/OmniBrain-AI-Proxy-Smart.git && \
+cd OmniBrain-AI-Proxy-Smart && chmod +x omni.sh && ./omni.sh install
+```
+
+**Configuración e Inicio:**
+```bash
+omni env     # Configura tus API Keys
+omni start   # Inicia el Proxy
+```
 
 ### 🛠️ Entornos Soportados
 *   **Android**: 7.0 hasta 14.0+ (ARMv7/ARMv8) vía Termux.
@@ -92,8 +96,7 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 |---------|--------|
 | `./omni.sh install`       | Instalador "One-Click" (Integra CLI + Deps)      |
 | `./omni.sh setup-service` | Configura el proxy como servicio (arranque automático) |
-| `omni start`            | Inicia el centro de opciones de arranque (Fondo/Manual) |
-| `omni start:manual`     | Fuerza la ejecución en primer plano (ideal para logs) |
+| `omni start`            | Inicia el proxy (Fondo via sv / Manual auto-detección) |
 | `omni stop`             | Detiene el servidor y limpia procesos huérfanos |
 | `omni restart`          | Reinicia el sistema |
 | `omni logs`             | Visualiza los logs en tiempo real |
