@@ -200,18 +200,18 @@ Esto garantiza que todos los comandos posteriores (`git fetch`, `npm install`, `
 
 ---
 
-## 🔐 11. Seguridad: Cómo se maneja la Key Local en el Tester
+## 🔐 11. Seguridad: "Security Gate" en el Tester (Ingreso Manual)
 
 **🚨 Síntoma:**
-Al abrir el Dashboard (`http://localhost:3000`), el campo de la API Key se rellena solo (visto como puntos `•••••`), pero si miras el "Código fuente de la página" (`Ctrl+U`), el campo aparece vacío: `<input type="password" id="local-api-key" ... />`.
+Al abrir el Dashboard (`http://localhost:3000`), el campo de la API Key aparece siempre vacío.
 
 **🔍 Causa:**
-Hemos implementado un sistema de **Ingesta Silenciosa**. El servidor no inyecta tu clave directamente en el HTML (lo cual sería un riesgo si compartes capturas de pantalla o código). En su lugar, un script de JavaScript consulta un endpoint seguro (`/v1/config/default-key`) tras bambalinas y rellena el campo en la memoria del navegador.
+Esta es una **decisión de diseño consciente** por seguridad. El campo `OmniBrain API Key Local` actúa como una "puerta de seguridad" (_Security Gate_). Si el servidor rellenara la clave automáticamente, cualquier persona con acceso a tu red local o dispositivo podría usar tu saldo de APIs simplemente abriendo la URL.
 
 **✅ Solución:**
-1. No necesitas hacer nada, el sistema se auto-rellena para tu comodidad.
-2. Si deseas cambiarla, simplemente escribe la nueva clave sobre el campo.
-3. El valor solo es visible en el Inspector de Elementos si lo cambias manualmente a `type="text"`, lo cual es el comportamiento estándar de seguridad de navegadores.
+1. Debes ingresar manualmente el valor de tu `LOCAL_API_KEY` definido en el archivo `.env`. 
+2. Puedes encontrar este valor rápidamente ejecutando el comando `omni env` o abriendo el archivo `.env` en la raíz del proyecto.
+3. El campo es de tipo contraseña (`•••••`), por lo que tu clave no será visible para personas que miren tu pantalla durante las pruebas.
 
 ---
 

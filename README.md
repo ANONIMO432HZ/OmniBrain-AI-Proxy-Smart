@@ -110,7 +110,8 @@ Hemos desarrollado una herramienta dedicada para facilitar la gestión en Termux
 > **Backups Automáticos**: Cada vez que ejecutas un comando crítico (como `update`), el sistema genera un respaldo de seguridad en `~/omnibrain-backups/` para proteger tus llaves API y base de datos.
 
 > [!TIP]
-> **Uso del Proxy**: Por defecto, `omni start` lanza el proxy en segundo plano de forma segura. Al finalizar, verás una **URL azul sobre la que puedes hacer clic** para abrirla. También puedes usar `omni ui` en cualquier momento.
+> **Uso del Proxy**: Por defecto, `omni start` lanza el proxy en segundo plano. Al terminar verás la URL para abrir el Dashboard.
+> **Seguridad**: Para usar el Tester, el sistema te pedirá tu `LOCAL_API_KEY`. Puedes verla o configurarla rápidamente usando `omni env`.
 *(En PC con Bun: `bun start:bun`)*
 
 ---

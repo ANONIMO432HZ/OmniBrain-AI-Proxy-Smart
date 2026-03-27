@@ -269,19 +269,6 @@ export const landingPageHtml = `<!doctype html>
     </main>
 
     <script>
-      // 🔐 Carga segura de la API Key (No inyectada en HTML directo)
-      window.addEventListener("DOMContentLoaded", async () => {
-        try {
-          const res = await fetch("/v1/config/default-key");
-          const data = await res.json();
-          if (data.key) {
-             document.getElementById("local-api-key").value = data.key;
-          }
-        } catch (err) {
-          console.error("Error cargando clave por defecto:", err);
-        }
-      });
-
       const form = document.getElementById("chat-form");
       const send = document.getElementById("send");
       const result = document.getElementById("result");
