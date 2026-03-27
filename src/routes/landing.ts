@@ -159,7 +159,7 @@ export const landingPageHtml = `<!doctype html>
           <label for="local-api-key" style="display:flex; align-items:center; gap:6px;">
              <span>🔑 OmniBrain API Key Local</span>
           </label>
-          <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" value="{{DEFAULT_KEY}}" style="margin-bottom: 12px; background:#0e1218;" />
+          <input type="password" id="local-api-key" placeholder="Ingresa tu pass local" style="margin-bottom: 12px; background:#0e1218;" />
 
           <label for="model">Modelo (opcional)</label>
           <select id="model" name="model" style="background:#0e1218;">
@@ -269,6 +269,19 @@ export const landingPageHtml = `<!doctype html>
     </main>
 
     <script>
+      // 🔐 Carga segura de la API Key (No inyectada en HTML directo)
+      window.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const res = await fetch("/v1/config/default-key");
+          const data = await res.json();
+          if (data.key) {
+             document.getElementById("local-api-key").value = data.key;
+          }
+        } catch (err) {
+          console.error("Error cargando clave por defecto:", err);
+        }
+      });
+
       const form = document.getElementById("chat-form");
       const send = document.getElementById("send");
       const result = document.getElementById("result");

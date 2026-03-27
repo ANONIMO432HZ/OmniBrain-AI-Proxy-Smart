@@ -99,6 +99,10 @@ router.get("/openapi.json", async () => {
   return new Response(content, { headers: { "Content-Type": "application/json" } });
 });
 
+router.get("/v1/config/default-key", async () => {
+  return Response.json({ key: process.env.LOCAL_API_KEY ?? "omnibrain-dev-token" }, { headers: CORS_HEADERS });
+});
+
 router.get("/v1/history", getHistory);
 router.delete("/v1/history", deleteHistory);
 router.get("/v1/status/providers", getProviderStatus);
