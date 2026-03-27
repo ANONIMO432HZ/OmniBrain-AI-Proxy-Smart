@@ -283,9 +283,13 @@ export const landingPageHtml = `<!doctype html>
       const apiKeyInput = document.getElementById("local-api-key");
       const quickButtons = document.querySelectorAll(".quick-buttons button");
 
-      // 💾 Carga la clave desde el almacenamiento local del navegador
+      // 💾 Gestión de clave en almacenamiento local
       const savedKey = localStorage.getItem("omnibrain_local_key");
       if (savedKey) apiKeyInput.value = savedKey;
+
+      apiKeyInput.addEventListener("input", () => {
+        localStorage.setItem("omnibrain_local_key", apiKeyInput.value.trim());
+      });
 
       function setLoading(isLoading) {
         send.disabled = isLoading;
