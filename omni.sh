@@ -10,7 +10,7 @@ if [ -f "$PROJECT_DIR/scripts/lib.sh" ]; then
 fi
 
 # Fallback values (Single Source of Truth is in lib.sh)
-OMNI_VERSION="${OMNI_VERSION:-1.2.0}"
+OMNI_VERSION="${OMNI_VERSION:-1.2.1}"
 RED="${RED:-\033[0;31m}"
 GREEN="${GREEN:-\033[0;32m}"
 YELLOW="${YELLOW:-\033[1;33m}"
@@ -207,22 +207,32 @@ case "${1:-}" in
         if [ "$LOCAL" = "$REMOTE" ]; then
             echo -e "${GREEN}[OK]${NC} Already up-to-date (v$OMNI_VERSION)."
         else
-            echo -e "${YELLOW}[UPDATE]${NC} New version found. Downloading..."
-            git pull
+            echo -e "${YELLOW}[UPDATE]${NC} New version found. Syncing repository..."
             
-            # Refresh CLI and clean endings
-            find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
-            if [ -w "$PREFIX/bin" ]; then
-                ln -sf "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
-                chmod +x "$PROJECT_DIR/omni.sh"
-            fi
+            # Auto-stash local changes (like CRLF cleanups) to allow pull
+            git stash push -m "omni-auto-stash" >/dev/null 2>&1 || true
+            
+            if git pull; then
+                git stash pop >/dev/null 2>&1 || true
+                
+                # Refresh CLI and clean endings
+                find "$PROJECT_DIR" -maxdepth 2 -name "*.sh" -exec sed -i 's/\r$//' {} + 2>/dev/null || true
+                if [ -w "$PREFIX/bin" ]; then
+                    ln -sf "$PROJECT_DIR/omni.sh" "$PREFIX/bin/omni"
+                    chmod +x "$PROJECT_DIR/omni.sh"
+                fi
 
-            if command -v bun &>/dev/null; then
-                bun install
+                if command -v bun &>/dev/null; then
+                    bun install
+                else
+                    npm install
+                fi
+                echo -e "${GREEN}[OK]${NC} Successfully updated to v$(grep OMNI_VERSION "$PROJECT_DIR/scripts/lib.sh" | cut -d'"' -f2). Restart for changes."
             else
-                npm install
+                echo -e "${RED}[FAIL]${NC} Pull failed. Try: git reset --hard origin/main"
+                git stash pop >/dev/null 2>&1 || true
+                exit 1
             fi
-            echo -e "${GREEN}[OK]${NC} Successfully updated. Restart the server for changes."
         fi
         ;;
     --uninstall|-uninstall|uninstall)
