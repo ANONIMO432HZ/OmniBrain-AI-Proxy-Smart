@@ -265,18 +265,18 @@ cmd_uninstall() {
 
 # ── Main Entry Point ──
 case "${1:-}" in
-    install)    cmd_install ;;
-    start)      cmd_start   ;;
-    start:fg)   cmd_start_fg ;;
-    stop)       cmd_stop    ;;
-    restart)    cmd_stop && cmd_start ;;
-    logs)       cmd_logs    ;;
-    status)     cmd_status  ;;
-    update)     cmd_update  ;;
-    env)        cmd_env     ;;
-    uninstall)  cmd_uninstall ;;
+    install|--install|inst)    cmd_install ;;
+    start|--start|strt)      cmd_start   ;;
+    start:fg|--start:fg|strt:fg)   cmd_start_fg ;;
+    stop|--stop|stp)       cmd_stop    ;;
+    restart|--restart|rst)    cmd_stop && cmd_start ;;
+    logs|--logs|log)       cmd_logs    ;;
+    status|--status|st)     cmd_status  ;;
+    update|--update|up)     cmd_update  ;;
+    env|--env|en)        cmd_env     ;;
+    uninstall|--uninstall|uninst)  cmd_uninstall ;;
     v|version|-v|--version) echo "omni CLI v$OMNI_VERSION" ;;
-    help|-h|--help|"")      show_help ;;
+    help|--help|h|"")      show_help ;;
     *)
         echo -e "${RED}Unknown command: $1${NC}"
         show_help
