@@ -26,7 +26,8 @@ show_help() {
     echo ""
     echo "Commands:"
     echo "  install      All-in-one installation & integration"
-    echo "  start        Start proxy (Standard & Auto-Daemon)"
+    echo "  start        Start proxy (Background by default)"
+    echo "  start:fg     Start proxy in Foreground (Debug)"
     echo "  stop         Stop the background proxy and clean-up"
     echo "  restart      Restart the proxy service"
     echo "  status       Show comprehensive status & version"
@@ -116,6 +117,30 @@ case "${1:-}" in
         cmd_install
         ;;
     --start|-start|start)
+        echo -e "${CYAN}Starting OmniBrain Proxy in background...${NC}"
+        # Prevent double starting
+        $0 stop >/dev/null 2>&1 || true
+        
+        local START_CMD=""
+        if command -v bun &>/dev/null; then
+            START_CMD="bun run start:bun"
+        else
+            START_CMD="npm run start:node"
+        fi
+        
+        # Launch using nohup to survive session close
+        mkdir -p "$PROJECT_DIR/logs"
+        nohup $START_CMD > "$PROJECT_DIR/server.log" 2>&1 &
+        
+        sleep 2
+        if pgrep -f "index.ts" >/dev/null; then
+            echo -e "${GREEN}[OK]${NC} Proxy is running in the background."
+            echo -e "     Logs: ${BOLD}omni logs${NC}"
+        else
+            echo -e "${RED}[FAIL]${NC} Failed to start. Check server.log"
+        fi
+        ;;
+    --start:fg|start:fg)
         echo -e "${CYAN}Starting OmniBrain Proxy in foreground...${NC}"
         if command -v bun &>/dev/null; then
             bun run start:bun
@@ -126,14 +151,27 @@ case "${1:-}" in
     --stop|-stop|stop)
         echo -e "${YELLOW}Stopping OmniBrain Proxy processes...${NC}"
         
-        # Infallible Search: Catch any process running within the project directory
-        # Excludes self PID ($$) to avoid accidental closure of the CLI itself
-        local PIDS
-        PIDS=$(pgrep -f "$PROJECT_DIR" | grep -v "$$" || echo "")
+        # Atomic Multi-Session Search: 
+        # Identify processes running 'index.ts' whose CWD is this project
+        local PIDS=""
+        local ALL_CANDIDATES
+        ALL_CANDIDATES=$(pgrep -f "index.ts" || echo "")
+        
+        for pid in $ALL_CANDIDATES; do
+            if [ -d "/proc/$pid" ]; then
+                local PROC_CWD
+                PROC_CWD=$(readlink -f "/proc/$pid/cwd" 2>/dev/null || echo "")
+                if [ "$PROC_CWD" = "$PROJECT_DIR" ] && [ "$pid" != "$$" ]; then
+                    PIDS="$PIDS $pid"
+                fi
+            fi
+        done
         
         if [ -n "$PIDS" ]; then
             echo -e "Cleaning up lingering processes ($PIDS)..."
             kill -9 $PIDS 2>/dev/null || true
+        else
+            echo -e "No active proxy processes found for this directory."
         fi
         echo -e "${GREEN}[OK]${NC} Stopped."
         ;;
